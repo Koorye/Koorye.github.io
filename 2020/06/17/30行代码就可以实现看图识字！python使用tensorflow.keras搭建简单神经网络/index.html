@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="大概几个月前，神经网络、人工智能等概念在我心里仍高不可攀，直到自己亲身上手之后，才发现搭建神经网络并不像自己想象的那么难。很幸运，我开始学习神经网络的时候Tensorflow2.0已经发布了。 Tensorflow2中内置了Keras库，Keras是一个由Python编写的开源人工神经网络库，可以作为Tensorflow、Microsoft- CNTK和Theano的高阶应用程序接口，进行深度学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="30行代码实现看图识字！python使用tensorflow.keras搭建简单神经网络">
-<meta property="og:url" content="http://yoursite.com/2020/06/17/30%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%9C%8B%E5%9B%BE%E8%AF%86%E5%AD%97%EF%BC%81python%E4%BD%BF%E7%94%A8tensorflow.keras%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://koorye.github.io/2020/06/17/30%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%9C%8B%E5%9B%BE%E8%AF%86%E5%AD%97%EF%BC%81python%E4%BD%BF%E7%94%A8tensorflow.keras%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:site_name" content="不会码代码的Koorye">
 <meta property="og:description" content="大概几个月前，神经网络、人工智能等概念在我心里仍高不可攀，直到自己亲身上手之后，才发现搭建神经网络并不像自己想象的那么难。很幸运，我开始学习神经网络的时候Tensorflow2.0已经发布了。 Tensorflow2中内置了Keras库，Keras是一个由Python编写的开源人工神经网络库，可以作为Tensorflow、Microsoft- CNTK和Theano的高阶应用程序接口，进行深度学习">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200422104311166.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
@@ -33,11 +33,11 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200422120850848.gif">
 <meta property="article:published_time" content="2020-06-16T16:06:15.923Z">
 <meta property="article:modified_time" content="2020-06-16T14:22:53.881Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="Koorye">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200422104311166.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
 
-<link rel="canonical" href="http://yoursite.com/2020/06/17/30%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%9C%8B%E5%9B%BE%E8%AF%86%E5%AD%97%EF%BC%81python%E4%BD%BF%E7%94%A8tensorflow.keras%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
+<link rel="canonical" href="http://koorye.github.io/2020/06/17/30%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%9C%8B%E5%9B%BE%E8%AF%86%E5%AD%97%EF%BC%81python%E4%BD%BF%E7%94%A8tensorflow.keras%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
 
 
 <script id="page-configurations">
@@ -50,7 +50,7 @@
   };
 </script>
 
-  <title>30行代码实现看图识字！python使用tensorflow.keras搭建简单神经网络 | Hexo</title>
+  <title>30行代码实现看图识字！python使用tensorflow.keras搭建简单神经网络 | 不会码代码的Koorye</title>
   
 
 
@@ -101,7 +101,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Hexo</h1>
+      <h1 class="site-title">不会码代码的Koorye</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -155,16 +155,16 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/17/30%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%9C%8B%E5%9B%BE%E8%AF%86%E5%AD%97%EF%BC%81python%E4%BD%BF%E7%94%A8tensorflow.keras%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/06/17/30%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%9C%8B%E5%9B%BE%E8%AF%86%E5%AD%97%EF%BC%81python%E4%BD%BF%E7%94%A8tensorflow.keras%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="Koorye">
       <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="不会码代码的Koorye">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -330,7 +330,7 @@ CNTK</code>和<code>Theano</code>的高阶应用程序接口，进行深度学�
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">John Doe</p>
+  <p class="site-author-name" itemprop="name">Koorye</p>
   <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap motion-element">
@@ -370,7 +370,7 @@ CNTK</code>和<code>Theano</code>的高阶应用程序接口，进行深度学�
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">Koorye</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
