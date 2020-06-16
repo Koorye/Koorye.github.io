@@ -210,27 +210,22 @@
 <li>备份官方源</li>
 </ol>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/apt</span><br><span class="line">sudo sources.list sources-backup.list</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
+<ol>
 <li>更换国内源<br>这里推荐用清华同方、网易和阿里的源。</li>
 </ol>
 <p><code>sudo vim sources.list</code></p>
 <p>输入：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
-
 <p>之后输入：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt upgrade</span><br></pre></td></tr></table></figure>
-
 <p>更新完成。</p>
 <hr>
 <h1 id="配置vim"><a href="#配置vim" class="headerlink" title="配置vim"></a>配置vim</h1><p>vim的配置文件有两个：<br><code>/etc/vim/vimrc</code>: 全局配置<br><code>/usr/share/vim/vimrc</code>: 用户配置</p>
 <p>此处我选择修改全局配置。</p>
 <h2 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h2><p>输入：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/vim</span><br><span class="line">sudo vim vimrc</span><br></pre></td></tr></table></figure>
-
 <p>加入一下内容：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">" 去掉边框</span><br><span class="line">set go=</span><br><span class="line">" 设置背景色，每种配色有两种方案，一个light、一个dark</span><br><span class="line">set background=dark</span><br><span class="line">" 打开语法高亮</span><br><span class="line">syntax on</span><br><span class="line">" 显示行号 </span><br><span class="line">set number</span><br><span class="line">" 设置缩进有三个取值cindent(c风格)、smartindent(智能模式)、autoindent(简单的与一行保持一致)</span><br><span class="line">set cindent</span><br><span class="line">" 在windows版本中vim的退格键模式默认与vi兼容，与我们的使用习惯不太符合，下边这条可以改过来</span><br><span class="line">set backspace=indent,eol,start</span><br><span class="line">" 用空格键替换制表符</span><br><span class="line">:set expandtab</span><br><span class="line">" 制表符占2个空格</span><br><span class="line">set tabstop=2</span><br><span class="line">" 默认缩进2个空格大小</span><br><span class="line">set shiftwidth=2</span><br><span class="line">" 增量式搜索</span><br><span class="line">set incsearch</span><br><span class="line">" 高亮搜索</span><br><span class="line">set hlsearch</span><br></pre></td></tr></table></figure>
-
 <p>笔者个人不太喜欢配置许多复杂的内容，这些都是比较基础的配置。</p>
 <p>个人习惯缩进2个空格，因为这是google的风格规范，如果你不喜欢这样，可以调成4个空格。</p>
 <h2 id="与windows系统剪贴板通信"><a href="#与windows系统剪贴板通信" class="headerlink" title="与windows系统剪贴板通信"></a>与windows系统剪贴板通信</h2><p>vim非常让人头疼的一点，就是vim的复制粘贴是在自己的寄存器，而不在系统剪贴板，这使得复制代码和其他内容十分麻烦。</p>
@@ -240,7 +235,6 @@
 </ol>
 <p><code>vim --version | grep clipboard</code></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">koorye@LAPTOP-UHN3B0S8:/etc/vim$ vim --version | grep clipboard</span><br><span class="line">+clipboard         +keymap            +printer           +vertsplit</span><br><span class="line">+emacs_tags        +mouse_gpm         -sun_workshop      +xterm_clipboard</span><br></pre></td></tr></table></figure>
-
 <p>返回<code>+clipboard</code>，说明支持；如果不支持，我们需要安装其他内容。</p>
 <p>不支持，解决方案：</p>
 <p><code>sudo apt install vim-gtk</code></p>
@@ -250,7 +244,6 @@
 <p>下载之后放到<code>C:/Windows/System32</code>目录下。</p>
 <p>之后在vimrc配置文件中配置映射：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">" 设置剪贴命令</span><br><span class="line">map ;y :!/mnt/c/Windows/System32/clip.exe &lt;cr&gt;u</span><br><span class="line">map ;p :read !/mnt/c/Windows/System32/paste.exe &lt;cr&gt;i&lt;bs&gt;&lt;esc&gt;l</span><br><span class="line">map! ;p &lt;esc&gt;:read !/mnt/c/Windows/System32/paste.exe &lt;cr&gt;i&lt;bs&gt;&lt;esc&gt;l</span><br></pre></td></tr></table></figure>
-
 <p>这样，就可以使用<code>;y</code>和<code>;p</code>来进行复制粘贴了。</p>
 <h2 id="配置配色主题"><a href="#配置配色主题" class="headerlink" title="配置配色主题"></a>配置配色主题</h2><p>原生的vim配色不太好看，说到配色主题，笔者喜欢用molokai。</p>
 <p>先把主题clone下来：</p>
@@ -265,7 +258,6 @@
 <p><code>sudo vim /etc/vim/colors/molokai.vim</code></p>
 <p>在结尾加入：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hi Delimiter ctermfg=red</span><br><span class="line">hi Comment ctermfg=green</span><br><span class="line">hi LineNr ctermfg=180 ctermbg=none</span><br><span class="line">hi Normal ctermfg=252 ctermbg=none</span><br></pre></td></tr></table></figure>
-
 <p>分别是括号等（定界符）、注释、侧边栏（行号显示）、背景的设置。</p>
 <p>配置完之后的效果：<br><img src="https://img-blog.csdnimg.cn/20200610111000316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>你说你的cmd怎么不一样？那就去微软商店下载一个windows terminal吧。</p>
 <hr>

@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200615232019216.gif">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200615234001430.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2020-06-16T16:06:15.972Z">
-<meta property="article:modified_time" content="2020-06-16T14:11:56.514Z">
+<meta property="article:modified_time" content="2020-06-16T16:40:55.814Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200615232019216.gif">
@@ -175,16 +175,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2020-06-17 00:06:15" itemprop="dateCreated datePublished" datetime="2020-06-17T00:06:15+08:00">2020-06-17</time>
+              <time title="Created: 2020-06-17 00:06:15 / Modified: 00:40:55" itemprop="dateCreated datePublished" datetime="2020-06-17T00:06:15+08:00">2020-06-17</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-06-16 22:11:56" itemprop="dateModified" datetime="2020-06-16T22:11:56+08:00">2020-06-16</time>
-              </span>
 
           
 
@@ -203,37 +197,128 @@
 <li>为什么要使用卷积神经网络？<br>卷积神经网络常用于图像处理。它可以提取关键信息，如图片轮廓、主色调等信息，在减少喂入数据量的同时，又能增加模型深度，提高准确率。其具体实现笔者将在下文中介绍。</li>
 </ul>
 <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h3><p>卷积是通过两个函数f 和g 生成第三个函数的一种数学算子，可以理解为，在原函数f上，通过函数g进行处理，得到结果函数。这个处理卷积过程的g，就是卷积核。</p>
-<p>为了便于理解，举一种简单情况（选用离散数列进行演示，连续数列会更加麻烦）：<br>原函数：<br>$$<br>f=[1,4,6,3,5,9,7],卷积核：g=[1,−2,1]<br>$$</p>
-<p>接下来，卷积核从左向右移动，每三个元素通过卷积核得到结果，如：<br>$$<br>1×1+4×(−2)+6×1=−1，得到第一个结果为−1……\<br>4×1+6×(−2)+3×1=−5，得到第二个结果为−5……\<br>\begin{matrix}\<br>1&amp;4&amp;6&amp;3&amp;5&amp;9&amp;7\\ 1&amp;-2&amp;1&amp;\ \rightarrow&amp;1&amp;-2&amp;1\ &amp;\rightarrow&amp;1&amp;-2&amp;1\<br>&amp;&amp;\rightarrow&amp;1&amp;-2&amp;1\&amp;&amp;&amp;\rightarrow&amp;1&amp;-2&amp;1\\<br>&amp;\downarrow&amp;\downarrow&amp;\downarrow&amp;\downarrow&amp;\downarrow\<br>&amp;-1&amp;-5&amp;5&amp;2&amp;-6&amp;\qquad \end{matrix}<br>$$</p>
-<p>最终得到的数列就是卷积后的结果。</p>
+<p>为了便于理解，举一种简单情况（选用离散数列进行演示，连续数列会更加麻烦）：  </p>
+<script type="math/tex; mode=display">
+原函数：f=[1,4,6,3,5,9,7]</script><script type="math/tex; mode=display">
+卷积核：g=[1,−2,1]</script><p>接下来，卷积核从左向右移动，每三个元素通过卷积核得到结果，如：  </p>
+<script type="math/tex; mode=display">
+1×1+4×(−2)+6×1=−1，得到第一个结果为−1……</script><script type="math/tex; mode=display">
+4×1+6×(−2)+3×1=−5，得到第二个结果为−5……</script><script type="math/tex; mode=display">
+\begin{matrix}\\
+1&4&6&3&5&9&7\\
+\\
+1&-2&1&\\ 
+\rightarrow&1&-2&1\\ 
+&\rightarrow&1&-2&1\\
+&&\rightarrow&1&-2&1\\
+&&&\rightarrow&1&-2&1\\
+\\
+&\downarrow&\downarrow&\downarrow&\downarrow&\downarrow\\
+&-1&-5&5&2&-6&\qquad \end{matrix}</script><p>最终得到的数列就是卷积后的结果。</p>
 <p>上面的例子是一维矩阵（数列）的卷积，对于二维、三维甚至更高维的矩阵，都可以这样类比。</p>
-<p>举一个例子：<br>$$<br>原函数：f = \begin{pmatrix} 1&amp;4&amp;8&amp;3\<br>-4&amp;5&amp;-1&amp;2 \ 8&amp;-2&amp;4&amp;-6 \end{pmatrix} \ 卷积核：g = \begin{pmatrix} 1&amp;-1\-1&amp;1<br>\end{pmatrix}<br>$$</p>
-<p>同样，卷积核需要逐个移动，例如先从左往右，再从上往下，遍历每一块元素：<br>$$<br>第一个元素： \begin{pmatrix} 1&amp;4\-4&amp;5 \end{pmatrix} \times \begin{pmatrix}<br>1&amp;-1\-1&amp;1 \end{pmatrix}\ = 1 \times 1 + 4 \times (-1) + (-4) \times (-1)</p>
-<ul>
-<li>5 \times 1 = 9\\ \rightarrow第二个元素： \begin{pmatrix} 4&amp;8\5&amp;-1 \end{pmatrix}<br>\times \begin{pmatrix} 1&amp;-1\-1&amp;1 \end{pmatrix}\\ = 4 \times 1 + 8 \times<br>(-1) + 5 \times (-1) + (-1) \times 1 = -10\ ……<br>$$</li>
-</ul>
-<p>最终结果：<br>$$<br>\begin{pmatrix} 9&amp;-10&amp;8\-19&amp;12 &amp;-13 \end{pmatrix}<br>$$</p>
-<p>动图演示：<br><img src="https://img-blog.csdnimg.cn/20200615232019216.gif" alt="在这里插入图片描述"><br>更高维的卷积都可以用这种方法推广。</p>
+<p>举一个例子：</p>
+<script type="math/tex; mode=display">
+原函数：f = \begin{pmatrix} 
+1&4&8&3\\
+-4&5&-1&2\\
+8&-2&4&-6 \end{pmatrix}</script><script type="math/tex; mode=display">
+卷积核：g = \begin{pmatrix}
+1&-1\\-1&1
+\end{pmatrix}</script><p>同样，卷积核需要逐个移动，例如先从左往右，再从上往下，遍历每一块元素：</p>
+<script type="math/tex; mode=display">
+第一个元素：
+\begin{pmatrix}
+1&4\\-4&5 
+\end{pmatrix}
+\times 
+\begin{pmatrix}
+1&-1\\-1&1 
+\end{pmatrix}\\ 
+= 1 \times 1 + 4 \times (-1) + (-4) \times (-1)
++ 5 \times 1 = 9\\</script><script type="math/tex; mode=display">
+\rightarrow第二个元素：
+\begin{pmatrix}
+4&8\\5&-1
+\end{pmatrix}
+\times 
+\begin{pmatrix} 
+1&-1\\-1&1 
+\end{pmatrix}\\
+= 4 \times 1 + 8 \times
+(-1) + 5 \times (-1) + (-1) \times 1 = -10\\ 
+……</script><p>最终结果：</p>
+<script type="math/tex; mode=display">
+\begin{pmatrix}
+9&-10&8\\
+-19&12 &-13 
+\end{pmatrix}</script><p>动图演示：<br><img src="https://img-blog.csdnimg.cn/20200615232019216.gif" alt="在这里插入图片描述"><br>更高维的卷积都可以用这种方法推广。</p>
 <h4 id="卷积核"><a href="#卷积核" class="headerlink" title="卷积核"></a>卷积核</h4><p>上面的例子已经介绍了卷积核，卷积核非常神奇，图像像素排列成的矩阵在通过卷积核可以实现锐化、模糊、边缘、浮雕等效果，因此，我们可以使用卷积核提取关键信息。</p>
-<p>下面是一些图像处理常用卷积核：<br>$$<br>均值模糊： \begin{pmatrix} 1/9&amp;1/9&amp;1/9\ 1/9&amp;1/9&amp;1/9\ 1/9&amp;1/9&amp;1/9<br>\end{pmatrix}\ 锐化： \begin{pmatrix} -1&amp;-1&amp;-1\ -1&amp;9&amp;-1\ -1&amp;-1&amp;-1<br>\end{pmatrix}\ Soble边缘检测： \begin{pmatrix} -1&amp;0&amp;1\ -2&amp;0&amp;2\ -1&amp;0&amp;1<br>\end{pmatrix}<br>$$</p>
-<p>这里笔者使用OpenCV2演示效果，代码如下：</p>
+<p>下面是一些图像处理常用卷积核：</p>
+<script type="math/tex; mode=display">
+均值模糊： 
+\begin{pmatrix}
+1/9&1/9&1/9\\ 
+1/9&1/9&1/9\\
+1/9&1/9&1/9
+\end{pmatrix}\\</script><script type="math/tex; mode=display">
+锐化： 
+\begin{pmatrix}
+-1&-1&-1\\ 
+-1&9&-1\\ 
+-1&-1&-1
+\end{pmatrix}\\</script><script type="math/tex; mode=display">
+Soble边缘检测： 
+\begin{pmatrix} 
+-1&0&1\\ 
+-2&0&2\\ 
+-1&0&1
+\end{pmatrix}</script><p>这里笔者使用OpenCV2演示效果，代码如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># !usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># @Date: 2020/6/15</span></span><br><span class="line"><span class="comment"># @Author: Koorye</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:  </span><br><span class="line">    img = cv2.imread(<span class="string">'data/img/lena.jpg'</span>)</span><br><span class="line">    cv2.imshow(<span class="string">'Lena'</span>, img)</span><br><span class="line">    </span><br><span class="line">    blur = np.array([[<span class="number">1</span> / <span class="number">9</span>, <span class="number">1</span> / <span class="number">9</span>, <span class="number">1</span> / <span class="number">9</span>], [<span class="number">1</span> / <span class="number">9</span>, <span class="number">1</span> / <span class="number">9</span>, <span class="number">1</span> / <span class="number">9</span>], [<span class="number">1</span> / <span class="number">9</span>, <span class="number">1</span> / <span class="number">9</span>, <span class="number">1</span> / <span class="number">9</span>]], np.float32)</span><br><span class="line">    sharp = np.array([[<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>], [<span class="number">-1</span>, <span class="number">9</span>, <span class="number">-1</span>], [<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>]], np.float32)</span><br><span class="line">    soble = np.array([[<span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>], [<span class="number">-2</span>, <span class="number">0</span>, <span class="number">2</span>], [<span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>]], np.float32)</span><br><span class="line">    </span><br><span class="line">    blur_dst = cv2.filter2D(img, <span class="number">-1</span>, kernel=blur)</span><br><span class="line">    sharp_dst = cv2.filter2D(img, <span class="number">-1</span>, kernel=sharp)</span><br><span class="line">    soble_dst = cv2.filter2D(img, <span class="number">-1</span>, kernel=soble)</span><br><span class="line"></span><br><span class="line">    cv2.imshow(<span class="string">'blur'</span>, blur_dst)</span><br><span class="line">    cv2.imshow(<span class="string">'sharp'</span>, sharp_dst)</span><br><span class="line">    cv2.imshow(<span class="string">'soble'</span>, soble_dst)</span><br><span class="line">    </span><br><span class="line">    cv2.waitKey(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
 <p>运行结果：<br><img src="https://img-blog.csdnimg.cn/20200615234001430.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>通过修改卷积核的数值和尺寸，还可以得到不同效果的图片。</p>
 <h4 id="全零填充"><a href="#全零填充" class="headerlink" title="全零填充"></a>全零填充</h4><p>之前卷积的例子，在卷积之后都会丢失宽度（高度），原来7个元素的数列变成了5个元素，原来4x3的矩阵变成了3x2，这与原函数和卷积核的维度和尺寸有关。</p>
 <p>要解决宽度（高度）的丢失问题，有一个解决思路，就是使用全零填充，即在边缘加上0.</p>
 <p>如： </p>
-<p>$$<br>原函数：f=[1,4,6,3,5,9,7],卷积核：g=[1,−2,1]<br>$$</p>
-<p>卷积的结果是：<br>$$<br>1,−5,5,2,−6.<br>$$</p>
-<p>但如果使用全零填充，就变成：<br>$$<br>原函数：f=[0,1,4,6,3,5,9,7,0],卷积核：g=[1,−2,1]<br>$$</p>
-<p>卷积的结果是：<br>$$<br>2,1,−5,5,2,−6,−5<br>$$<br>通过全零填充，梳理（矩阵）的尺寸得以保留，这可以有效缓解网络层数加深后数据量减少的问题。</p>
+<script type="math/tex; mode=display">
+原函数：f=[1,4,6,3,5,9,7],</script><script type="math/tex; mode=display">
+卷积核：g=[1,−2,1]</script><p>卷积的结果是：</p>
+<script type="math/tex; mode=display">
+1,−5,5,2,−6.</script><p>但如果使用全零填充，就变成：  </p>
+<script type="math/tex; mode=display">
+原函数：f=[0,1,4,6,3,5,9,7,0],</script><script type="math/tex; mode=display">
+卷积核：g=[1,−2,1]</script><p>卷积的结果是：</p>
+<script type="math/tex; mode=display">
+2,1,−5,5,2,−6,−5</script><p>通过全零填充，梳理（矩阵）的尺寸得以保留，这可以有效缓解网络层数加深后数据量减少的问题。</p>
 <h3 id="批标准化"><a href="#批标准化" class="headerlink" title="批标准化"></a>批标准化</h3><p>批标准化(Batch Normalization)是一种用于改善人工神经网络的性能和稳定性的技术，简称BN算法。</p>
 <p>批标准化和标准化类似，用于将数据规范到一定的范围内，以便计算。</p>
 <p>笔者非该专业，无法深入讲解，仅在此简单介绍其作用。</p>
 <h3 id="池化"><a href="#池化" class="headerlink" title="池化"></a>池化</h3><p>池化是一种采样方法，它可以提取数据特征，减少数据量并缓解过拟合。下面介绍一下两种池化方法：</p>
-<h4 id="均值池化"><a href="#均值池化" class="headerlink" title="均值池化"></a>均值池化</h4><p>顾名思义，即取平均值。<br>首先将源数据分块，然后取每块的平均值，如：<br>$$<br>\begin{pmatrix} 4&amp;6&amp;|&amp;8&amp;2\<br>7&amp;3&amp;|&amp;2&amp;9\ \text{—}&amp;\text{—}&amp;\text{—}&amp;\text{—}&amp;\text{—}\ 8&amp;4&amp;|&amp;9&amp;1\<br>4&amp;3&amp;|&amp;2&amp;5 \end{pmatrix}\rightarrow \begin{pmatrix} 5&amp;10.5\9.5&amp;8.5<br>\end{pmatrix}<br>$$</p>
-<h4 id="最大值池化"><a href="#最大值池化" class="headerlink" title="最大值池化"></a>最大值池化</h4><p>最大值池化也很好理解，即取最大值：<br>$$<br>\begin{pmatrix} 4&amp;6&amp;|&amp;8&amp;2\<br>7&amp;3&amp;|&amp;2&amp;9\ \text{—}&amp;\text{—}&amp;\text{—}&amp;\text{—}&amp;\text{—}\ 8&amp;4&amp;|&amp;9&amp;1\<br>4&amp;3&amp;|&amp;2&amp;5 \end{pmatrix}\rightarrow \begin{pmatrix} 5&amp;9\8&amp;9<br>\end{pmatrix}<br>$$</p>
-<h3 id="失活"><a href="#失活" class="headerlink" title="失活"></a>失活</h3><p>随机失活(Dropout)是对具有深度结构的人工神经网络进行优化的方法，在学习过程中通过将隐含层的部分权重或输出随机归零，降低节点间的相互依赖性从而实现神经网络的正则化，降低其结构风险。</p>
+<h4 id="均值池化"><a href="#均值池化" class="headerlink" title="均值池化"></a>均值池化</h4><p>顾名思义，即取平均值。<br>首先将源数据分块，然后取每块的平均值，如：</p>
+<script type="math/tex; mode=display">
+\begin{pmatrix}
+4&6&|&8&2\\
+7&3&|&2&9\\ 
+\text{—}&\text{—}&\text{—}&\text{—}&\text{—}\\
+8&4&|&9&1\\
+4&3&|&2&5
+\end{pmatrix}
+\rightarrow 
+\begin{pmatrix}
+5&10.5\\
+9.5&8.5
+\end{pmatrix}</script><h4 id="最大值池化"><a href="#最大值池化" class="headerlink" title="最大值池化"></a>最大值池化</h4><p>最大值池化也很好理解，即取最大值：</p>
+<script type="math/tex; mode=display">
+\begin{pmatrix}
+4&6&|&8&2\\
+7&3&|&2&9\\
+\text{—}&\text{—}&\text{—}&\text{—}&\text{—}\\ 
+8&4&|&9&1\\
+4&3&|&2&5 
+\end{pmatrix}
+\rightarrow
+\begin{pmatrix}
+5&9\\
+8&9
+\end{pmatrix}</script><h3 id="失活"><a href="#失活" class="headerlink" title="失活"></a>失活</h3><p>随机失活(Dropout)是对具有深度结构的人工神经网络进行优化的方法，在学习过程中通过将隐含层的部分权重或输出随机归零，降低节点间的相互依赖性从而实现神经网络的正则化，降低其结构风险。</p>
 <p>如何实现呢？每次，我们可以选用神经层中的部分神经元，下次训练时再选用其他部分，通过这样的选取，可以有效缓解过拟合等问题。</p>
 <p>图例：</p>
 <pre class="mermaid">graph LR
@@ -282,7 +367,6 @@ b2-->c2</pre>
 <p>概括为CBAPD.</p>
 <p>简单演示tensorflow2的keras搭建CNN神经网络，以下是一个典型的解决多分类问题（如图片内容分类）的代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># !usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># @Date: 2020/6/15</span></span><br><span class="line"><span class="comment"># @Author: Koorye</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># 需要提供数据集</span></span><br><span class="line">    <span class="comment"># x_train, x_test, y_train, y_test = ...</span></span><br><span class="line">  </span><br><span class="line">    model = tf.keras.Sequential(</span><br><span class="line">    <span class="comment"># 卷积层，filters指定卷积核数量，kernal_size指定卷积核尺寸</span></span><br><span class="line">    <span class="comment"># padding指定是否使用全零填充</span></span><br><span class="line">        tf.keras.layers.Conv2D(filters=<span class="number">6</span>, kernal_size=(<span class="number">5</span>, <span class="number">5</span>), padding=<span class="string">'same'</span>),</span><br><span class="line">        <span class="comment"># 批标准化</span></span><br><span class="line">        tf.keras.layers.BatchNormalization(),</span><br><span class="line">        <span class="comment"># relu激活函数</span></span><br><span class="line">        tf.keras.layers.Activation(<span class="string">'relu'</span>),</span><br><span class="line">        <span class="comment"># 池化，pool_size指定池尺寸，strides指定池间隔，默认与尺寸一致</span></span><br><span class="line">        tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>, <span class="number">2</span>), strides=<span class="number">2</span>, padding=<span class="string">'same'</span>),</span><br><span class="line">        <span class="comment"># 随机失活，指定每次失活20%的神经元</span></span><br><span class="line">        tf.keras.layers.Dropout(<span class="number">0.2</span>),</span><br><span class="line">        <span class="comment"># 数据平铺成一维数组</span></span><br><span class="line">        tf.keras.layers.Flatten(),</span><br><span class="line">        <span class="comment"># 全连接，128个神经元，relu激活函数</span></span><br><span class="line">        tf.keras.layers.Dense(<span class="number">128</span>, activation=<span class="string">'relu'</span>),</span><br><span class="line">        <span class="comment"># 随机失活</span></span><br><span class="line">        tf.keras.layers.Dropout(<span class="number">0.2</span>),</span><br><span class="line">        <span class="comment"># 全连接，10个神经元，softmax激活函数，用于解决多分类问题</span></span><br><span class="line">        tf.keras.layers.Dense(<span class="number">10</span>, activation=<span class="string">'softmax'</span>)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 模型编译，optimize指定adam优化器，loss指定损失函数为均方差</span></span><br><span class="line">    model.compile(optimize=<span class="string">'adam'</span>, loss=<span class="string">'mse'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 模型训练，batch_size指定每次喂入的数据量，epochs指定训练次数</span></span><br><span class="line">    <span class="comment"># validation_data指定验证集，validation_freq指定多少次训练进行一次验证</span></span><br><span class="line">    model.fit(x_train, y_train, batch_size=<span class="number">32</span>, epochs=<span class="number">5</span>, validation_data=(x_test, y_test), validation_freq=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
 
     </div>
 

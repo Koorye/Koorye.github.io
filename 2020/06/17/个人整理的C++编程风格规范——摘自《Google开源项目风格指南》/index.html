@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="命名规范文件文件名: 小写(必要时使用下划线) file_name.h define保护: ​​    #ifndef HELLO_H_​    #define HELLO_H_​    pass​     1#endif &#x2F;&#x2F;HELLO_H_   变量名变量名: 小写+下划线 variable_name *全局变量: *g开头 g_variable_name *静态变量: *s开头 s_vari">
+  <meta name="description" content="命名规范文件文件名: 小写(必要时使用下划线) file_name.h define保护: ​​    #ifndef HELLO_H_​    #define HELLO_H_​    pass​1#endif &#x2F;&#x2F;HELLO_H_  变量名变量名: 小写+下划线 variable_name 全局变量: g开头 g_variable_name 静态变量: s开头 s_variable_name">
 <meta property="og:type" content="article">
 <meta property="og:title" content="个人整理C++风格规范——摘自《Google开源项目风格指南》">
 <meta property="og:url" content="http://yoursite.com/2020/06/17/%E4%B8%AA%E4%BA%BA%E6%95%B4%E7%90%86%E7%9A%84C++%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83%E2%80%94%E2%80%94%E6%91%98%E8%87%AA%E3%80%8AGoogle%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E3%80%8B/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="命名规范文件文件名: 小写(必要时使用下划线) file_name.h define保护: ​​    #ifndef HELLO_H_​    #define HELLO_H_​    pass​     1#endif &#x2F;&#x2F;HELLO_H_   变量名变量名: 小写+下划线 variable_name *全局变量: *g开头 g_variable_name *静态变量: *s开头 s_vari">
+<meta property="og:description" content="命名规范文件文件名: 小写(必要时使用下划线) file_name.h define保护: ​​    #ifndef HELLO_H_​    #define HELLO_H_​    pass​1#endif &#x2F;&#x2F;HELLO_H_  变量名变量名: 小写+下划线 variable_name 全局变量: g开头 g_variable_name 静态变量: s开头 s_variable_name">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-06-16T16:06:15.964Z">
 <meta property="article:modified_time" content="2020-06-16T14:42:39.324Z">
@@ -196,18 +196,16 @@
       
         <h1 id="命名规范"><a href="#命名规范" class="headerlink" title="命名规范"></a>命名规范</h1><h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><p><strong>文件名:</strong> 小写(必要时使用下划线) <code>file_name.h</code></p>
 <p><strong>define保护:</strong></p>
-<p>​<br>​    #ifndef HELLO_H_<br>​    #define HELLO_H_<br>​    pass<br>​    </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">//HELLO_H_</span></span></span><br></pre></td></tr></table></figure>
-
+<p>​<br>​    #ifndef HELLO_H_<br>​    #define HELLO_H_<br>​    pass<br>​<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">//HELLO_H_</span></span></span><br></pre></td></tr></table></figure></p>
 <hr>
 <h2 id="变量名"><a href="#变量名" class="headerlink" title="变量名"></a>变量名</h2><p><strong>变量名:</strong> 小写+下划线 <code>variable_name</code></p>
-<p>*<em>全局变量: *</em>g开头 <code>g_variable_name</code></p>
-<p>*<em>静态变量: *</em>s开头 <code>s_variable_name</code></p>
+<p><strong>全局变量: </strong>g开头 <code>g_variable_name</code></p>
+<p><strong>静态变量: </strong>s开头 <code>s_variable_name</code></p>
 <p><strong>类成员变量:</strong> 小写+下划线+_ <code>variable_name_</code></p>
-<p>*<em>常量名: *</em>k+大驼峰 <code>kConstName</code></p>
+<p><strong>常量名: </strong>k+大驼峰 <code>kConstName</code></p>
 <hr>
 <h2 id="函数名与类名"><a href="#函数名与类名" class="headerlink" title="函数名与类名"></a>函数名与类名</h2><p><strong>函数名:</strong> 大驼峰 <code>FunctionName</code></p>
-<p>*<em>类私有函数: *</em>_+小写+下划线 <code>_function_name</code></p>
+<p><strong>类私有函数: </strong>_+小写+下划线 <code>_function_name</code></p>
 <p><strong>类名，结构体名，枚举名:</strong> 大驼峰 <code>ClassName</code></p>
 <hr>
 <h1 id="结构规范"><a href="#结构规范" class="headerlink" title="结构规范"></a>结构规范</h1><h2 id="空格"><a href="#空格" class="headerlink" title="空格"></a>空格</h2><p><strong>空格:</strong><br>二元运算符两端应有空格<code>(+,-,*,/,=,&gt;,&lt;,&gt;=,&lt;=,||/or,&amp;&amp;/and等)</code><br>根据运算优先级，低优先级可以没有空格 <code>(a+b) * (c+d)</code><br>函数形参要有空格 <code>Function(int a, int b)</code><br>形参默认值等号两端不要空格 <code>Function(int a=0)</code><br>左括号之后，右括号之前不要空格 <code>(a, b, c, d)</code></p>
@@ -215,15 +213,12 @@
 <p><strong>空行:</strong> 顶级定义(函数、类)之间空两行，方法定义之间空一行</p>
 <h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p><strong>大型注释:</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ==========</span></span><br><span class="line"><span class="comment">// xxxxxxxxxxxxxx</span></span><br><span class="line"><span class="comment">// xxxxxxxxxxxxxx</span></span><br><span class="line"><span class="comment">// ==========</span></span><br></pre></td></tr></table></figure>
-
 <hr>
 <h2 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h2><p><strong>缩进:</strong> 每次缩进两格，严禁tab</p>
 <h2 id="类与函数"><a href="#类与函数" class="headerlink" title="类与函数"></a>类与函数</h2><p><strong>类格式:</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ClassName</span>&#123;</span></span><br><span class="line"> <span class="keyword">public</span>: <span class="comment">//缩进一格</span></span><br><span class="line">  ClassName(); <span class="comment">//构造函数 </span></span><br><span class="line">  ～ClassName(); <span class="comment">//析构函数</span></span><br><span class="line">    </span><br><span class="line">  Function1()；</span><br><span class="line">  Function2()；</span><br><span class="line">  ...</span><br><span class="line">  <span class="comment">//空一行</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">protected</span>:</span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">  <span class="keyword">int</span> x_, y_; <span class="comment">//私有变量</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><strong>函数格式:</strong> 参数写不下则缩进4格</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FunctionName(</span><br><span class="line">    <span class="keyword">int</span> x,</span><br><span class="line">    <span class="keyword">int</span> y) &#123;</span><br><span class="line">    <span class="keyword">return</span> x+y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>输入在前，输出在后: <code>Function(const int kInput,int *output)</code></p>
 
     </div>
