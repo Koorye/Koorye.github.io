@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>python使用scrapy实现爬虫 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一开始笔者都是使用requests+bs4实现爬虫，直到后来我发现了有一个功能强大使用简单的爬虫框架——scrapy，本文是一个入门级教程，会记录下从零开始使用scrapy实现最简单爬虫的全过程：  搭建scrapy项目安装scrapy第一步，安装scrapy，在命令行中输入： 1pip install scrapy  当然，如果你使用的是pycharm，就可以在Project:Python →">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python使用scrapy实现爬虫">
+<meta property="og:url" content="http://yoursite.com/2020/06/17/%E3%80%90%E5%85%A5%E9%97%A8%E7%BA%A7%E6%95%99%E7%A8%8B%E3%80%91python%E4%BD%BF%E7%94%A8scrapy%E5%BA%93%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一开始笔者都是使用requests+bs4实现爬虫，直到后来我发现了有一个功能强大使用简单的爬虫框架——scrapy，本文是一个入门级教程，会记录下从零开始使用scrapy实现最简单爬虫的全过程：  搭建scrapy项目安装scrapy第一步，安装scrapy，在命令行中输入： 1pip install scrapy  当然，如果你使用的是pycharm，就可以在Project:Python →">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200427222925101.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200427223149713.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200427223245881.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200427225145954.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200427230446279.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200427231216569.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200427231804148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-06-16T16:06:16.006Z">
+<meta property="article:modified_time" content="2020-06-16T13:46:29.613Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200427222925101.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-【入门级教程】python使用scrapy库实现爬虫" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/17/%E3%80%90%E5%85%A5%E9%97%A8%E7%BA%A7%E6%95%99%E7%A8%8B%E3%80%91python%E4%BD%BF%E7%94%A8scrapy%E5%BA%93%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB/" class="article-date">
+  <time datetime="2020-06-16T16:06:16.006Z" itemprop="datePublished">2020-06-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      python使用scrapy实现爬虫
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一开始笔者都是使用<code>requests</code>+<code>bs4</code>实现爬虫，直到后来我发现了有一个功能强大使用简单的爬虫框架——<code>scrapy</code>，本文是一个入门级教程，会记录下从零开始使用<code>scrapy</code>实现最简单爬虫的全过程：</p>
+<hr>
+<h1 id="搭建scrapy项目"><a href="#搭建scrapy项目" class="headerlink" title="搭建scrapy项目"></a>搭建scrapy项目</h1><h2 id="安装scrapy"><a href="#安装scrapy" class="headerlink" title="安装scrapy"></a>安装scrapy</h2><p>第一步，安装<code>scrapy</code>，在命令行中输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapy</span><br></pre></td></tr></table></figure>
+
+<p>当然，如果你使用的是<code>pycharm</code>，就可以在<code>Project:Python</code> → <code>Project Interperter</code> →<br>点击右侧的+号搜索<code>scrapy</code>进行安装。</p>
+<hr>
+<h2 id="构造scrapy框架"><a href="#构造scrapy框架" class="headerlink" title="构造scrapy框架"></a>构造scrapy框架</h2><p>第二步，构建<code>scrapy</code>框架，在命令行中输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy startproject xxx（项目名）</span><br></pre></td></tr></table></figure>
+
+<p>此处笔者输入了<code>scrapy startproject hello_scrapy</code>，便会在项目目录下生成一个<code>hello_scrapy</code>文件夹：<br><img src="https://img-blog.csdnimg.cn/20200427222925101.png" alt="在这里插入图片描述"><br><code>hello_scrapy</code>文件夹内有如下结构：<br><img src="https://img-blog.csdnimg.cn/20200427223149713.png" alt="在这里插入图片描述"><br>第二个<code>hello_scrapy</code>目录内有，这里有各种各样的配置文件，作为入门教程，我们只需要了解<code>settings.py</code>的部分配置：![在这里插入图片描述](<a href="https://img-" target="_blank" rel="noopener">https://img-</a><br>blog.csdnimg.cn/20200427223227578.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70)<br><code>spiders</code>目录内有：<img src="https://img-blog.csdnimg.cn/20200427223245881.png" alt="在这里插入图片描述"></p>
+<hr>
+<h2 id="构建一个爬虫"><a href="#构建一个爬虫" class="headerlink" title="构建一个爬虫"></a>构建一个爬虫</h2><p>接下来，我们在项目中构建第一个爬虫，在命令行中输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd 项目名</span><br><span class="line">scrapy genspider xxx（爬虫名） xxxxxx（域名）</span><br></pre></td></tr></table></figure>
+
+<p><code>cd</code>命令用于切换文件夹到项目文件夹内，<code>scrapy genspider</code>用于创建一个爬虫，第一个参数是爬虫名，此处爬虫名 <strong>切忌与项目名重复!</strong><br>第二个参数是域名，如想要爬取的网站如果是百度百科对<code>Python</code>的记录：<code>https://baike.baidu.com/item/Python/407313</code>，它的域名便是掐头去尾剩下的部分：<code>baidu.com</code></p>
+<p>此处笔者想实现一个爬取英为财情<code>https://cn.investing.com/</code>网上期货数据的爬虫，便输入了以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd hello_scrapy</span><br><span class="line">scrapy genspider futures_spider investing.com</span><br></pre></td></tr></table></figure>
+
+<p>输入后便会在<code>hello_scrapy/hello_scrapy/spiders</code>中生成一个新文件<code>futures_spider.py</code>（期货爬虫）：![在这里插入图片描述](<a href="https://img-" target="_blank" rel="noopener">https://img-</a><br>blog.csdnimg.cn/20200427224601783.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70)<br><code>futures_spider.py</code>中的内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FuturesSpiderSpider</span><span class="params">(scrapy.Spider)</span>:</span></span><br><span class="line">    name = <span class="string">'futures_spider'</span></span><br><span class="line">    allowed_domains = [<span class="string">'investing.com'</span>]</span><br><span class="line">    start_urls = [<span class="string">'http://investing.com/'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>此处的<code>pass</code>便是我们需要输入的地方。</p>
+<hr>
+<h1 id="分析网页"><a href="#分析网页" class="headerlink" title="分析网页"></a>分析网页</h1><h2 id="观察网页源代码"><a href="#观察网页源代码" class="headerlink" title="观察网页源代码"></a>观察网页源代码</h2><p>我们先来浏览一下英为财情网的期货数据，我们要爬取的网页是：<code>https://cn.investing.com/commodities/real-time-
+futures</code><br><img src="https://img-blog.csdnimg.cn/20200427225145954.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>通过观察网页的结构和源代码，我们发现网页的期货数据被存储在表格结构中，接下来，我们就要对这个表格中的数据进行爬取：</p>
+<hr>
+<h2 id="学习网页结构（了解可以跳过）"><a href="#学习网页结构（了解可以跳过）" class="headerlink" title="学习网页结构（了解可以跳过）"></a>学习网页结构（了解可以跳过）</h2><p>作为入门教程，我们先来简单了解一下网页结构：每个网页都分为<code>head</code>和<code>body</code>，<code>head</code>主要用于网页的初始化，例如设置编码格式，设置标题，引入脚本，引入风格样式等；而<code>body</code>用于显示网页的内容，如下便是一个基础的网页结构：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>网页标题<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">Hello html!</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>效果如下，非常简单：<br><img src="https://img-blog.csdnimg.cn/20200427230446279.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<hr>
+<h2 id="学习网页表格（了解可以跳过）"><a href="#学习网页表格（了解可以跳过）" class="headerlink" title="学习网页表格（了解可以跳过）"></a>学习网页表格（了解可以跳过）</h2><p>接下来，我们来了解一下网页的表格结构：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>表格示例<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>ID<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Name<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>NO.001<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>Alex<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>NO.002<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>Amy<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>NO.003<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>John<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>NO.004<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>Helen<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这是一个简单的表格：</p>
+<ul>
+<li><code>table</code>是表格本体</li>
+<li><code>table</code>中包含<code>tr</code>，即<code>table row</code>，表示表格的一行</li>
+<li><code>tr</code>中有<code>th</code>和<code>td</code>，<code>th</code>即<code>table head</code>，意为表头</li>
+<li><code>td</code>即<code>table data</code>，意为表中数据，即表身</li>
+</ul>
+<p>我们这里的表格创建了<code>ID</code>和<code>Name</code>两个表头，表中导入了四排数据，效果如下：<br><img src="https://img-blog.csdnimg.cn/20200427231216569.png" alt="在这里插入图片描述"></p>
+<hr>
+<h2 id="学习XPath语法（了解可以跳过）"><a href="#学习XPath语法（了解可以跳过）" class="headerlink" title="学习XPath语法（了解可以跳过）"></a>学习XPath语法（了解可以跳过）</h2><p>在简单了解<code>html</code>之后，我们来了解一下<code>xpath</code>语法：</p>
+<ul>
+<li><code>//</code>表示选择所有，如<code>//tr</code>表示选择所有<code>tr</code>行</li>
+<li><code>./</code>表示当前目录的下一个目录</li>
+<li>text()表示该目录的中内容</li>
+</ul>
+<p>即使不熟悉<code>xpath</code>，我们也有另一个办法，通过在想获取的元素上右键检查（笔者使用<code>chrome</code>作为浏览器），在元素上右键 → <code>Copy</code> →<br><code>Copy Xpath</code>，我们便可以获得该元素的<code>Xpath</code>：<br><img src="https://img-blog.csdnimg.cn/20200427231804148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>此示例获取的<code>xpath</code>：<code>/html/body/table/tbody/tr[4]/td[2]</code>，当然我们也可以通过<code>Copy full
+Xpath</code>获取完整的<code>Xpath</code>。</p>
+<p>我们来观察一下此例中得到的<code>Xpath</code>：</p>
+<p><code>John</code>位于：</p>
+<ul>
+<li><code>&lt;html&gt;</code></li>
+<li>→ <code>&lt;body&gt;</code></li>
+<li>→ <code>&lt;table&gt;</code></li>
+<li>→ <code>&lt;tbody&gt;</code>（<code>tbody</code>与<code>thead</code>对应，表示表身，即使源代码中不写，浏览器编译后也会自动生成）</li>
+<li>→ <code>tr[4]</code>（即第4个<code>tr</code>，此处的<code>tr</code>的位置用数组形式表示索引）</li>
+<li>→ <code>td[2]</code>（即第2个<code>td</code>，同样使用索引标记位置）</li>
+</ul>
+<p>在了解这些前置知识之后，我们就可以开始实现<code>parse</code>函数，我们再次观察要爬取的网页：![在这里插入图片描述](<a href="https://img-" target="_blank" rel="noopener">https://img-</a><br>blog.csdnimg.cn/20200427232831274.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70)</p>
+<p>可以发现，表格中<code>tr</code>行的第2个数据里的超链接标签<code>a</code>对应商品名，第4个对应最新价，第8个对应涨跌幅。</p>
+<p>因此，</p>
+<ul>
+<li>商品名内容的<code>XPath</code>路径为<code>//tr/td[2]/a/text()</code>(意为所有<code>tr</code>标签下的第二个<code>td</code>里<code>a</code>标签的内容)</li>
+<li>最新价为<code>//tr/td[4]/text()</code></li>
+<li>涨跌幅为<code>//tr/td[8]/text()</code></li>
+</ul>
+<hr>
+<h1 id="实现爬虫"><a href="#实现爬虫" class="headerlink" title="实现爬虫"></a>实现爬虫</h1><h2 id="修改指定的网页名"><a href="#修改指定的网页名" class="headerlink" title="修改指定的网页名"></a>修改指定的网页名</h2><p>把<code>start_urls</code>指定的网页修改成所要爬取的网页名：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start_urls = [<span class="string">'https://cn.investing.com/commodities/real-time-futures'</span>]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="编写parse函数"><a href="#编写parse函数" class="headerlink" title="编写parse函数"></a>编写parse函数</h2><p>实现<code>parse</code>函数（<code>parse</code>意为语法分析，顾名思义，用于解读网页结构获取内容）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    <span class="comment">#创建一个selector列表，其中包含所有tr行</span></span><br><span class="line">    selectors = response.xpath(<span class="string">'//tr'</span>)</span><br><span class="line">    <span class="comment">#遍历selector列表</span></span><br><span class="line">    <span class="keyword">for</span> selector <span class="keyword">in</span> selectors:</span><br><span class="line">        <span class="comment">#获取商品名,get函数用于得到一个元素 </span></span><br><span class="line">        futures_type = selector.xpath(<span class="string">'./td[2]/a/text()'</span>).get()</span><br><span class="line">        <span class="comment">#获取最新价</span></span><br><span class="line">        latest_price = selector.xpath(<span class="string">'./td[4]/text()'</span>).get()</span><br><span class="line">        <span class="comment">#获取涨跌幅</span></span><br><span class="line">        change_rate = selector.xpath(<span class="string">'./td[8]/text()'</span>).get()</span><br><span class="line">        <span class="comment">#如果数据存在（防止遍历到没有数据的tr行）</span></span><br><span class="line">        <span class="keyword">if</span> futures_type <span class="keyword">and</span> latest_price <span class="keyword">and</span> change_rate:</span><br><span class="line">            <span class="comment">#打印数据</span></span><br><span class="line">            print(futures_type, latest_price, change_rate)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="运行爬虫"><a href="#运行爬虫" class="headerlink" title="运行爬虫"></a>运行爬虫</h1><h2 id="运行命令"><a href="#运行命令" class="headerlink" title="运行命令"></a>运行命令</h2><p>接下来我们来运行一下试试，运行爬虫需要在命令行中项目目录下输入如下指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy crawl xxx（爬虫名）</span><br></pre></td></tr></table></figure>
+
+<p>笔者此处输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy crawl futures_spider</span><br></pre></td></tr></table></figure>
+
+<p>效果如下，此处为节省篇幅只显示错误提示：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2020-04-27 23:46:28 [scrapy.core.engine] DEBUG: Crawled (403) &lt;GET https://cn.investing.com/commodities/real-time-futures&gt; (referer: None)</span><br><span class="line">2020-04-27 23:46:28 [scrapy.spidermiddlewares.httperror] INFO: Ignoring response &lt;403 https://cn.investing.com/commodities/real-time-futures</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">: HTTP status code is not handled or not allowed</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，网页报了403错误，意为服务器拒绝处理，这是为什么呢？</p>
+<hr>
+<h2 id="配置settings"><a href="#配置settings" class="headerlink" title="配置settings"></a>配置settings</h2><h3 id="设置ROBOT君子协议"><a href="#设置ROBOT君子协议" class="headerlink" title="设置ROBOT君子协议"></a>设置ROBOT君子协议</h3><p>因为我们没有在<code>settings.py</code>中设置一些必要的选项，<code>settings</code>中有一条<code>ROBOTSTXT_OBEY</code>，意为是否遵守君子协议，若为<code>True</code>，你可以爬取的格式、范围、次数等就要受到网站要求的限制，所以为了正常爬取，我们需要修改为<code>False</code>（你懂的）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Obey robots.txt rules</span></span><br><span class="line">ROBOTSTXT_OBEY = <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="设置请求头"><a href="#设置请求头" class="headerlink" title="设置请求头"></a>设置请求头</h3><p>然而这样设置之后还是不行，因为我们需要指定<code>User-Agent</code>请求头，才能把爬虫伪装成一个浏览器，<code>User-
+Agent</code>同样可以在<code>settings</code>中设置：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Crawl responsibly by identifying yourself (and your website) on the user-agent</span></span><br><span class="line">USER_AGENT = <span class="string">'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.54 Safari/536.5'</span></span><br></pre></td></tr></table></figure>
+
+<p>设置之后，我们便可以得到数据啦，再次在命令行中输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy crawl futures_spider</span><br></pre></td></tr></table></figure>
+
+<p>返回结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">2020-04-27 23:56:01 [scrapy.utils.log] INFO: Scrapy 2.0.1 started (bot: hello_scrapy)</span><br><span class="line">2020-04-27 23:56:01 [scrapy.utils.log] INFO: Versions: lxml 4.5.0.0, libxml2 2.9.5, cssselect 1.1.0, parsel 1.5.2, w3lib 1.21.0, Twisted 20.</span><br><span class="line">3.0, Python 3.8.2 (tags/v3.8.2:7b3ab59, Feb 25 2020, 23:03:10) [MSC v.1916 64 bit (AMD64)], pyOpenSSL 19.1.0 (OpenSSL 1.1.1f  31 Mar 2020),</span><br><span class="line">cryptography 2.9, Platform Windows-10-10.0.18362-SP0</span><br><span class="line">2020-04-27 23:56:01 [scrapy.utils.log] DEBUG: Using reactor: twisted.internet.selectreactor.SelectReactor</span><br><span class="line">2020-04-27 23:56:01 [scrapy.crawler] INFO: Overridden settings:</span><br><span class="line">&#123;'BOT_NAME': 'hello_scrapy',</span><br><span class="line"> 'NEWSPIDER_MODULE': 'hello_scrapy.spiders',</span><br><span class="line"> 'SPIDER_MODULES': ['hello_scrapy.spiders'],</span><br><span class="line"> 'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) '</span><br><span class="line">               'AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.54 '</span><br><span class="line">               'Safari/536.5'&#125;</span><br><span class="line">2020-04-27 23:56:01 [scrapy.extensions.telnet] INFO: Telnet Password: 8f3e69fc82bdb3cc</span><br><span class="line">2020-04-27 23:56:01 [scrapy.middleware] INFO: Enabled extensions:</span><br><span class="line">['scrapy.extensions.corestats.CoreStats',</span><br><span class="line"> 'scrapy.extensions.telnet.TelnetConsole',</span><br><span class="line"> 'scrapy.extensions.logstats.LogStats']</span><br><span class="line">2020-04-27 23:56:02 [scrapy.middleware] INFO: Enabled downloader middlewares:</span><br><span class="line">['scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',</span><br><span class="line"> 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',</span><br><span class="line"> 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',</span><br><span class="line"> 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',  'scrapy.downloadermiddlewares.retry.RetryMiddleware',</span><br><span class="line"> 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',</span><br><span class="line"> 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',</span><br><span class="line"> 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',</span><br><span class="line"> 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',</span><br><span class="line"> 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',</span><br><span class="line"> 'scrapy.downloadermiddlewares.stats.DownloaderStats']</span><br><span class="line">2020-04-27 23:56:02 [scrapy.middleware] INFO: Enabled spider middlewares:</span><br><span class="line">['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',</span><br><span class="line"> 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',  'scrapy.spidermiddlewares.referer.RefererMiddleware',</span><br><span class="line"> 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',</span><br><span class="line"> 'scrapy.spidermiddlewares.depth.DepthMiddleware']</span><br><span class="line">2020-04-27 23:56:02 [scrapy.middleware] INFO: Enabled item pipelines:</span><br><span class="line">[]</span><br><span class="line">2020-04-27 23:56:02 [scrapy.core.engine] INFO: Spider opened</span><br><span class="line">2020-04-27 23:56:02 [scrapy.extensions.logstats] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)</span><br><span class="line">2020-04-27 23:56:02 [scrapy.extensions.telnet] INFO: Telnet console listening on 127.0.0.1:6023</span><br><span class="line">2020-04-27 23:56:03 [scrapy.core.engine] DEBUG: Crawled (200) &lt;GET https://cn.investing.com/commodities/real-time-futures&gt; (referer: None)</span><br><span class="line">黄金 1,723.45 -0.70%</span><br><span class="line">XAU/USD 1,710.37 -1.07%</span><br><span class="line">白银 15.273 +0.07%</span><br><span class="line">铜 2.349 +0.53%</span><br><span class="line">铂 777.75 +0.51%</span><br><span class="line">钯 1,897.30 -4.43%</span><br><span class="line">WTI原油 12.23 -27.80%</span><br><span class="line">伦敦布伦特原油 22.82 -8.02%</span><br><span class="line">天然气 1.837 -3.06%</span><br><span class="line">燃料油 0.7071 -3.51%</span><br><span class="line">RBOB汽油 0.6939 -0.89%</span><br><span class="line">伦敦汽油 192.75 -6.20%</span><br><span class="line">铝 1,507.75 -0.54%</span><br><span class="line">锌 1,910.50 +1.16%</span><br><span class="line">铅 1,638.75 +0.74%</span><br><span class="line">镍 12,240.00 -0.16%</span><br><span class="line">铜 5,199.25 +0.20%</span><br><span class="line">锡 15,450.00 +3.14%</span><br><span class="line">美国小麦 525.88 -0.78%</span><br><span class="line">稻谷 14.655 -0.07%</span><br><span class="line">玉米 314.62 -2.29%</span><br><span class="line">美国大豆 840.62 +0.07%</span><br><span class="line">美国大豆油 24.94 -2.20%</span><br><span class="line">美国豆粕 292.50 -0.03%</span><br><span class="line">美国二号棉花 54.96 -1.20%</span><br><span class="line">美国可可 2,330.50 +0.32%</span><br><span class="line">美国C型咖啡 106.20 -0.52%</span><br><span class="line">伦敦咖啡 1,143.00 0.00%</span><br><span class="line">美国11号糖 9.52 -2.96%</span><br><span class="line">橙汁 112.08 +3.20%</span><br><span class="line">活牛 83.675 +1.27%</span><br><span class="line">瘦肉猪 56.17 +6.94%</span><br><span class="line">饲牛 118.69 +1.21%</span><br><span class="line">木材 312.30 -3.10%</span><br><span class="line">燕麦 281.10 -1.26%</span><br><span class="line">2020-04-27 23:56:03 [scrapy.core.engine] INFO: Closing spider (finished)</span><br><span class="line">2020-04-27 23:56:03 [scrapy.statscollectors] INFO: Dumping Scrapy stats:</span><br><span class="line">&#123;'downloader/request_bytes': 328,</span><br><span class="line"> 'downloader/request_count': 1,  </span><br><span class="line"> 'downloader/request_method_count/GET': 1,</span><br><span class="line"> 'downloader/response_bytes': 55344,</span><br><span class="line"> 'downloader/response_count': 1,</span><br><span class="line"> 'downloader/response_status_count/200': 1,</span><br><span class="line"> 'elapsed_time_seconds': 1.551372,</span><br><span class="line"> 'finish_reason': 'finished',</span><br><span class="line"> 'finish_time': datetime.datetime(2020, 4, 27, 15, 56, 3, 887893),</span><br><span class="line"> 'log_count/DEBUG': 1,</span><br><span class="line"> 'log_count/INFO': 10,</span><br><span class="line"> 'response_received_count': 1,</span><br><span class="line"> 'scheduler/dequeued': 1,</span><br><span class="line"> 'scheduler/dequeued/memory': 1, </span><br><span class="line"> 'scheduler/enqueued': 1,</span><br><span class="line"> 'scheduler/enqueued/memory': 1,</span><br><span class="line"> 'start_time': datetime.datetime(2020, 4, 27, 15, 56, 2, 336521)&#125;</span><br><span class="line">2020-04-27 23:56:03 [scrapy.core.engine] INFO: Spider closed (finished)</span><br></pre></td></tr></table></figure>
+
+<p>这样我们就得到结果啦，接下来可以写一个<code>writer</code>存储数据，笔者此处便不再赘述。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/06/17/%E3%80%90%E5%85%A5%E9%97%A8%E7%BA%A7%E6%95%99%E7%A8%8B%E3%80%91python%E4%BD%BF%E7%94%A8scrapy%E5%BA%93%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB/" data-id="ckbi4cilu000bu8uj71e61d50" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/06/17/%E3%80%90%E6%9C%80%E6%96%B0%E3%80%91Qt5.13%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Qt5.13及以上版本如何访问MySQL数据库
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/06/17/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AE%8C%E6%88%90vue-cli%E8%84%9A%E6%89%8B%E6%9E%B6%E9%85%8D%E7%BD%AE/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">从零开始完成vue-cli脚手架配置</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E6%9C%80%E6%96%B0%E3%80%91Qt5.13%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/">Qt5.13及以上版本如何访问MySQL数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E5%85%A5%E9%97%A8%E7%BA%A7%E6%95%99%E7%A8%8B%E3%80%91python%E4%BD%BF%E7%94%A8scrapy%E5%BA%93%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB/">python使用scrapy实现爬虫</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AE%8C%E6%88%90vue-cli%E8%84%9A%E6%89%8B%E6%9E%B6%E9%85%8D%E7%BD%AE/">从零开始完成vue-cli脚手架配置</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA+Hello%20World+%E4%B8%BB%E9%A1%B5%E9%85%8D%E7%BD%AE/">【Spring Boot自学笔记一】项目搭建+Hello World+主页配置</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E6%95%B4%E5%90%88MyBatis+Druid+%E4%BD%BF%E7%94%A8MyBatis%20Generator+%E5%8A%A8%E6%80%81%E6%89%AB%E6%8F%8F%E5%BC%80%E5%8F%91/">【Spring Boot自学笔记四】整合MyBatis+Druid+MyBatis Generator逆向工程动态扫描开发</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

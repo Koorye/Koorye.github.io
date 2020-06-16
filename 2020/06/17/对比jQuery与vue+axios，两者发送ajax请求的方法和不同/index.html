@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>对比jQuery与Vue+axios的Ajax | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="axios和jQuery的ajax本质上都是对原生XHR的封装，不过axios符合最新的ES规范。因此，在用vue编写js时，使用axios而不是jQuery的ajax应该是更好的方案。 axios和jQuery的ajax用法大多相同，不过还是有少数地方不一样，我们来对比一下。由于axios经常与vue结合，这里笔者采用vue+axios实现axios版ajax。  post请求准备控制器首先实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对比jQuery与Vue+axios的Ajax">
+<meta property="og:url" content="http://yoursite.com/2020/06/17/%E5%AF%B9%E6%AF%94jQuery%E4%B8%8Evue+axios%EF%BC%8C%E4%B8%A4%E8%80%85%E5%8F%91%E9%80%81ajax%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E4%B8%8D%E5%90%8C/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="axios和jQuery的ajax本质上都是对原生XHR的封装，不过axios符合最新的ES规范。因此，在用vue编写js时，使用axios而不是jQuery的ajax应该是更好的方案。 axios和jQuery的ajax用法大多相同，不过还是有少数地方不一样，我们来对比一下。由于axios经常与vue结合，这里笔者采用vue+axios实现axios版ajax。  post请求准备控制器首先实现">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507115352756.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507115431764.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507115504437.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507124856250.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507124914566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507125527389.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507125548539.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507125650952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507130419226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507130643517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507131306480.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200507131326692.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-06-16T16:06:15.961Z">
+<meta property="article:modified_time" content="2020-06-16T15:11:31.222Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200507115352756.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-对比jQuery与vue+axios，两者发送ajax请求的方法和不同" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/17/%E5%AF%B9%E6%AF%94jQuery%E4%B8%8Evue+axios%EF%BC%8C%E4%B8%A4%E8%80%85%E5%8F%91%E9%80%81ajax%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E4%B8%8D%E5%90%8C/" class="article-date">
+  <time datetime="2020-06-16T16:06:15.961Z" itemprop="datePublished">2020-06-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      对比jQuery与Vue+axios的Ajax
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>axios和jQuery的ajax本质上都是对原生XHR的封装，不过axios符合最新的ES规范。因此，在用vue编写js时，使用axios而不是jQuery的ajax应该是更好的方案。</p>
+<p>axios和jQuery的ajax用法大多相同，不过还是有少数地方不一样，我们来对比一下。由于axios经常与vue结合，这里笔者采用vue+axios实现axios版ajax。</p>
+<hr>
+<h1 id="post请求"><a href="#post请求" class="headerlink" title="post请求"></a>post请求</h1><h2 id="准备控制器"><a href="#准备控制器" class="headerlink" title="准备控制器"></a>准备控制器</h2><p>首先实现一个后台控制器，笔者此处采用spring boot，可以看到，这个控制器需要一个请求参数id，然后会返回一个包含id和msg信息的json：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.koorye.hellokotlin.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSON;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.ResponseBody;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line">    </span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MsgControllerJava</span> </span>&#123;</span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="meta">@RequestMapping</span>(<span class="string">"/msg"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">getMsg</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">    Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">"id"</span>, id);</span><br><span class="line">    map.put(<span class="string">"msg"</span>, <span class="string">"A message from Controller."</span>);</span><br><span class="line">    <span class="keyword">return</span> JSON.toJSON(map);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="准备html"><a href="#准备html" class="headerlink" title="准备html"></a>准备html</h2><p>我们来准备两个按钮：</p>
+<ul>
+<li>jQuery给按钮提供click事件需要用选择器，因此这里提供一个id</li>
+<li>vue+axios只需要使用<code>v-on:click</code>或者简写<code>@click</code>就可以指定事件</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-primary"</span> @<span class="attr">click</span>=<span class="string">"getMsg"</span>&gt;</span>Vue + Axios<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"ajaxBtn"</span> <span class="attr">class</span>=<span class="string">"btn btn-secondary"</span>&gt;</span>Vue + JQuery<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="实现ajax请求"><a href="#实现ajax请求" class="headerlink" title="实现ajax请求"></a>实现ajax请求</h2><p>请关注以下不同：</p>
+<ul>
+<li>发送参数的方式</li>
+<li>接收参数的方式</li>
+</ul>
+<h3 id="vue-axios版ajax"><a href="#vue-axios版ajax" class="headerlink" title="vue+axios版ajax"></a>vue+axios版ajax</h3><p>此处需要引入Qs来转换数据类型：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    getMsg() &#123;</span><br><span class="line">      axios(&#123;</span><br><span class="line">        method: <span class="string">'post'</span>,</span><br><span class="line">        url: <span class="string">'/msg'</span>,</span><br><span class="line">        data: Qs.stringify&#123;</span><br><span class="line">          id: <span class="number">111</span></span><br><span class="line">        &#125;,</span><br><span class="line">        responseType: <span class="string">'json'</span>,</span><br><span class="line">      &#125;</span><br><span class="line">      .then(<span class="function"><span class="keyword">function</span> (<span class="params">resp</span>) </span>&#123;</span><br><span class="line">        alert(resp.data.id + <span class="string">", "</span> + resp.data.msg);</span><br><span class="line">      &#125;)</span><br><span class="line">      .catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">        alert(error);</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="jQuery版ajax"><a href="#jQuery版ajax" class="headerlink" title="jQuery版ajax"></a>jQuery版ajax</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  $(<span class="string">'#ajaxBtn'</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">      method: <span class="string">'post'</span>,</span><br><span class="line">      url: <span class="string">'/msg'</span>,</span><br><span class="line">      data: &#123;</span><br><span class="line">        <span class="string">'id'</span>: <span class="number">222</span></span><br><span class="line">      &#125;,</span><br><span class="line">      dataType: <span class="string">'json'</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .done(<span class="function"><span class="keyword">function</span> (<span class="params">resp</span>) </span>&#123;</span><br><span class="line">      alert(resp.id + <span class="string">", "</span> + resp.msg);</span><br><span class="line">    &#125;)</span><br><span class="line">    .fail(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">      alert(error);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="发送参数的不同"><a href="#发送参数的不同" class="headerlink" title="发送参数的不同"></a>发送参数的不同</h3><p>传统的jquery把请求数据封装在data中，data是json的形式，需要用引号表示成员名；</p>
+<p>而axios+qs的形式不需要使用引号，再通过<code>Qs.stringify()</code>把数据转换成json。</p>
+<p>我们来看一下axios不使用<code>Qs.stringify()</code>会发生什么：<br><img src="https://img-blog.csdnimg.cn/20200507115352756.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>报了500错误？再来看一下发送的参数：<br><img src="https://img-blog.csdnimg.cn/20200507115431764.png" alt="在这里插入图片描述"><br>Request Payload？那么正常的参数是什么呢，下面是jQuery发送的参数：<br><img src="https://img-blog.csdnimg.cn/20200507115504437.png" alt="在这里插入图片描述"><br>可以看到，正常发送的参数应该是Form Data，这样后台才能接收到一个json；如果是Request<br>Payload，后台还需要额外的解析才能得到其中的json。</p>
+<p>所以，<br><strong>jQuery可以直接在data中编写json来发送post请求；而axios需要把编写的内容通过Qs转换成json字符串才能发送post请求。</strong></p>
+<h3 id="接收参数的不同"><a href="#接收参数的不同" class="headerlink" title="接收参数的不同"></a>接收参数的不同</h3><p>观察上面的脚本我们发现，jQuery可以直接通过resp.id、resp.msg得到json中的数据，axios的数据却存在resp.data中。</p>
+<p>我们来试一下把得到的json转换成字符串，使用<code>JSON.stringify(resp)</code>转换再用<code>alert(JSON.stringify(resp))</code>输出：</p>
+<p>jQuery的ajax返回的json：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200507124856250.png" alt="在这里插入图片描述"><br>axios返回的json:<br><img src="https://img-blog.csdnimg.cn/20200507124914566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到jQuery返回的json中只有数据；axios却返回了各种信息，如状态码、时间、url、请求方法等，其数据存在data成员中，这就是我们获取数据方法不同的原因。</p>
+<hr>
+<h1 id="get请求"><a href="#get请求" class="headerlink" title="get请求"></a>get请求</h1><p>既然请求方法只需要指定method，那么，如果我们直接把两个脚本中的method改成get，能否正常使用呢？</p>
+<p>jQuery正常运行：<br><img src="https://img-blog.csdnimg.cn/20200507125527389.png" alt="在这里插入图片描述"><br>axios报500状态码错误：<br><img src="https://img-blog.csdnimg.cn/20200507125548539.png" alt="在这里插入图片描述"><br>检查请求头， <strong>我们发现axios没有传入任何信息，甚至在去掉Qs.stringify和给id加上引号之后还是一样</strong> ：<br><img src="https://img-blog.csdnimg.cn/20200507125650952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>这说明axios不能通过data给get请求提供参数。</p>
+<h2 id="get和post的差别"><a href="#get和post的差别" class="headerlink" title="get和post的差别"></a>get和post的差别</h2><p>事实上，get请求通过在url后直接跟上参数来发送请求，例如localhost:8080/login/?username=koorye&amp;password=123，就是给后台发送了username为koorye，password为123的参数。</p>
+<p>而post则是使用request body传递参数，参数不存入url中，而是以额外的键值对的方式传递。</p>
+<h2 id="jQuery与axios的data在发送get请求时的不同"><a href="#jQuery与axios的data在发送get请求时的不同" class="headerlink" title="jQuery与axios的data在发送get请求时的不同"></a>jQuery与axios的data在发送get请求时的不同</h2><p>观察一下上文中jQuery和axios发送get请求时的url：</p>
+<p><strong>jQuery会根据请求类型自动判断把data放到url中还是request body中</strong> ，此处jQuery发送的get请求的url就带上了参数：<br><img src="https://img-blog.csdnimg.cn/20200507130419226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>而axios就不行，axios的data只用于给request body提供参数，而不能在url中附加参数：<br><img src="https://img-blog.csdnimg.cn/20200507130643517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="axios的get请求方式"><a href="#axios的get请求方式" class="headerlink" title="axios的get请求方式"></a>axios的get请求方式</h2><p>axios发送get请求时不能使用data，而要使用axios提供的一种新的类型<code>params</code>，params其中的参数会被直接加到url后，我们来试一下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    getMsg() &#123;</span><br><span class="line">      axios(&#123;</span><br><span class="line">        method: <span class="string">'get'</span>,</span><br><span class="line">        url: <span class="string">'/msg'</span>,</span><br><span class="line">        params: &#123;</span><br><span class="line">          <span class="string">'id'</span>: <span class="number">111</span></span><br><span class="line">        &#125;,</span><br><span class="line">        responseType: <span class="string">'json'</span>,</span><br><span class="line">      &#125;)</span><br><span class="line">      .then(<span class="function"><span class="keyword">function</span> (<span class="params">resp</span>) </span>&#123;</span><br><span class="line">        alert(resp.data.id + <span class="string">", "</span> + resp.data.msg);</span><br><span class="line">      &#125;) </span><br><span class="line">      .catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">       alert(error);</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>成功发送请求并接收数据：<br><img src="https://img-blog.csdnimg.cn/20200507131306480.png" alt="在这里插入图片描述"><br>请求头的url中成功附上参数：<br><img src="https://img-blog.csdnimg.cn/20200507131326692.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>到这里，我们已经成功使用jQuery和axios的ajax各自完成了get和post请求的参数发送和结果获取，我们来总结一下不同之处：</p>
+<p><strong>关于发送请求:</strong></p>
+<ul>
+<li>jQuery无论是get还是post，都使用data发送数据，jQuery会自动判断请求类型并匹配</li>
+<li>axios在get请求时使用params；在post请求时使用data，并且要注意把发送的data通过<code>Qs.stringify()</code>转换成json</li>
+</ul>
+<p><strong>关于接收数据:</strong></p>
+<ul>
+<li>jQuery接收的数据直接以json的形式存在返回的response中</li>
+<li>axios接收一个json形式的response，返回的数据存在response的data参数中</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/06/17/%E5%AF%B9%E6%AF%94jQuery%E4%B8%8Evue+axios%EF%BC%8C%E4%B8%A4%E8%80%85%E5%8F%91%E9%80%81ajax%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E4%B8%8D%E5%90%8C/" data-id="ckbi4cim1000iu8ujaat88agf" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/06/17/%E4%B8%AA%E4%BA%BA%E6%95%B4%E7%90%86%E7%9A%84C++%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83%E2%80%94%E2%80%94%E6%91%98%E8%87%AA%E3%80%8AGoogle%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E3%80%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          个人整理C++风格规范——摘自《Google开源项目风格指南》
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/06/17/vue%E7%BB%84%E4%BB%B6%E9%97%B4%E7%88%B6%E5%AD%90%E4%BC%A0%E5%80%BC%E3%80%81%E7%A5%96%E7%88%B6%E5%AD%90%E5%AD%99%E4%BC%A0%E5%80%BC%E5%92%8C%E4%BB%BB%E6%84%8F%E4%BC%A0%E5%80%BC%E7%9A%845%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%8Cprop,emit,attrs,listeners%E4%BB%A5%E5%8F%8A%E4%B8%AD%E5%A4%AE%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">vue组件间传值方法——prop、emit、attrs、listeners、中央事件总线</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E6%9C%80%E6%96%B0%E3%80%91Qt5.13%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/">Qt5.13及以上版本如何访问MySQL数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E5%85%A5%E9%97%A8%E7%BA%A7%E6%95%99%E7%A8%8B%E3%80%91python%E4%BD%BF%E7%94%A8scrapy%E5%BA%93%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB/">python使用scrapy实现爬虫</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AE%8C%E6%88%90vue-cli%E8%84%9A%E6%89%8B%E6%9E%B6%E9%85%8D%E7%BD%AE/">从零开始完成vue-cli脚手架配置</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA+Hello%20World+%E4%B8%BB%E9%A1%B5%E9%85%8D%E7%BD%AE/">【Spring Boot自学笔记一】项目搭建+Hello World+主页配置</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E6%95%B4%E5%90%88MyBatis+Druid+%E4%BD%BF%E7%94%A8MyBatis%20Generator+%E5%8A%A8%E6%80%81%E6%89%AB%E6%8F%8F%E5%BC%80%E5%8F%91/">【Spring Boot自学笔记四】整合MyBatis+Druid+MyBatis Generator逆向工程动态扫描开发</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

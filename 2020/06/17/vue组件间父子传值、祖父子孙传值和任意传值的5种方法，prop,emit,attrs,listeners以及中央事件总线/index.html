@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>vue组件间传值方法——prop、emit、attrs、listeners、中央事件总线 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="父子传值prop: 父向子传值步骤：  在子部件标签中加入自定义属性：&lt;Son :fatherMsg&#x3D;&quot;msg&quot;&#x2F;&gt;  在子部件中添加props数组：props:[&#39;fatherMsg&#39;]   12345678910111213141516171819202122232425let Son&#x3D;&amp;#123;  props:[&#39;fatherMsg&#39;],">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue组件间传值方法——prop、emit、attrs、listeners、中央事件总线">
+<meta property="og:url" content="http://yoursite.com/2020/06/17/vue%E7%BB%84%E4%BB%B6%E9%97%B4%E7%88%B6%E5%AD%90%E4%BC%A0%E5%80%BC%E3%80%81%E7%A5%96%E7%88%B6%E5%AD%90%E5%AD%99%E4%BC%A0%E5%80%BC%E5%92%8C%E4%BB%BB%E6%84%8F%E4%BC%A0%E5%80%BC%E7%9A%845%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%8Cprop,emit,attrs,listeners%E4%BB%A5%E5%8F%8A%E4%B8%AD%E5%A4%AE%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="父子传值prop: 父向子传值步骤：  在子部件标签中加入自定义属性：&lt;Son :fatherMsg&#x3D;&quot;msg&quot;&#x2F;&gt;  在子部件中添加props数组：props:[&#39;fatherMsg&#39;]   12345678910111213141516171819202122232425let Son&#x3D;&amp;#123;  props:[&#39;fatherMsg&#39;],">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200509000815363.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200509000829992.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200509000842343.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200509000853889.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020050900090859.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-06-16T16:06:15.959Z">
+<meta property="article:modified_time" content="2020-06-16T15:05:19.923Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200509000815363.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-vue组件间父子传值、祖父子孙传值和任意传值的5种方法，prop,emit,attrs,listeners以及中央事件总线" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/17/vue%E7%BB%84%E4%BB%B6%E9%97%B4%E7%88%B6%E5%AD%90%E4%BC%A0%E5%80%BC%E3%80%81%E7%A5%96%E7%88%B6%E5%AD%90%E5%AD%99%E4%BC%A0%E5%80%BC%E5%92%8C%E4%BB%BB%E6%84%8F%E4%BC%A0%E5%80%BC%E7%9A%845%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%8Cprop,emit,attrs,listeners%E4%BB%A5%E5%8F%8A%E4%B8%AD%E5%A4%AE%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF/" class="article-date">
+  <time datetime="2020-06-16T16:06:15.959Z" itemprop="datePublished">2020-06-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      vue组件间传值方法——prop、emit、attrs、listeners、中央事件总线
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="父子传值"><a href="#父子传值" class="headerlink" title="父子传值"></a>父子传值</h1><h2 id="prop-父向子传值"><a href="#prop-父向子传值" class="headerlink" title="prop: 父向子传值"></a>prop: 父向子传值</h2><p>步骤：</p>
+<ul>
+<li><p>在子部件标签中加入自定义属性：<br><code>&lt;Son :fatherMsg=&quot;msg&quot;/&gt;</code></p>
+</li>
+<li><p>在子部件中添加props数组：<br><code>props:[&#39;fatherMsg&#39;]</code></p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> Son=&#123;</span><br><span class="line">  props:[<span class="string">'fatherMsg'</span>],</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">    &lt;h2 class="display-4 text-secondary"&gt;This is Son&lt;/h2&gt;</span></span><br><span class="line"><span class="string">    &lt;p class="text-danger"&gt;&#123;&#123;fatherMsg&#125;&#125;&lt;/p&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> Father = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el:<span class="string">'#app'</span>,</span><br><span class="line">  data()&#123;</span><br><span class="line">    <span class="keyword">return</span>&#123;</span><br><span class="line">      msg:<span class="string">'A message from father.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  components:&#123;</span><br><span class="line">    Son</span><br><span class="line">  &#125;, </span><br><span class="line">  template:<span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-primary"&gt;This is Father&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;Son :fatherMsg="msg"/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200509000815363.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="emit：子向父传值"><a href="#emit：子向父传值" class="headerlink" title="$emit：子向父传值"></a>$emit：子向父传值</h2><p>子传父与父传子略有不同，依赖于事件，我们定义一个按钮用于触发事件。</p>
+<p>步骤：</p>
+<ul>
+<li><p>准备发送数据的方法<br><code>methods: {sendMsg(){this.$emit(&#39;sendMsgFromSon&#39;,this.msg);}},</code></p>
+</li>
+<li><p>准备一个触发事件的对象并指定发送数据的方法（如button)<br><code>&lt;button class=&quot;btn btn-success&quot; @click=&quot;sendMsg&quot;&gt;Send&lt;/button&gt;</code></p>
+</li>
+<li><p>预留一个接收数据的参数<br><code>sonMsg: &#39;Message does not arrive.&#39;</code></p>
+</li>
+<li><p>准备接收数据的方法并修改参数<br><code>methods: {getMsg(resp) {this.sonMsg = resp;}},</code></p>
+</li>
+<li><p>在子部件中加入自定义属性接收数据并指定接收数据的方法<br><code>&lt;Son @sendMsgFromSon=&quot;getMsg&quot;/&gt;</code></p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> Son = &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      msg: <span class="string">'A message from son.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    sendMsg() &#123;</span><br><span class="line">      <span class="keyword">this</span>.$emit(<span class="string">'sendMsgFromSon'</span>, <span class="keyword">this</span>.msg);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">    &lt;h2 class="display-4 text-secondary"&gt;This is Son&lt;/h2&gt;</span></span><br><span class="line"><span class="string">    &lt;button class="btn btn-success" @click="sendMsg"&gt;Send&lt;/button&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> Father = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      sonMsg: <span class="string">'Message does not arrive.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  components: &#123;</span><br><span class="line">    Son</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    getMsg(resp) &#123;</span><br><span class="line">      <span class="keyword">this</span>.sonMsg = resp;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-primary"&gt;This is Father&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;p class="text-danger"&gt;&#123;&#123;sonMsg&#125;&#125;&lt;/p&gt;</span></span><br><span class="line"><span class="string">      &lt;Son @sendMsgFromSon="getMsg"/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200509000829992.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<hr>
+<h1 id="祖父子孙传值"><a href="#祖父子孙传值" class="headerlink" title="祖父子孙传值"></a>祖父子孙传值</h1><p>有了父子传递的经验，那么多层传递是否也可以用多个prop和emit实现呢？</p>
+<p>当然可以，不过这显得太麻烦了。于是，vue2.4推出了<code>$attrs</code>和<code>$listeners</code>帮我们解决了这个问题。</p>
+<h2 id="attrs-祖父向子孙传值"><a href="#attrs-祖父向子孙传值" class="headerlink" title="$attrs: 祖父向子孙传值"></a>$attrs: 祖父向子孙传值</h2><p>不然发现，此处的Father和prop例子中的完全相同，Grandson也与Son除名字外完全相同，唯一的区别是多了中间组件。</p>
+<p>关键步骤：</p>
+<ul>
+<li><p>中间组件中添加子孙组件为子组件<br><code>components:{Grandson},</code></p>
+</li>
+<li><p>使用<code>v-bind</code>为子组件绑定<code>$attrs</code><br><code>&lt;Grandson v-bind=&quot;$attrs&quot;/&gt;</code></p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> Grandson = &#123;</span><br><span class="line">  props: [<span class="string">'fatherMsg'</span>],</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-success"&gt;This is Grandson&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;p class="text-danger"&gt;&#123;&#123;fatherMsg&#125;&#125;&lt;/p&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;`</span></span><br><span class="line">&#125;;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">let</span> Son = (&#123;</span><br><span class="line">  components: &#123;</span><br><span class="line">    Grandson</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-secondary"&gt;This is Son&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;Grandson v-bind="$attrs"/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> Father = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      msg: <span class="string">'A message from father.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  components: &#123;   </span><br><span class="line">    Son</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class = "display-4 text-primary"&gt; This is Father &lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;Son :fatherMsg="msg"/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200509000842343.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="listeners-子孙向祖父传值"><a href="#listeners-子孙向祖父传值" class="headerlink" title="$listeners: 子孙向祖父传值"></a>$listeners: 子孙向祖父传值</h2><p>有了祖父传子孙的经验，子孙传祖父也大同小异，只需在子传父的基础上添加即可：</p>
+<ul>
+<li><p>为中间组件添加子孙组件为子组件<br><code>components:{Grandson},</code></p>
+</li>
+<li><p>使用<code>v-on</code>为子组件绑定<code>$listeners</code><br><code>&lt;Grandson v-on=&quot;$listeners&quot;&gt;</code></p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> Grandson = &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      msg: <span class="string">'A message from Grandson.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    sendMsg() &#123;</span><br><span class="line">      <span class="keyword">this</span>.$emit(<span class="string">'sendMsgFromGrandson'</span>, <span class="keyword">this</span>.msg);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-success"&gt;This is Grandson&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;button class="btn btn-success" @click="sendMsg"&gt;Send&lt;/button&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span>,</span><br><span class="line">&#125;;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">let</span> Son = &#123;   </span><br><span class="line">  components: &#123;</span><br><span class="line">    Grandson</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">  &lt;div&gt;</span></span><br><span class="line"><span class="string">    &lt;h2 class="display-4 text-secondary"&gt;This is Son&lt;/h2&gt;</span></span><br><span class="line"><span class="string">    &lt;Grandson v-on="$listeners"/&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;`</span></span><br><span class="line">&#125;;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">let</span> Father = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">       grandsonMsg: <span class="string">'Message does not arrive.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  components: &#123;</span><br><span class="line">    Son</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    getMsg(resp) &#123;</span><br><span class="line">      <span class="keyword">this</span>.grandsonMsg = resp;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-primary"&gt;This is Father&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;p class="text-danger"&gt;&#123;&#123;grandsonMsg&#125;&#125;&lt;/p&gt;</span></span><br><span class="line"><span class="string">      &lt;Son @sendMsgFromGrandson="getMsg"/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200509000853889.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="任意传值"><a href="#任意传值" class="headerlink" title="任意传值"></a>任意传值</h1><h2 id="中央事件总线：任意组件间传值"><a href="#中央事件总线：任意组件间传值" class="headerlink" title="中央事件总线：任意组件间传值"></a>中央事件总线：任意组件间传值</h2><p>最后的方法叫做中央事件总线，它可以实现任意组件的传值，无论是父子、祖父子孙、还是兄弟。</p>
+<p>这里我们创建了一个全局的bus，这个bus就像一个接线员，接收一个数据，再发送给别的组件。</p>
+<p>步骤：</p>
+<ul>
+<li><p>声明一个全局的Vue作为总线<br><code>let bus = new Vue();</code></p>
+</li>
+<li><p>为发送数据的组件添加方法，使用<code>bus.$emit</code>发送<br><code>methods:{sendMsg(){bus.$emit(&#39;msgFromComponent1&#39;, this.msg);}},</code></p>
+</li>
+<li><p>为发送数据的组件提供事件触发方法（此处使用按钮）：<br><code>&lt;button class=&quot;btn btn-success&quot; @click=&quot;sendMsg&quot;&gt;Send&lt;/button&gt;</code></p>
+</li>
+<li><p>为接收的数据预留槽位<br><code>data(){return{msg: &#39;Message does not arrive.&#39;}},</code></p>
+</li>
+<li><p>为接收数据的组件提供方法，使用<code>bus.$on</code>接收（此处使用<code>mounted</code>，意味着数据改变就调用方法，从而实现同步更新）<br><code>mounted() {bus.$on(&#39;msgFromComponent1&#39;, (resp) =&gt; {this.msg = resp;})},</code></p>
+</li>
+</ul>
+<pre><code class="js"><span class="keyword">let</span> bus = <span class="keyword">new</span> Vue();
+
+<span class="keyword">let</span> Component1 = <span class="keyword">new</span> Vue({
+  el: <span class="string">'#app'</span>,
+  data() {
+    <span class="keyword">return</span> {
+      msg: <span class="string">'A message from component1.'</span>
+    }
+  },
+  methods: {
+    sendMsg() {
+      bus.$emit(<span class="string">'msgFromComponent1'</span>, <span class="keyword">this</span>.msg);
+    }
+  },
+  template: <span class="string">`</span>
+<span class="string">    &lt;div&gt;</span>
+<span class="string">      &lt;h2 class="display-4 text-primary"&gt;This is Component1&lt;/h2&gt;</span>
+<span class="string">      &lt;button class="btn btn-success" @click="sendMsg"&gt;Send&lt;/button&gt;</span>
+<span class="string">    &lt;/div&gt;`</span>
+});
+
+<span class="keyword">let</span> Component2 = <span class="keyword">new</span> Vue({
+  el: <span class="string">'#app2'</span>,
+  data() {
+    <span class="keyword">return</span> {
+      msg: <span class="string">'Message does not arrive.'</span>
+    }
+  },
+  mounted() {
+    bus.$on(<span class="string">'msgFromComponent1'</span>, (resp) =&gt; {
+      <span class="keyword">this</span>.msg = resp;
+    })
+  },
+  template: <span class="string">`</span>
+<span class="string">  &lt;div&gt;</span>
+<span class="string">    &lt;h2 class="display-4 text-secondary"&gt;This is Component2&lt;/h2&gt;</span>
+<span class="string">    &lt;p class="text-danger"&gt;{{msg}}&lt;/p&gt;</span>
+<span class="string">  &lt;/div&gt;`</span>
+})</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/2020050900090859.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">  </p>
+<p>以上5种方法讲解完成，除此之外，还有<code>provided</code> / <code>inject</code>和<code>$parent</code> /<br><code>$children[index]</code>等方法，不过不太常用，大家可以自行了解。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/06/17/vue%E7%BB%84%E4%BB%B6%E9%97%B4%E7%88%B6%E5%AD%90%E4%BC%A0%E5%80%BC%E3%80%81%E7%A5%96%E7%88%B6%E5%AD%90%E5%AD%99%E4%BC%A0%E5%80%BC%E5%92%8C%E4%BB%BB%E6%84%8F%E4%BC%A0%E5%80%BC%E7%9A%845%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%8Cprop,emit,attrs,listeners%E4%BB%A5%E5%8F%8A%E4%B8%AD%E5%A4%AE%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF/" data-id="ckbi4cila0000u8ujb8jdfkx2" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/06/17/%E5%AF%B9%E6%AF%94jQuery%E4%B8%8Evue+axios%EF%BC%8C%E4%B8%A4%E8%80%85%E5%8F%91%E9%80%81ajax%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E4%B8%8D%E5%90%8C/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          对比jQuery与Vue+axios的Ajax
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/06/17/jQuery%E5%AE%9E%E7%8E%B0%E9%9D%99%E6%80%81html+ajax%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B9%B6%E6%98%BE%E7%A4%BA/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">jQuery实现静态html+ajax访问MySQL数据库</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E6%9C%80%E6%96%B0%E3%80%91Qt5.13%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/">Qt5.13及以上版本如何访问MySQL数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E5%85%A5%E9%97%A8%E7%BA%A7%E6%95%99%E7%A8%8B%E3%80%91python%E4%BD%BF%E7%94%A8scrapy%E5%BA%93%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB/">python使用scrapy实现爬虫</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AE%8C%E6%88%90vue-cli%E8%84%9A%E6%89%8B%E6%9E%B6%E9%85%8D%E7%BD%AE/">从零开始完成vue-cli脚手架配置</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA+Hello%20World+%E4%B8%BB%E9%A1%B5%E9%85%8D%E7%BD%AE/">【Spring Boot自学笔记一】项目搭建+Hello World+主页配置</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E6%95%B4%E5%90%88MyBatis+Druid+%E4%BD%BF%E7%94%A8MyBatis%20Generator+%E5%8A%A8%E6%80%81%E6%89%AB%E6%8F%8F%E5%BC%80%E5%8F%91/">【Spring Boot自学笔记四】整合MyBatis+Druid+MyBatis Generator逆向工程动态扫描开发</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

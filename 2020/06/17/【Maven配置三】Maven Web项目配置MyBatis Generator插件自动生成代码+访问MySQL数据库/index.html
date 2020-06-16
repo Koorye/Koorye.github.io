@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>【Maven配置三】Web项目配置MyBatis Generator逆向工程 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="我们知道MyBatis的框架为我们操作数据库大大减小了工作量，然而实现类和mapper映射仍然需要我们自己编写。 MyBatis Generator为我们很好的解决了这个问题，它能自动生成实现类和mapper映射，我们要做的只是直接调用它生成的代码访问数据库。 那我们就开始配置MyBatis Generator， 以下操作全都基于MyBatis框架配置完成的情况！  配置xml配置pom.xml在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Maven配置三】Web项目配置MyBatis Generator逆向工程">
+<meta property="og:url" content="http://yoursite.com/2020/06/17/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%B8%89%E3%80%91Maven%20Web%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AEMyBatis%20Generator%E6%8F%92%E4%BB%B6%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81+%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="我们知道MyBatis的框架为我们操作数据库大大减小了工作量，然而实现类和mapper映射仍然需要我们自己编写。 MyBatis Generator为我们很好的解决了这个问题，它能自动生成实现类和mapper映射，我们要做的只是直接调用它生成的代码访问数据库。 那我们就开始配置MyBatis Generator， 以下操作全都基于MyBatis框架配置完成的情况！  配置xml配置pom.xml在">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200430145201668.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200430145557645.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200430153719794.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200430153710524.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200430154325827.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200430154300255.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-06-16T16:06:15.988Z">
+<meta property="article:modified_time" content="2020-06-16T11:52:34.971Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200430145201668.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-【Maven配置三】Maven Web项目配置MyBatis Generator插件自动生成代码+访问MySQL数据库" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/17/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%B8%89%E3%80%91Maven%20Web%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AEMyBatis%20Generator%E6%8F%92%E4%BB%B6%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81+%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" class="article-date">
+  <time datetime="2020-06-16T16:06:15.988Z" itemprop="datePublished">2020-06-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【Maven配置三】Web项目配置MyBatis Generator逆向工程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们知道<code>MyBatis</code>的框架为我们操作数据库大大减小了工作量，然而实现类和<code>mapper</code>映射仍然需要我们自己编写。</p>
+<p><code>MyBatis Generator</code>为我们很好的解决了这个问题，它能自动生成实现类和<code>mapper</code>映射，我们要做的只是直接调用它生成的代码访问数据库。</p>
+<p>那我们就开始配置<code>MyBatis Generator</code>， <strong>以下操作全都基于<code>MyBatis</code>框架配置完成的情况！</strong></p>
+<hr>
+<h1 id="配置xml"><a href="#配置xml" class="headerlink" title="配置xml"></a>配置xml</h1><h2 id="配置pom-xml"><a href="#配置pom-xml" class="headerlink" title="配置pom.xml"></a>配置pom.xml</h2><p>在<code>pom.xml</code>的<code>&lt;plugins&gt;</code>标签中加入以下内容：</p>
+<ul>
+<li><code>verbose</code>: 指定结果会输出到控制台</li>
+<li><code>overwrite</code>: 新生成的文件会覆盖旧文件，不设置此选项新内容将会追加到原文件尾</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.generator<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-generator-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.7<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">verbose</span>&gt;</span>true<span class="tag">&lt;/<span class="name">verbose</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">overwrite</span>&gt;</span>true<span class="tag">&lt;/<span class="name">overwrite</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="配置GeneratorConfig-xml"><a href="#配置GeneratorConfig-xml" class="headerlink" title="配置GeneratorConfig.xml"></a>配置GeneratorConfig.xml</h2><p>在<code>src/main/resources</code>中创建<code>GeneratorConfig.xml</code>，输入以下内容：</p>
+<ul>
+<li><p><code>jdbcConnection</code>中的设置我们已经很熟悉，输入驱动、<code>URL</code>、用户名和密码</p>
+</li>
+<li><p>在<code>javaModelGenerator</code>和<code>sqlMapGenerator</code>的<code>targetPackage</code>中指定生成的位置<br>本例中<code>targerPackage=&quot;pojo&quot;</code>即让实现类生成到<code>main/java/pojo</code>包中</p>
+</li>
+<li><p><code>table</code>用于指定要生成的数据库中的数据表名，可以有多个<code>table</code></p>
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">generatorConfiguration</span></span></span><br><span class="line"><span class="meta">    <span class="meta-keyword">PUBLIC</span> <span class="meta-string">"-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"</span></span></span><br><span class="line"><span class="meta">    <span class="meta-string">"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">generatorConfiguration</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--mysql 连接数据库jar 这里选择自己本地位置--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">classPathEntry</span> <span class="attr">location</span>=<span class="string">"D:\software\system\mysql-8.0.19-winx64\lib\mysql-connector-java-8.0.19.jar"</span>/&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--实例--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">context</span> <span class="attr">id</span>=<span class="string">"MysqlGenerator"</span> <span class="attr">targetRuntime</span>=<span class="string">"MyBatis3"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--数据库连接--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">jdbcConnection</span> <span class="attr">driverClass</span>=<span class="string">"com.mysql.cj.jdbc.Driver"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">connectionURL</span>=<span class="string">"jdbc:mysql://localhost:3306/hello_mysql?useUnicode=true<span class="symbol">&amp;amp;</span>characterEncoding=UTF-8<span class="symbol">&amp;amp;</span>serverTimezone=UTC"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">userId</span>=<span class="string">"root"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">password</span>=<span class="string">"123"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--生成POJO类--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">javaModelGenerator</span> <span class="attr">targetPackage</span>=<span class="string">"pojo"</span> <span class="attr">targetProject</span>=<span class="string">"src/main/java"</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- 是否对model添加 构造函数 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"constructorBased"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- 是否允许子包 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"enableSubPackages"</span> <span class="attr">value</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- 建立的Model对象是否不可改变,即生成的Model对象不会有setter方法只有构造方法 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"immutable"</span> <span class="attr">value</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- 是否对类CHAR类型的列的数据进行trim操作 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"trimStrings"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">javaModelGenerator</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--Mapper映射文件的生成配置,指定包位置和实际位置--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">sqlMapGenerator</span> <span class="attr">targetPackage</span>=<span class="string">"mapper"</span> <span class="attr">targetProject</span>=<span class="string">"src/main/java"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--Mapper接口生成的配置,指定包位置和实际位置--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">javaClientGenerator</span> <span class="attr">type</span>=<span class="string">"XMLMAPPER"</span> <span class="attr">targetPackage</span>=<span class="string">"mapper"</span> <span class="attr">targetProject</span>=<span class="string">"src/main/java"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">table</span> <span class="attr">tableName</span>=<span class="string">"users"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">context</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">generatorConfiguration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="配置命令行"><a href="#配置命令行" class="headerlink" title="配置命令行"></a>配置命令行</h1><p>在<code>intellij idea</code>中点击右上角的<code>Edit Configurations</code>：![在这里插入图片描述](<a href="https://img-" target="_blank" rel="noopener">https://img-</a><br>blog.csdnimg.cn/20200430145151191.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70)<br>点击左侧加号 → 在左侧栏中找到<code>Maven</code> → 在<code>Command line</code>中输入<code>mybatis-generator:generate
+-e</code>（<code>-e</code>指定结果显示到控制台中），并为配置命名：<br><img src="https://img-blog.csdnimg.cn/20200430145201668.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>接下来，我们就可以启动运行项目啦，运行之后，<code>MyBatis Generator</code>就为我们指定的<code>Users</code>表生成了<code>mapper</code>包和<code>pojo</code>包：</p>
+<ul>
+<li><code>mapper</code>: 提供了<code>Mapper</code>接口，<code>Mapper.xml</code>配置文件</li>
+<li><code>pojo</code>: 提供了<code>Users</code>实现类，<code>Example</code>用于辅助查询的类</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200430145557645.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<hr>
+<h1 id="使用生成的代码访问Mysql"><a href="#使用生成的代码访问Mysql" class="headerlink" title="使用生成的代码访问Mysql"></a>使用生成的代码访问Mysql</h1><p>在提供<code>Servlet</code>之前，我们先来看一下生成的文件，注意到生成的<code>mapper</code>并不像之前在<code>resources</code>中，而是在<code>java</code>中，那么此时要怎么访问映射文件呢？</p>
+<h2 id="修改mybatis-config-xml"><a href="#修改mybatis-config-xml" class="headerlink" title="修改mybatis-config.xml"></a>修改mybatis-config.xml</h2><p>这是我们原来访问映射文件的方法：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">"xxxmapper.xml"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们将其修改为：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">"mapper"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这是利用包名访问映射文件的方法，通过指定包含所有映射文件和接口的包目录，<code>mybatis</code>将读取包中的所有接口文件和对应的同名映射文件。</p>
+<p>如果要通过这种方式访问映射，我们需要在接口中声明需要的操作方法并在<code>mapper</code>中实现方法，这些代码<code>MyBatis Generator</code>已经帮我们自动生成了。</p>
+<h2 id="实现servlet"><a href="#实现servlet" class="headerlink" title="实现servlet"></a>实现servlet</h2><p>接下来我们来实现一个<code>servlet</code>，在<code>main/java</code>中创建<code>service</code>包，包中创建<code>UsersServlet</code>类，前面创建<code>factory</code>和<code>session</code>类的过程和之前没有区别：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> mapper.UsersMapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.io.Resources;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSession;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactoryBuilder;</span><br><span class="line"><span class="keyword">import</span> pojo.Users;</span><br><span class="line"><span class="keyword">import</span> pojo.UsersExample;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UsersServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"UsersServlet: GET"</span>);</span><br><span class="line">    InputStream stream = Resources.getResourceAsStream(<span class="string">"mybatis-config.xml"</span>);</span><br><span class="line">    SqlSessionFactory factory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(stream);</span><br><span class="line">    SqlSession session = factory.openSession();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.doGet(req, resp);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p><code>MyBatis Generator</code>为我们使用session访问数据库提供了很多种方法，我们先得到一个<code>mapper</code>映射</p>
+<p><code>UsersMapper mapper = session.getMapper(UsersMapper.class);</code></p>
+<p>而<code>mapper</code>有很多方法，首先<code>mapper</code>可以实现<code>select</code>、<code>insert</code>、<code>update</code>、<code>delete</code>、<code>count</code>操作，然后对于每种操作，又提供了不同的条件：</p>
+<ul>
+<li><code>ByPrimaryKey</code>: 根据主键增删改查</li>
+<li><code>ByExample</code>: 根据<code>example</code>辅助类删改查（不能增）</li>
+<li><code>Selective</code>: 选择性的增删改（不能查）</li>
+</ul>
+<p>我们来写几个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查找主键为3的数据</span></span><br><span class="line">Users user = mapper.selectByPrimaryKey(<span class="number">3</span>);</span><br><span class="line">   </span><br><span class="line"><span class="comment">//查找所有id不为空的数据</span></span><br><span class="line">UsersExample example = <span class="keyword">new</span> UsersExample();</span><br><span class="line">    example.createCriteria().andIdIsNotNull();</span><br><span class="line">    List&lt;Users&gt; usersList = mapper.selectByExample(example);</span><br><span class="line">    </span><br><span class="line"><span class="comment">//选择性的插入值（只会插入非空值）</span></span><br><span class="line">Users record = <span class="keyword">new</span> Users(<span class="keyword">null</span>, <span class="string">"John"</span>, <span class="keyword">null</span>);</span><br><span class="line">    mapper.insertSelective(record);</span><br></pre></td></tr></table></figure>
+
+<p>这里简单说一下<code>selective</code>，对于这个例子<code>record(null,&quot;John&quot;,null)</code>：</p>
+<ul>
+<li><p><code>mapper.insert</code>相当于：<br><code>insert into users value(null,&#39;John&#39;,null)</code></p>
+</li>
+<li><p><code>mapper.insertSelective</code>则相当于：<br><code>insert into users(name) value(&#39;John&#39;)</code></p>
+</li>
+</ul>
+<p>笔者实现了一个<code>servlet</code>类：</p>
+<p>​<br>​    package service;<br>​    </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mapper.UsersMapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.io.Resources;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSession;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactoryBuilder;</span><br><span class="line"><span class="keyword">import</span> pojo.Users;</span><br><span class="line"><span class="keyword">import</span> pojo.UsersExample;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UsersServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"UsersServlet: GET"</span>);</span><br><span class="line">    InputStream stream = Resources.getResourceAsStream(<span class="string">"mybatis-config.xml"</span>);</span><br><span class="line">    SqlSessionFactory factory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(stream);</span><br><span class="line">    SqlSession session = factory.openSession();</span><br><span class="line">    UsersMapper mapper = session.getMapper(UsersMapper<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    UsersExample example = <span class="keyword">new</span> UsersExample();</span><br><span class="line">    example.createCriteria().andIdIsNotNull();</span><br><span class="line">    List&lt;Users&gt; usersList = mapper.selectByExample(example);</span><br><span class="line">    Users record = <span class="keyword">new</span> Users(<span class="keyword">null</span>, <span class="string">"John"</span>, <span class="keyword">null</span>);</span><br><span class="line">    mapper.insertSelective(record);</span><br><span class="line">    req.setAttribute(<span class="string">"usersList"</span>, usersList);</span><br><span class="line">    req.getRequestDispatcher(req.getContextPath() + <span class="string">"index.jsp"</span>).forward(req, resp);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.doGet(req, resp);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>我们启动服务器试一下效果：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200430153719794.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>点击超链接：<br><img src="https://img-blog.csdnimg.cn/20200430153710524.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>报错<code>HTTP ERROR 500</code>，关键信息：Invalid bound statement (not found):<br>mapper.UsersMapper.selectByExample</p>
+<p>服务器并没有找到<code>UsersMapper</code>映射，这是为什么呢？</p>
+<h2 id="解决找不到映射的错误"><a href="#解决找不到映射的错误" class="headerlink" title="解决找不到映射的错误"></a>解决找不到映射的错误</h2><p>我们来观察一下生成的<code>target</code>文件，发现<code>mapper</code>包中只生成了接口，却没有映射：![在这里插入图片描述](<a href="https://img-" target="_blank" rel="noopener">https://img-</a><br>blog.csdnimg.cn/20200430154006223.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70)<br>要解决此问题，我们需要在<code>pom.xml</code>的<code>&lt;build&gt;</code>标签中加入：</p>
+<p>​<br>​     <resources><br>​          <resource><br>​            <directory>src/main/java</directory><br>​            <!-- 此配置不可缺，否则mybatis的Mapper.xml将会丢失 --><br>​            <includes><br>​              <include><em>*/</em>.xml</include><br>​            </includes><br>​          </resource><br>​          <!--指定资源的位置--><br>​          <resource><br>​            <directory>src/main/resources</directory><br>​          </resource><br>​        </resources></p>
+<p>这样映射文件就会正常生成，项目就可以正常访问啦：<br><img src="https://img-blog.csdnimg.cn/20200430154325827.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200430154300255.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<hr>
+<h1 id="附：关于MBG生成代码重复的问题"><a href="#附：关于MBG生成代码重复的问题" class="headerlink" title="附：关于MBG生成代码重复的问题"></a>附：关于MBG生成代码重复的问题</h1><p>笔者为取消生成代码的注释文件，在<code>GeneratorConfig.xml</code>中加入了以下设置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">commentGenerator</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--取消时间戳--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"suppressDate"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">   <span class="comment">&lt;!--取消注释--&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"suppressAllComments"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">commentGenerator</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">加入后却导致了意想不到的问题， **`mapper`文件中出现了重复代码！**，这直接导致报错。</span><br><span class="line"></span><br><span class="line">笔者查询了网上的方法，如在`<span class="tag">&lt;<span class="name">table</span>&gt;</span>`标签中设置用户名等，然而问题并未解决，直到把新版本的`mysql.connector.java-8.0.17`降级到`5.1.6`才正常运行。</span><br><span class="line"></span><br><span class="line">因此，笔者推测这里是版本不兼容的问题， **暂时除降级外我还未找到更好的解决方法** 。</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/06/17/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%B8%89%E3%80%91Maven%20Web%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AEMyBatis%20Generator%E6%8F%92%E4%BB%B6%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81+%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" data-id="ckbi4cilm0006u8uj3ygreyf5" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/06/17/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E5%9B%9B%E3%80%91%E9%85%8D%E7%BD%AESpring+%E6%95%B4%E5%90%88MyBatis%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E6%89%AB%E6%8F%8F%E5%BC%80%E5%8F%91/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          【Maven配置四】配置Spring+整合MyBatis实现动态扫描开发
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/06/17/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%BA%8C%E3%80%91Maven%20Web%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AEMyBatis%E6%A1%86%E6%9E%B6%E5%B9%B6%E8%AF%BB%E5%8F%96MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">【Maven配置二】Web项目配置MyBatis框架并读取MySQL数据库</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E6%9C%80%E6%96%B0%E3%80%91Qt5.13%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/">Qt5.13及以上版本如何访问MySQL数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E5%85%A5%E9%97%A8%E7%BA%A7%E6%95%99%E7%A8%8B%E3%80%91python%E4%BD%BF%E7%94%A8scrapy%E5%BA%93%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB/">python使用scrapy实现爬虫</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AE%8C%E6%88%90vue-cli%E8%84%9A%E6%89%8B%E6%9E%B6%E9%85%8D%E7%BD%AE/">从零开始完成vue-cli脚手架配置</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA+Hello%20World+%E4%B8%BB%E9%A1%B5%E9%85%8D%E7%BD%AE/">【Spring Boot自学笔记一】项目搭建+Hello World+主页配置</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/17/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E6%95%B4%E5%90%88MyBatis+Druid+%E4%BD%BF%E7%94%A8MyBatis%20Generator+%E5%8A%A8%E6%80%81%E6%89%AB%E6%8F%8F%E5%BC%80%E5%8F%91/">【Spring Boot自学笔记四】整合MyBatis+Druid+MyBatis Generator逆向工程动态扫描开发</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
