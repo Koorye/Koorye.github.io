@@ -205,7 +205,18 @@
 <li><p><strong>优点三:</strong> 服务器压力更小<br>既然<code>jsp</code>是<code>servlet</code>，那么无论是编译还是访问，都需要占用服务器资源，前后端分离可以有效缓解问题。</p>
 </li>
 </ul>
-<h1 id="ajax访问流程图"><a href="#ajax访问流程图" class="headerlink" title="ajax访问流程图"></a>ajax访问流程图</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">html(静态html)</span><br><span class="line">servlet(servlet)</span><br><span class="line">dao(dao)</span><br><span class="line">sql(MySQL数据库)</span><br><span class="line"></span><br><span class="line">html--发起ajax请求--&gt;servlet</span><br><span class="line">servlet--发起dao请求--&gt;dao</span><br><span class="line">dao--发起访问请求--&gt;sql</span><br><span class="line">sql--得到数据集--&gt;dao</span><br><span class="line">dao--返回数据列表--&gt;servlet</span><br><span class="line">servlet--返回数据串,可以使用json--&gt;html</span><br></pre></td></tr></table></figure>
+<h1 id="ajax访问流程图"><a href="#ajax访问流程图" class="headerlink" title="ajax访问流程图"></a>ajax访问流程图</h1><pre class="mermaid">graph TD
+html(静态html)
+servlet(servlet)
+dao(dao)
+sql(MySQL数据库)
+
+html--发起ajax请求-->servlet
+servlet--发起dao请求-->dao
+dao--发起访问请求-->sql
+sql--得到数据集-->dao
+dao--返回数据列表-->servlet
+servlet--返回数据串,可以使用json-->html</pre>
 
 <h1 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h1><h2 id="配置jQuery"><a href="#配置jQuery" class="headerlink" title="配置jQuery"></a>配置jQuery</h2><p>在<code>web</code>/<code>webapp</code>（具体目录名根据项目类型判断）目录下新建一个<code>js</code>目录，导入<code>jQuery-x.x.x.js</code>文件，脚本下载地址：<a href="https://jquery.com/download/" target="_blank" rel="noopener">jQuery下载</a></p>
 <h2 id="准备index-html"><a href="#准备index-html" class="headerlink" title="准备index.html"></a>准备index.html</h2><p>编写一个<code>index.html</code>文件，导入<code>jQuery</code>脚本，提供一个按钮和空表格（只有表头），为按钮和表格指定<code>id</code>以便脚本调用：</p>
@@ -430,6 +441,59 @@ if (document.querySelectorAll('pre.mermaid').length) {
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

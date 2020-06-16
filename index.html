@@ -1179,7 +1179,21 @@ archetype-webapp:RELEASE</code> → <code>NEXT</code></p>
           <p><code>Spring</code>框架是一个开放源代码的<code>J2EE</code>应用程序框架，它使得我们的开发过程更简单，可以大大减少工作量，提高效率。<code>spring</code>具有轻量化、<code>ioc</code>（控制反转）、<code>aop</code>（面向切面编程）思想、<code>mvc</code>模式等特性，在企业中被广泛使用。</p>
 <p>今天我们使用<code>Maven</code>完成<code>spring</code>的配置以及和<code>MyBatis</code>的整合。</p>
 <hr>
-<h1 id="动态扫描过程图"><a href="#动态扫描过程图" class="headerlink" title="动态扫描过程图"></a>动态扫描过程图</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">subgraph ApplicationContext</span><br><span class="line">source(DataSource连接池)</span><br><span class="line">factory(SqlSessionFactory)</span><br><span class="line">scan(MapperScannerConfiurer动态扫描器)</span><br><span class="line">end</span><br><span class="line">api(Mapper接口)</span><br><span class="line">other(后续操作...)</span><br><span class="line">config(Mapper配置)</span><br><span class="line"></span><br><span class="line">source--&gt;factory</span><br><span class="line">factory--&gt;scan</span><br><span class="line">scan--&gt;api</span><br><span class="line">config--&gt;scan</span><br><span class="line">api--&gt;other</span><br></pre></td></tr></table></figure>
+<h1 id="动态扫描过程图"><a href="#动态扫描过程图" class="headerlink" title="动态扫描过程图"></a>动态扫描过程图</h1><pre class="mermaid">graph TD
+subgraph ApplicationContext
+source(DataSource连接池)
+factory(SqlSessionFactory)
+scan(MapperScannerConfiurer动态扫描器)
+end
+api(Mapper接口)
+other(后续操作...)
+config(Mapper配置)
+
+source-->factory
+factory-->scan
+scan-->api
+config-->scan
+api-->other</pre>
 
 <hr>
 <h1 id="配置xml"><a href="#配置xml" class="headerlink" title="配置xml"></a>配置xml</h1><h2 id="配置pom-xml"><a href="#配置pom-xml" class="headerlink" title="配置pom.xml"></a>配置pom.xml</h2><p>在<code>pom.xml</code>中加入<code>properties</code>，指定<code>spring</code>版本：</p>
@@ -1543,6 +1557,59 @@ if (document.querySelectorAll('pre.mermaid').length) {
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
