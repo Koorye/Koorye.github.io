@@ -176,13 +176,13 @@
             
             <tag> 前端 </tag>
             
+            <tag> Vue </tag>
+            
             <tag> Web </tag>
             
             <tag> JavaScript </tag>
             
             <tag> jQuery </tag>
-            
-            <tag> Vue </tag>
             
         </tags>
       
@@ -207,15 +207,15 @@
       
         <tags>
             
+            <tag> Java </tag>
+            
             <tag> Web </tag>
+            
+            <tag> MyBatis </tag>
             
             <tag> MySQL </tag>
             
-            <tag> Java </tag>
-            
             <tag> Spring Boot </tag>
-            
-            <tag> MyBatis </tag>
             
         </tags>
       
@@ -240,9 +240,9 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Web </tag>
             
             <tag> Spring Boot </tag>
             
@@ -269,9 +269,9 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Web </tag>
             
             <tag> Spring Boot </tag>
             
@@ -298,9 +298,9 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Web </tag>
             
             <tag> Spring Boot </tag>
             
@@ -327,17 +327,17 @@
       
         <tags>
             
+            <tag> Java </tag>
+            
             <tag> Web </tag>
             
-            <tag> MySQL </tag>
+            <tag> MyBatis </tag>
             
-            <tag> Java </tag>
+            <tag> MySQL </tag>
             
             <tag> Maven </tag>
             
             <tag> Spring </tag>
-            
-            <tag> MyBatis </tag>
             
         </tags>
       
@@ -366,13 +366,13 @@
             
             <tag> Web </tag>
             
+            <tag> MySQL </tag>
+            
             <tag> HTML </tag>
             
             <tag> JavaScript </tag>
             
             <tag> jQuery </tag>
-            
-            <tag> MySQL </tag>
             
         </tags>
       
@@ -397,13 +397,13 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
             
+            <tag> Web </tag>
+            
             <tag> MyBatis </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -428,13 +428,13 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
             
+            <tag> Web </tag>
+            
             <tag> MyBatis </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -459,9 +459,9 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Web </tag>
             
             <tag> Maven </tag>
             
@@ -542,9 +542,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
