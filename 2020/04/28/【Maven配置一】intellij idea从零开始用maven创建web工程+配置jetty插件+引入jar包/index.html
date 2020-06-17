@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Maven项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，报告和文档的项目管理工具软件。 通过使用Maven，我们可以便捷的使用一段代码来引入jar包，从而不再为杂乱的引用而烦恼，同时远离jar包各种报错的折磨。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Maven配置一】Intellij Idea从零开始创建Web工程+配置Jetty+引入jar包">
+<meta property="og:url" content="http://koorye.github.io/2020/04/28/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%B8%80%E3%80%91intellij%20idea%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%94%A8maven%E5%88%9B%E5%BB%BAweb%E5%B7%A5%E7%A8%8B+%E9%85%8D%E7%BD%AEjetty%E6%8F%92%E4%BB%B6+%E5%BC%95%E5%85%A5jar%E5%8C%85/index.html">
+<meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
+<meta property="og:description" content="Maven项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，报告和文档的项目管理工具软件。 通过使用Maven，我们可以便捷的使用一段代码来引入jar包，从而不再为杂乱的引用而烦恼，同时远离jar包各种报错的折磨。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428151244840.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428151243455.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428151243648.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428153625901.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428151244640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428151243496.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428154545658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428151243364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428151242958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428160756955.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428161041449.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428161537440.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428162646692.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200428163124315.png">
+<meta property="article:published_time" content="2020-04-28T08:34:51.000Z">
+<meta property="article:modified_time" content="2020-06-17T03:08:02.572Z">
+<meta property="article:author" content="Koorye">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Maven">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200428151244840.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://koorye.github.io/2020/04/28/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%B8%80%E3%80%91intellij%20idea%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%94%A8maven%E5%88%9B%E5%BB%BAweb%E5%B7%A5%E7%A8%8B+%E9%85%8D%E7%BD%AEjetty%E6%8F%92%E4%BB%B6+%E5%BC%95%E5%85%A5jar%E5%8C%85/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【Maven配置一】Intellij Idea从零开始创建Web工程+配置Jetty+引入jar包 | 不会真有人以为Koorye会写代码吧</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不会真有人以为Koorye会写代码吧</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不会吧不会吧</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/28/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%B8%80%E3%80%91intellij%20idea%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%94%A8maven%E5%88%9B%E5%BB%BAweb%E5%B7%A5%E7%A8%8B+%E9%85%8D%E7%BD%AEjetty%E6%8F%92%E4%BB%B6+%E5%BC%95%E5%85%A5jar%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="Koorye的个人知识分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Maven配置一】Intellij Idea从零开始创建Web工程+配置Jetty+引入jar包
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-28 16:34:51" itemprop="dateCreated datePublished" datetime="2020-04-28T16:34:51+08:00">2020-04-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-17 11:08:02" itemprop="dateModified" datetime="2020-06-17T11:08:02+08:00">2020-06-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><code>Maven</code>项目对象模型<code>(POM)</code>，可以通过一小段描述信息来管理项目的构建，报告和文档的项目管理工具软件。</p>
+<p>通过使用<code>Maven</code>，我们可以便捷的使用一段代码来引入<code>jar</code>包，从而不再为杂乱的引用而烦恼，同时远离<code>jar</code>包各种报错的折磨。</p>
+<a id="more"></a>
+<hr>
+<h1 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h1><h2 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h2><p>选择<code>Maven</code> → <code>org.apache.maven.archetypes:maven-archetype-webapp</code> → <code>maven-
+archetype-webapp:RELEASE</code> → <code>NEXT</code></p>
+<p>此处的<code>webapp</code>千万不能选错，必须要选择<code>apache.maven</code>下的<code>webapp</code>，否则会出现严重问题！（我会说我在这里卡了3个小时嘛）<br><img src="https://img-blog.csdnimg.cn/20200428151244840.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<hr>
+<h2 id="项目命名"><a href="#项目命名" class="headerlink" title="项目命名"></a>项目命名</h2><ul>
+<li><code>Name</code>: 项目名</li>
+<li><code>Location</code>: 项目路径</li>
+<li><code>GroupId</code>: 第一段为域，第二段为公司名/组名，最后一段一般为项目名；域又分为<code>org</code>、<code>com</code>、<code>cn</code>等等许多，其中<code>org</code>为非盈利组织，<code>com</code>为商业组织</li>
+<li><code>Artifactid</code>: 不带版本号的项目名，要求使用小写字母，且没有特殊符号</li>
+<li><code>Version</code>: 版本，默认的<code>SNAPSHOT</code>代表快照<br><img src="https://img-blog.csdnimg.cn/20200428151243455.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ul>
+<hr>
+<h2 id="配置Maven"><a href="#配置Maven" class="headerlink" title="配置Maven"></a>配置Maven</h2><ul>
+<li><code>Maven home directory</code>: <code>Maven</code>的安装路径，这里笔者已经下载安装好<code>Maven</code>（<code>idea</code>其实已经集成好<code>Maven</code>，因此也可以使用自带的<code>Maven</code>)</li>
+<li><code>User setting file</code>: 配置文件，此处可以使用安装目录下自带的<code>Maven/conf/settings.xml</code>，也可以自己编写。</li>
+<li><code>Local repository</code>: 仓库目录，可以自己设定<code>jar</code>包的下载位置<br><img src="https://img-blog.csdnimg.cn/20200428151243648.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>这是笔者使用的配置文件，它将仓库设置到自定义的目录下，并使用阿里提供的镜像文件代替官方仓库，以加快下载速度。</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">settings</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/SETTINGS/1.0.0"</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">    <span class="tag">&lt;<span class="name">pluginGroups</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">proxies</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servers</span> /&gt;</span></span><br><span class="line">     </span><br><span class="line">    <span class="tag">&lt;<span class="name">localRepository</span>&gt;</span>D:/server/maven/repository<span class="tag">&lt;/<span class="name">localRepository</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">    <span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/repositories/central/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>central<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>Maven Repository Switchboard<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://repo1.maven.org/maven2/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>repo2<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>Human Readable Name for this Mirror.<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://repo2.maven.org/maven2/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>ibiblio<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>Human Readable Name for this Mirror.<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://mirrors.ibiblio.org/pub/mirrors/maven2/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>jboss-public-repository-group<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>JBoss Public Repository Group<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://repository.jboss.org/nexus/content/groups/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>google-maven-central<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>Google Maven Central<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://maven-central.storage.googleapis.com</span><br><span class="line">            <span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 中央仓库在中国的镜像 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>maven.net.cn<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>oneof the central mirrors in china<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.net.cn/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">settings</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>稍作等待，项目就生成完成了。<br><img src="https://img-blog.csdnimg.cn/20200428153625901.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<hr>
+<h2 id="配置Tomcat服务器（使用本地文件）"><a href="#配置Tomcat服务器（使用本地文件）" class="headerlink" title="配置Tomcat服务器（使用本地文件）"></a>配置Tomcat服务器（使用本地文件）</h2><p>点击右上角的<code>ADD CONFIGURATION</code> → 点击左上角的+号 → <code>Tomcat Server</code> → <code>Local</code>，新建一个Tomcat配置。<br><img src="https://img-blog.csdnimg.cn/20200428151244640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>点击右下角的<code>FIX</code>，选择<code>xxx_war_exploded</code>.</p>
+<p><code>war exploded</code>模式是将<code>WEB</code>工程以当前文件夹的位置关系上传到服务器，即直接把文件夹、<code>jsp</code>页面<br>、<code>classes</code>等等移到<code>Tomcat</code>部署文件夹里面，进行加载部署。</p>
+<p>如果没有<code>xxx_war_exploded</code>选项，在<code>Settings</code> → <code>Build, Execution, Deploy</code> → <code>Build
+Tools</code> → <code>Maven</code> → <code>Importing</code> → 勾选<code>Import Maven projects automatically</code><br><img src="https://img-blog.csdnimg.cn/20200428151243496.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200428154545658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>最后，点击运行，<code>web</code>项目就成功打开啦。（项目已经为我们自动生成了一个带有<code>Hello World!</code>的<code>index.jsp</code>）</p>
+<p><img src="https://img-blog.csdnimg.cn/20200428151243364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200428151242958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<hr>
+<hr>
+<h1 id="引入jar包"><a href="#引入jar包" class="headerlink" title="引入jar包"></a>引入jar包</h1><h2 id="使用jetty插件搭建服务器"><a href="#使用jetty插件搭建服务器" class="headerlink" title="使用jetty插件搭建服务器"></a>使用jetty插件搭建服务器</h2><h3 id="关于Tomcat和Jetty"><a href="#关于Tomcat和Jetty" class="headerlink" title="关于Tomcat和Jetty"></a>关于Tomcat和Jetty</h3><p>使用外部的<code>Tomcat</code>程序作为服务器固然可行，然而在使用外部的<code>Tomcat</code>时，我们在向<code>Maven</code>中引入<code>jar</code>的同时，也要在<code>Tomcat/lib</code>中加入<code>jar</code>，这使得项目的构建变得麻烦，违背了<code>Maven</code>便于管理的初衷。</p>
+<p>于是，<code>Maven</code>给我们提供了更轻量便捷的方式——使用内嵌的服务器插件。<code>Maven</code>支持内嵌<code>Tomcat</code>，所谓内嵌，即我们不需要额外下载<code>Tomcat</code>，只要引入依赖即可使用，故免去了修改外部文件的麻烦。</p>
+<p>在本文中，笔者使用<code>Jetty</code>插件作为演示，<code>Maven</code>同样可以内嵌<code>Jetty</code>，<code>Jetty</code>与<code>Tomcat</code>都可以搭建服务器，但是<code>Jetty</code>更加轻量化和灵活，适合小型项目。</p>
+<h3 id="添加plugin项"><a href="#添加plugin项" class="headerlink" title="添加plugin项"></a>添加plugin项</h3><p>找到<code>pom.xml</code>，<code>pom.xml</code>主要描述了项目的<code>maven</code>坐标，依赖关系，开发者需要遵循的规则，缺陷管理系统，组织和<code>licenses</code>，以及其他所有的项目相关因素，是项目级别的配置文件。</p>
+<p>在<code>pom.xml</code>内<code>&lt;build&gt;</code> →<code>pluginManagement</code> → <code>&lt;plugins&gt;</code>中加入以下内容：</p>
+<ul>
+<li><code>groupId</code>: 组名</li>
+<li><code>artifactId</code>: jar名</li>
+<li><code>version</code>: 版本</li>
+<li><code>scanIntervalSeconds</code>: 扫描时间，即多久扫描一次文件是否变动，若有变动就会修改项目</li>
+<li><code>port</code>: 端口号（可以自定义，不过为了不与<code>Tomcat</code>冲突，一般不设为8080）</li>
+<li><code>contextPath</code>: 根目录，设为<code>/</code>即没有额外的目录，该配置的根目录为<code>http://localhost:8080/</code></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.eclipse.jetty<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jetty-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>9.4.5.v20170502<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scanIntervalSeconds</span>&gt;</span>10<span class="tag">&lt;/<span class="name">scanIntervalSeconds</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">httpConnector</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">port</span>&gt;</span>8888<span class="tag">&lt;/<span class="name">port</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">httpConnector</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">webApp</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">contextPath</span>&gt;</span>/<span class="tag">&lt;/<span class="name">contextPath</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">webApp</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>配置好之后<code>Maven</code>就会自动下载<code>jar</code>，并更新到项目中。</p>
+<p>其实关于公司名、<code>jar</code>名、版本号，我们并不需要自己书写，我们可以通过查询：<a href="https://mvnrepository.com/" target="_blank" rel="noopener">https://mvnrepository.com/</a>获取对应的信息。</p>
+<p>例如搜索<code>jetty</code>，选择对应的版本号，就可以得到：<br><img src="https://img-blog.csdnimg.cn/20200428160756955.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="配置命令行"><a href="#配置命令行" class="headerlink" title="配置命令行"></a>配置命令行</h3><p>接下来我们来配置启动<code>jetty</code>插件的命令行，同样点击右上角 → 选择<code>Edit Configurations</code> → 在左边栏找到<code>Maven</code> →<br>在<code>Command line</code>中输入<code>clean jetty:run</code>，并将配置命名。</p>
+<p>这样做之后，每次运行该配置，就相当于在命令行中输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mvn clean</span><br><span class="line">mvn jetty:run</span><br></pre></td></tr></table></figure>
+<p>从而启动<code>Jetty</code>服务器。<br><img src="https://img-blog.csdnimg.cn/20200428161041449.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>运行效果：<br><img src="https://img-blog.csdnimg.cn/20200428161537440.png" alt="在这里插入图片描述"></p>
+<hr>
+<h2 id="案例：引入jstl包"><a href="#案例：引入jstl包" class="headerlink" title="案例：引入jstl包"></a>案例：引入jstl包</h2><p>我们再来演示一下在<code>Maven</code>中使用<code>jstl</code>的方法，以体现其便捷。</p>
+<h3 id="添加dependency项"><a href="#添加dependency项" class="headerlink" title="添加dependency项"></a>添加dependency项</h3><p>同样，在<code>pom.xml</code>内<code>&lt;dependencies&gt;</code>标签内引入， <strong>这次不是plugin</strong><br>，<code>dependencies</code>代表依赖，<code>plugin</code>则是插件：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.servlet<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>javax.servlet-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.servlet.jsp<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jsp-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.servlet<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jstl<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>等待<code>jar</code>下载配置完成，我们就可以直接使用<code>jstl</code>了，是不是很方便呢？我们来试一下。</p>
+<p>首先引入标签库，设置前缀，然后尝试一下<code>forEach</code>循环语句：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;%<span class="meta">@taglib</span> uri=<span class="string">"http://java.sun.com/jsp/jstl/core"</span> prefix=<span class="string">"c"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h2&gt;Hello World!&lt;/h2&gt;</span><br><span class="line">&lt;c:forEach <span class="keyword">var</span>=<span class="string">"i"</span> begin=<span class="string">"1"</span> end=<span class="string">"10"</span>&gt;</span><br><span class="line">  $&#123;i&#125;&lt;br&gt;</span><br><span class="line">&lt;/c:forEach&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>运行效果：<br><img src="https://img-blog.csdnimg.cn/20200428162646692.png" alt="在这里插入图片描述"><br>我们本想得到从1到10的循环，此处显示的却是10个<code>el</code>表达式，难道<code>jstl</code>的引入有问题？显然不是，如果<code>jstl</code>有问题，我们连循环语句都无法使用。</p>
+<h3 id="启用el表达式"><a href="#启用el表达式" class="headerlink" title="启用el表达式"></a>启用el表达式</h3><p>显然，这里的问题不是<code>jstl</code>，而是<code>el</code>表达式，在<code>Maven</code>环境下，<code>el</code>表达式默认是不启用的，浏览器会将<code>el</code>表达式作为普通的字符串处理。</p>
+<p>为了启用<code>el</code>表达式，我们需要在<code>jsp</code>的开头添加：</p>
+<p><code>&lt;%@ page isELIgnored=&quot;false&quot; %&gt;</code></p>
+<p>即不忽略<code>el</code>表达式，这样就可以正常运行啦：<br><img src="https://img-blog.csdnimg.cn/20200428163124315.png" alt="在这里插入图片描述"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"># Web</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Maven/" rel="tag"># Maven</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/28/%E3%80%90%E5%85%A5%E9%97%A8%E7%BA%A7%E6%95%99%E7%A8%8B%E3%80%91python%E4%BD%BF%E7%94%A8scrapy%E5%BA%93%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB/" rel="prev" title="python使用scrapy实现爬虫">
+      <i class="fa fa-chevron-left"></i> python使用scrapy实现爬虫
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/29/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%BA%8C%E3%80%91Maven%20Web%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AEMyBatis%E6%A1%86%E6%9E%B6%E5%B9%B6%E8%AF%BB%E5%8F%96MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="next" title="【Maven配置二】Web项目配置MyBatis框架并读取MySQL数据库">
+      【Maven配置二】Web项目配置MyBatis框架并读取MySQL数据库 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建项目"><span class="nav-number">1.</span> <span class="nav-text">创建项目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#新建项目"><span class="nav-number">1.1.</span> <span class="nav-text">新建项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目命名"><span class="nav-number">1.2.</span> <span class="nav-text">项目命名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Maven"><span class="nav-number">1.3.</span> <span class="nav-text">配置Maven</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Tomcat服务器（使用本地文件）"><span class="nav-number">1.4.</span> <span class="nav-text">配置Tomcat服务器（使用本地文件）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引入jar包"><span class="nav-number">2.</span> <span class="nav-text">引入jar包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用jetty插件搭建服务器"><span class="nav-number">2.1.</span> <span class="nav-text">使用jetty插件搭建服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Tomcat和Jetty"><span class="nav-number">2.1.1.</span> <span class="nav-text">关于Tomcat和Jetty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加plugin项"><span class="nav-number">2.1.2.</span> <span class="nav-text">添加plugin项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置命令行"><span class="nav-number">2.1.3.</span> <span class="nav-text">配置命令行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#案例：引入jstl包"><span class="nav-number">2.2.</span> <span class="nav-text">案例：引入jstl包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加dependency项"><span class="nav-number">2.2.1.</span> <span class="nav-text">添加dependency项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启用el表达式"><span class="nav-number">2.2.2.</span> <span class="nav-text">启用el表达式</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Koorye</p>
+  <div class="site-description" itemprop="description">Koorye的个人知识分享</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Koorye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Koorye" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:a1311586225@gmail.com" title="E-Mail → mailto:a1311586225@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">Tag Cloud</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+            <canvas width="250" height="250" id="resCanvas" style="width:100%">
+             <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/" rel="tag">HTML</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a><span class="tag-list-count">2</span></li></ul>
+            </canvas>
+          </div>
+        </div>
+      
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koorye</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

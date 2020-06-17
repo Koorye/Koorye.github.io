@@ -116,6 +116,21 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
@@ -148,7 +163,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/06/17/%E5%AF%B9%E6%AF%94jQuery%E4%B8%8Evue+axios%EF%BC%8C%E4%B8%A4%E8%80%85%E5%8F%91%E9%80%81ajax%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E4%B8%8D%E5%90%8C/">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/28/%E3%80%90%E5%85%A5%E9%97%A8%E7%BA%A7%E6%95%99%E7%A8%8B%E3%80%91python%E4%BD%BF%E7%94%A8scrapy%E5%BA%93%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -162,7 +177,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/06/17/%E5%AF%B9%E6%AF%94jQuery%E4%B8%8Evue+axios%EF%BC%8C%E4%B8%A4%E8%80%85%E5%8F%91%E9%80%81ajax%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E4%B8%8D%E5%90%8C/" class="post-title-link" itemprop="url">对比jQuery与Vue+axios的Ajax</a>
+            <a href="/2020/04/28/%E3%80%90%E5%85%A5%E9%97%A8%E7%BA%A7%E6%95%99%E7%A8%8B%E3%80%91python%E4%BD%BF%E7%94%A8scrapy%E5%BA%93%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB/" class="post-title-link" itemprop="url">python使用scrapy实现爬虫</a>
         </h2>
 
         <div class="post-meta">
@@ -172,15 +187,24 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-06-17 00:06:15" itemprop="dateCreated datePublished" datetime="2020-06-17T00:06:15+08:00">2020-06-17</time>
+              <time title="创建时间：2020-04-28 00:01:37" itemprop="dateCreated datePublished" datetime="2020-04-28T00:01:37+08:00">2020-04-28</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-16 23:11:31" itemprop="dateModified" datetime="2020-06-16T23:11:31+08:00">2020-06-16</time>
+                <time title="修改时间：2020-06-17 11:07:52" itemprop="dateModified" datetime="2020-06-17T11:07:52+08:00">2020-06-17</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
 
           
 
@@ -193,56 +217,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>axios和jQuery的ajax本质上都是对原生XHR的封装，不过axios符合最新的ES规范。因此，在用vue编写js时，使用axios而不是jQuery的ajax应该是更好的方案。</p>
-<p>axios和jQuery的ajax用法大多相同，不过还是有少数地方不一样，我们来对比一下。由于axios经常与vue结合，这里笔者采用vue+axios实现axios版ajax。</p>
-<hr>
-<h1 id="post请求"><a href="#post请求" class="headerlink" title="post请求"></a>post请求</h1><h2 id="准备控制器"><a href="#准备控制器" class="headerlink" title="准备控制器"></a>准备控制器</h2><p>首先实现一个后台控制器，笔者此处采用spring boot，可以看到，这个控制器需要一个请求参数id，然后会返回一个包含id和msg信息的json：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.koorye.hellokotlin.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSON;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.ResponseBody;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line">    </span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MsgControllerJava</span> </span>&#123;</span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="meta">@RequestMapping</span>(<span class="string">"/msg"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">getMsg</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">    Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">"id"</span>, id);</span><br><span class="line">    map.put(<span class="string">"msg"</span>, <span class="string">"A message from Controller."</span>);</span><br><span class="line">    <span class="keyword">return</span> JSON.toJSON(map);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="准备html"><a href="#准备html" class="headerlink" title="准备html"></a>准备html</h2><p>我们来准备两个按钮：</p>
-<ul>
-<li>jQuery给按钮提供click事件需要用选择器，因此这里提供一个id</li>
-<li>vue+axios只需要使用<code>v-on:click</code>或者简写<code>@click</code>就可以指定事件</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-primary"</span> @<span class="attr">click</span>=<span class="string">"getMsg"</span>&gt;</span>Vue + Axios<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"ajaxBtn"</span> <span class="attr">class</span>=<span class="string">"btn btn-secondary"</span>&gt;</span>Vue + JQuery<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="实现ajax请求"><a href="#实现ajax请求" class="headerlink" title="实现ajax请求"></a>实现ajax请求</h2><p>请关注以下不同：</p>
-<ul>
-<li>发送参数的方式</li>
-<li>接收参数的方式</li>
-</ul>
-<h3 id="vue-axios版ajax"><a href="#vue-axios版ajax" class="headerlink" title="vue+axios版ajax"></a>vue+axios版ajax</h3><p>此处需要引入Qs来转换数据类型：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    getMsg() &#123;</span><br><span class="line">      axios(&#123;</span><br><span class="line">        method: <span class="string">'post'</span>,</span><br><span class="line">        url: <span class="string">'/msg'</span>,</span><br><span class="line">        data: Qs.stringify&#123;</span><br><span class="line">          id: <span class="number">111</span></span><br><span class="line">        &#125;,</span><br><span class="line">        responseType: <span class="string">'json'</span>,</span><br><span class="line">      &#125;</span><br><span class="line">      .then(<span class="function"><span class="keyword">function</span> (<span class="params">resp</span>) </span>&#123;</span><br><span class="line">        alert(resp.data.id + <span class="string">", "</span> + resp.data.msg);</span><br><span class="line">      &#125;)</span><br><span class="line">      .catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">        alert(error);</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="jQuery版ajax"><a href="#jQuery版ajax" class="headerlink" title="jQuery版ajax"></a>jQuery版ajax</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  $(<span class="string">'#ajaxBtn'</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">      method: <span class="string">'post'</span>,</span><br><span class="line">      url: <span class="string">'/msg'</span>,</span><br><span class="line">      data: &#123;</span><br><span class="line">        <span class="string">'id'</span>: <span class="number">222</span></span><br><span class="line">      &#125;,</span><br><span class="line">      dataType: <span class="string">'json'</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .done(<span class="function"><span class="keyword">function</span> (<span class="params">resp</span>) </span>&#123;</span><br><span class="line">      alert(resp.id + <span class="string">", "</span> + resp.msg);</span><br><span class="line">    &#125;)</span><br><span class="line">    .fail(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">      alert(error);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h3 id="发送参数的不同"><a href="#发送参数的不同" class="headerlink" title="发送参数的不同"></a>发送参数的不同</h3><p>传统的jquery把请求数据封装在data中，data是json的形式，需要用引号表示成员名；</p>
-<p>而axios+qs的形式不需要使用引号，再通过<code>Qs.stringify()</code>把数据转换成json。</p>
-<p>我们来看一下axios不使用<code>Qs.stringify()</code>会发生什么：<br><img src="https://img-blog.csdnimg.cn/20200507115352756.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>报了500错误？再来看一下发送的参数：<br><img src="https://img-blog.csdnimg.cn/20200507115431764.png" alt="在这里插入图片描述"><br>Request Payload？那么正常的参数是什么呢，下面是jQuery发送的参数：<br><img src="https://img-blog.csdnimg.cn/20200507115504437.png" alt="在这里插入图片描述"><br>可以看到，正常发送的参数应该是Form Data，这样后台才能接收到一个json；如果是Request<br>Payload，后台还需要额外的解析才能得到其中的json。</p>
-<p>所以，<br><strong>jQuery可以直接在data中编写json来发送post请求；而axios需要把编写的内容通过Qs转换成json字符串才能发送post请求。</strong></p>
-<h3 id="接收参数的不同"><a href="#接收参数的不同" class="headerlink" title="接收参数的不同"></a>接收参数的不同</h3><p>观察上面的脚本我们发现，jQuery可以直接通过resp.id、resp.msg得到json中的数据，axios的数据却存在resp.data中。</p>
-<p>我们来试一下把得到的json转换成字符串，使用<code>JSON.stringify(resp)</code>转换再用<code>alert(JSON.stringify(resp))</code>输出：</p>
-<p>jQuery的ajax返回的json：</p>
-<p><img src="https://img-blog.csdnimg.cn/20200507124856250.png" alt="在这里插入图片描述"><br>axios返回的json:<br><img src="https://img-blog.csdnimg.cn/20200507124914566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到jQuery返回的json中只有数据；axios却返回了各种信息，如状态码、时间、url、请求方法等，其数据存在data成员中，这就是我们获取数据方法不同的原因。</p>
-<hr>
-<h1 id="get请求"><a href="#get请求" class="headerlink" title="get请求"></a>get请求</h1><p>既然请求方法只需要指定method，那么，如果我们直接把两个脚本中的method改成get，能否正常使用呢？</p>
-<p>jQuery正常运行：<br><img src="https://img-blog.csdnimg.cn/20200507125527389.png" alt="在这里插入图片描述"><br>axios报500状态码错误：<br><img src="https://img-blog.csdnimg.cn/20200507125548539.png" alt="在这里插入图片描述"><br>检查请求头， <strong>我们发现axios没有传入任何信息，甚至在去掉Qs.stringify和给id加上引号之后还是一样</strong> ：<br><img src="https://img-blog.csdnimg.cn/20200507125650952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>这说明axios不能通过data给get请求提供参数。</p>
-<h2 id="get和post的差别"><a href="#get和post的差别" class="headerlink" title="get和post的差别"></a>get和post的差别</h2><p>事实上，get请求通过在url后直接跟上参数来发送请求，例如localhost:8080/login/?username=koorye&amp;password=123，就是给后台发送了username为koorye，password为123的参数。</p>
-<p>而post则是使用request body传递参数，参数不存入url中，而是以额外的键值对的方式传递。</p>
-<h2 id="jQuery与axios的data在发送get请求时的不同"><a href="#jQuery与axios的data在发送get请求时的不同" class="headerlink" title="jQuery与axios的data在发送get请求时的不同"></a>jQuery与axios的data在发送get请求时的不同</h2><p>观察一下上文中jQuery和axios发送get请求时的url：</p>
-<p><strong>jQuery会根据请求类型自动判断把data放到url中还是request body中</strong> ，此处jQuery发送的get请求的url就带上了参数：<br><img src="https://img-blog.csdnimg.cn/20200507130419226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>而axios就不行，axios的data只用于给request body提供参数，而不能在url中附加参数：<br><img src="https://img-blog.csdnimg.cn/20200507130643517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h2 id="axios的get请求方式"><a href="#axios的get请求方式" class="headerlink" title="axios的get请求方式"></a>axios的get请求方式</h2><p>axios发送get请求时不能使用data，而要使用axios提供的一种新的类型<code>params</code>，params其中的参数会被直接加到url后，我们来试一下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    getMsg() &#123;</span><br><span class="line">      axios(&#123;</span><br><span class="line">        method: <span class="string">'get'</span>,</span><br><span class="line">        url: <span class="string">'/msg'</span>,</span><br><span class="line">        params: &#123;</span><br><span class="line">          <span class="string">'id'</span>: <span class="number">111</span></span><br><span class="line">        &#125;,</span><br><span class="line">        responseType: <span class="string">'json'</span>,</span><br><span class="line">      &#125;)</span><br><span class="line">      .then(<span class="function"><span class="keyword">function</span> (<span class="params">resp</span>) </span>&#123;</span><br><span class="line">        alert(resp.data.id + <span class="string">", "</span> + resp.data.msg);</span><br><span class="line">      &#125;) </span><br><span class="line">      .catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">       alert(error);</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>成功发送请求并接收数据：<br><img src="https://img-blog.csdnimg.cn/20200507131306480.png" alt="在这里插入图片描述"><br>请求头的url中成功附上参数：<br><img src="https://img-blog.csdnimg.cn/20200507131326692.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<hr>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>到这里，我们已经成功使用jQuery和axios的ajax各自完成了get和post请求的参数发送和结果获取，我们来总结一下不同之处：</p>
-<p><strong>关于发送请求:</strong></p>
-<ul>
-<li>jQuery无论是get还是post，都使用data发送数据，jQuery会自动判断请求类型并匹配</li>
-<li>axios在get请求时使用params；在post请求时使用data，并且要注意把发送的data通过<code>Qs.stringify()</code>转换成json</li>
-</ul>
-<p><strong>关于接收数据:</strong></p>
-<ul>
-<li>jQuery接收的数据直接以json的形式存在返回的response中</li>
-<li>axios接收一个json形式的response，返回的数据存在response的data参数中</li>
-</ul>
-
+          <p>一开始笔者都是使用<code>requests</code>+<code>bs4</code>实现爬虫，直到后来我发现了有一个功能强大使用简单的爬虫框架——<code>scrapy</code>，本文是一个入门级教程，会记录下从零开始使用<code>scrapy</code>实现最简单爬虫的全过程。</p>
+          <!--noindex-->
+          <!--/noindex-->
+        
       
     </div>
 
@@ -261,7 +239,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/06/17/vue%E7%BB%84%E4%BB%B6%E9%97%B4%E7%88%B6%E5%AD%90%E4%BC%A0%E5%80%BC%E3%80%81%E7%A5%96%E7%88%B6%E5%AD%90%E5%AD%99%E4%BC%A0%E5%80%BC%E5%92%8C%E4%BB%BB%E6%84%8F%E4%BC%A0%E5%80%BC%E7%9A%845%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%8Cprop,emit,attrs,listeners%E4%BB%A5%E5%8F%8A%E4%B8%AD%E5%A4%AE%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF/">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/22/30%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%9C%8B%E5%9B%BE%E8%AF%86%E5%AD%97%EF%BC%81python%E4%BD%BF%E7%94%A8tensorflow.keras%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -275,7 +253,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/06/17/vue%E7%BB%84%E4%BB%B6%E9%97%B4%E7%88%B6%E5%AD%90%E4%BC%A0%E5%80%BC%E3%80%81%E7%A5%96%E7%88%B6%E5%AD%90%E5%AD%99%E4%BC%A0%E5%80%BC%E5%92%8C%E4%BB%BB%E6%84%8F%E4%BC%A0%E5%80%BC%E7%9A%845%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%8Cprop,emit,attrs,listeners%E4%BB%A5%E5%8F%8A%E4%B8%AD%E5%A4%AE%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF/" class="post-title-link" itemprop="url">vue组件间传值方法——prop、emit、attrs、listeners、中央事件总线</a>
+            <a href="/2020/04/22/30%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%9C%8B%E5%9B%BE%E8%AF%86%E5%AD%97%EF%BC%81python%E4%BD%BF%E7%94%A8tensorflow.keras%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="post-title-link" itemprop="url">30行代码实现看图识字！python使用tensorflow.keras搭建简单神经网络</a>
         </h2>
 
         <div class="post-meta">
@@ -285,378 +263,24 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-06-17 00:06:15" itemprop="dateCreated datePublished" datetime="2020-06-17T00:06:15+08:00">2020-06-17</time>
+              <time title="创建时间：2020-04-22 12:13:02" itemprop="dateCreated datePublished" datetime="2020-04-22T12:13:02+08:00">2020-04-22</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-16 23:05:19" itemprop="dateModified" datetime="2020-06-16T23:05:19+08:00">2020-06-16</time>
+                <time title="修改时间：2020-06-17 11:00:29" itemprop="dateModified" datetime="2020-06-17T11:00:29+08:00">2020-06-17</time>
               </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="父子传值"><a href="#父子传值" class="headerlink" title="父子传值"></a>父子传值</h1><h2 id="prop-父向子传值"><a href="#prop-父向子传值" class="headerlink" title="prop: 父向子传值"></a>prop: 父向子传值</h2><p>步骤：</p>
-<ul>
-<li><p>在子部件标签中加入自定义属性：<br><code>&lt;Son :fatherMsg=&quot;msg&quot;/&gt;</code></p>
-</li>
-<li><p>在子部件中添加props数组：<br><code>props:[&#39;fatherMsg&#39;]</code></p>
-</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> Son=&#123;</span><br><span class="line">  props:[<span class="string">'fatherMsg'</span>],</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">    &lt;h2 class="display-4 text-secondary"&gt;This is Son&lt;/h2&gt;</span></span><br><span class="line"><span class="string">    &lt;p class="text-danger"&gt;&#123;&#123;fatherMsg&#125;&#125;&lt;/p&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> Father = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el:<span class="string">'#app'</span>,</span><br><span class="line">  data()&#123;</span><br><span class="line">    <span class="keyword">return</span>&#123;</span><br><span class="line">      msg:<span class="string">'A message from father.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  components:&#123;</span><br><span class="line">    Son</span><br><span class="line">  &#125;, </span><br><span class="line">  template:<span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-primary"&gt;This is Father&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;Son :fatherMsg="msg"/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p><img src="https://img-blog.csdnimg.cn/20200509000815363.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h2 id="emit：子向父传值"><a href="#emit：子向父传值" class="headerlink" title="$emit：子向父传值"></a>$emit：子向父传值</h2><p>子传父与父传子略有不同，依赖于事件，我们定义一个按钮用于触发事件。</p>
-<p>步骤：</p>
-<ul>
-<li><p>准备发送数据的方法<br><code>methods: {sendMsg(){this.$emit(&#39;sendMsgFromSon&#39;,this.msg);}},</code></p>
-</li>
-<li><p>准备一个触发事件的对象并指定发送数据的方法（如button)<br><code>&lt;button class=&quot;btn btn-success&quot; @click=&quot;sendMsg&quot;&gt;Send&lt;/button&gt;</code></p>
-</li>
-<li><p>预留一个接收数据的参数<br><code>sonMsg: &#39;Message does not arrive.&#39;</code></p>
-</li>
-<li><p>准备接收数据的方法并修改参数<br><code>methods: {getMsg(resp) {this.sonMsg = resp;}},</code></p>
-</li>
-<li><p>在子部件中加入自定义属性接收数据并指定接收数据的方法<br><code>&lt;Son @sendMsgFromSon=&quot;getMsg&quot;/&gt;</code></p>
-</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> Son = &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      msg: <span class="string">'A message from son.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    sendMsg() &#123;</span><br><span class="line">      <span class="keyword">this</span>.$emit(<span class="string">'sendMsgFromSon'</span>, <span class="keyword">this</span>.msg);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">    &lt;h2 class="display-4 text-secondary"&gt;This is Son&lt;/h2&gt;</span></span><br><span class="line"><span class="string">    &lt;button class="btn btn-success" @click="sendMsg"&gt;Send&lt;/button&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> Father = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      sonMsg: <span class="string">'Message does not arrive.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  components: &#123;</span><br><span class="line">    Son</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    getMsg(resp) &#123;</span><br><span class="line">      <span class="keyword">this</span>.sonMsg = resp;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-primary"&gt;This is Father&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;p class="text-danger"&gt;&#123;&#123;sonMsg&#125;&#125;&lt;/p&gt;</span></span><br><span class="line"><span class="string">      &lt;Son @sendMsgFromSon="getMsg"/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p><img src="https://img-blog.csdnimg.cn/20200509000829992.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<hr>
-<h1 id="祖父子孙传值"><a href="#祖父子孙传值" class="headerlink" title="祖父子孙传值"></a>祖父子孙传值</h1><p>有了父子传递的经验，那么多层传递是否也可以用多个prop和emit实现呢？</p>
-<p>当然可以，不过这显得太麻烦了。于是，vue2.4推出了<code>$attrs</code>和<code>$listeners</code>帮我们解决了这个问题。</p>
-<h2 id="attrs-祖父向子孙传值"><a href="#attrs-祖父向子孙传值" class="headerlink" title="$attrs: 祖父向子孙传值"></a>$attrs: 祖父向子孙传值</h2><p>不然发现，此处的Father和prop例子中的完全相同，Grandson也与Son除名字外完全相同，唯一的区别是多了中间组件。</p>
-<p>关键步骤：</p>
-<ul>
-<li><p>中间组件中添加子孙组件为子组件<br><code>components:{Grandson},</code></p>
-</li>
-<li><p>使用<code>v-bind</code>为子组件绑定<code>$attrs</code><br><code>&lt;Grandson v-bind=&quot;$attrs&quot;/&gt;</code></p>
-</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> Grandson = &#123;</span><br><span class="line">  props: [<span class="string">'fatherMsg'</span>],</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-success"&gt;This is Grandson&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;p class="text-danger"&gt;&#123;&#123;fatherMsg&#125;&#125;&lt;/p&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;`</span></span><br><span class="line">&#125;;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">let</span> Son = (&#123;</span><br><span class="line">  components: &#123;</span><br><span class="line">    Grandson</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-secondary"&gt;This is Son&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;Grandson v-bind="$attrs"/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> Father = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      msg: <span class="string">'A message from father.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  components: &#123;   </span><br><span class="line">    Son</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class = "display-4 text-primary"&gt; This is Father &lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;Son :fatherMsg="msg"/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p><img src="https://img-blog.csdnimg.cn/20200509000842343.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h2 id="listeners-子孙向祖父传值"><a href="#listeners-子孙向祖父传值" class="headerlink" title="$listeners: 子孙向祖父传值"></a>$listeners: 子孙向祖父传值</h2><p>有了祖父传子孙的经验，子孙传祖父也大同小异，只需在子传父的基础上添加即可：</p>
-<ul>
-<li><p>为中间组件添加子孙组件为子组件<br><code>components:{Grandson},</code></p>
-</li>
-<li><p>使用<code>v-on</code>为子组件绑定<code>$listeners</code><br><code>&lt;Grandson v-on=&quot;$listeners&quot;&gt;</code></p>
-</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> Grandson = &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      msg: <span class="string">'A message from Grandson.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    sendMsg() &#123;</span><br><span class="line">      <span class="keyword">this</span>.$emit(<span class="string">'sendMsgFromGrandson'</span>, <span class="keyword">this</span>.msg);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-success"&gt;This is Grandson&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;button class="btn btn-success" @click="sendMsg"&gt;Send&lt;/button&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span>,</span><br><span class="line">&#125;;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">let</span> Son = &#123;   </span><br><span class="line">  components: &#123;</span><br><span class="line">    Grandson</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">  &lt;div&gt;</span></span><br><span class="line"><span class="string">    &lt;h2 class="display-4 text-secondary"&gt;This is Son&lt;/h2&gt;</span></span><br><span class="line"><span class="string">    &lt;Grandson v-on="$listeners"/&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;`</span></span><br><span class="line">&#125;;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">let</span> Father = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">       grandsonMsg: <span class="string">'Message does not arrive.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  components: &#123;</span><br><span class="line">    Son</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    getMsg(resp) &#123;</span><br><span class="line">      <span class="keyword">this</span>.grandsonMsg = resp;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;h2 class="display-4 text-primary"&gt;This is Father&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      &lt;p class="text-danger"&gt;&#123;&#123;grandsonMsg&#125;&#125;&lt;/p&gt;</span></span><br><span class="line"><span class="string">      &lt;Son @sendMsgFromGrandson="getMsg"/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p><img src="https://img-blog.csdnimg.cn/20200509000853889.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h1 id="任意传值"><a href="#任意传值" class="headerlink" title="任意传值"></a>任意传值</h1><h2 id="中央事件总线：任意组件间传值"><a href="#中央事件总线：任意组件间传值" class="headerlink" title="中央事件总线：任意组件间传值"></a>中央事件总线：任意组件间传值</h2><p>最后的方法叫做中央事件总线，它可以实现任意组件的传值，无论是父子、祖父子孙、还是兄弟。</p>
-<p>这里我们创建了一个全局的bus，这个bus就像一个接线员，接收一个数据，再发送给别的组件。</p>
-<p>步骤：</p>
-<ul>
-<li><p>声明一个全局的Vue作为总线<br><code>let bus = new Vue();</code></p>
-</li>
-<li><p>为发送数据的组件添加方法，使用<code>bus.$emit</code>发送<br><code>methods:{sendMsg(){bus.$emit(&#39;msgFromComponent1&#39;, this.msg);}},</code></p>
-</li>
-<li><p>为发送数据的组件提供事件触发方法（此处使用按钮）：<br><code>&lt;button class=&quot;btn btn-success&quot; @click=&quot;sendMsg&quot;&gt;Send&lt;/button&gt;</code></p>
-</li>
-<li><p>为接收的数据预留槽位<br><code>data(){return{msg: &#39;Message does not arrive.&#39;}},</code></p>
-</li>
-<li><p>为接收数据的组件提供方法，使用<code>bus.$on</code>接收（此处使用<code>mounted</code>，意味着数据改变就调用方法，从而实现同步更新）<br><code>mounted() {bus.$on(&#39;msgFromComponent1&#39;, (resp) =&gt; {this.msg = resp;})},</code></p>
-</li>
-</ul>
-<pre><code class="lang-js">let bus = new Vue();
-
-let Component1 = new Vue({
-  el: &#39;#app&#39;,
-  data() {
-    return {
-      msg: &#39;A message from component1.&#39;
-    }
-  },
-  methods: {
-    sendMsg() {
-      bus.$emit(&#39;msgFromComponent1&#39;, this.msg);
-    }
-  },
-  template: `
-    &lt;div&gt;
-      &lt;h2 class=&quot;display-4 text-primary&quot;&gt;This is Component1&lt;/h2&gt;
-      &lt;button class=&quot;btn btn-success&quot; @click=&quot;sendMsg&quot;&gt;Send&lt;/button&gt;
-    &lt;/div&gt;`
-});
-
-let Component2 = new Vue({
-  el: &#39;#app2&#39;,
-  data() {
-    return {
-      msg: &#39;Message does not arrive.&#39;
-    }
-  },
-  mounted() {
-    bus.$on(&#39;msgFromComponent1&#39;, (resp) =&gt; {
-      this.msg = resp;
-    })
-  },
-  template: `
-  &lt;div&gt;
-    &lt;h2 class=&quot;display-4 text-secondary&quot;&gt;This is Component2&lt;/h2&gt;
-    &lt;p class=&quot;text-danger&quot;&gt;{{msg}}&lt;/p&gt;
-  &lt;/div&gt;`
-})
-</code></pre>
-<p><img src="https://img-blog.csdnimg.cn/2020050900090859.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">  </p>
-<p>以上5种方法讲解完成，除此之外，还有<code>provided</code> / <code>inject</code>和<code>$parent</code> /<br><code>$children[index]</code>等方法，不过不太常用，大家可以自行了解。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/06/17/jQuery%E5%AE%9E%E7%8E%B0%E9%9D%99%E6%80%81html+ajax%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B9%B6%E6%98%BE%E7%A4%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Koorye">
-      <meta itemprop="description" content="Koorye的个人知识分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/17/jQuery%E5%AE%9E%E7%8E%B0%E9%9D%99%E6%80%81html+ajax%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B9%B6%E6%98%BE%E7%A4%BA/" class="post-title-link" itemprop="url">jQuery实现静态html+ajax访问MySQL数据库</a>
-        </h2>
-
-        <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-06-17 00:06:15" itemprop="dateCreated datePublished" datetime="2020-06-17T00:06:15+08:00">2020-06-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
                 </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-16 22:57:50" itemprop="dateModified" datetime="2020-06-16T22:57:50+08:00">2020-06-16</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="静态html-ajax与jsp"><a href="#静态html-ajax与jsp" class="headerlink" title="静态html+ajax与jsp"></a>静态html+ajax与jsp</h1><p>为什么要使用<code>ajax</code>请求，而不用<code>jsp</code>的<code>el</code>表达式和<code>jstl</code>方便的得到数据呢？</p>
-<ul>
-<li><p><strong>优点一:</strong> 前后端分离<br><code>jsp</code>是一种早期的技术，它将前后端杂糅在一起，<code>html</code>和<code>java</code>代码交错；而现在前后端分离逐渐成为业界标准，将静态<code>html</code>和后端<code>java</code>代码分开的思想有利于前后端专注于自己的工作，提高工作效率，降低维护成本。</p>
-</li>
-<li><p><strong>优点二:</strong> 访问速度更快<br>我们知道<code>jsp</code>的本质是<code>servlet</code>，因此浏览器在第一次访问<code>jsp</code>时，需要将<code>jsp</code>编译成<code>servlet</code>，这将耗费很多时间，而静态<code>html</code>就没有这样的问题。</p>
-</li>
-<li><p><strong>优点三:</strong> 服务器压力更小<br>既然<code>jsp</code>是<code>servlet</code>，那么无论是编译还是访问，都需要占用服务器资源，前后端分离可以有效缓解问题。</p>
-</li>
-</ul>
-<h1 id="ajax访问流程图"><a href="#ajax访问流程图" class="headerlink" title="ajax访问流程图"></a>ajax访问流程图</h1><pre class="mermaid">graph TD
-html(静态html)
-servlet(servlet)
-dao(dao)
-sql(MySQL数据库)
-
-html--发起ajax请求-->servlet
-servlet--发起dao请求-->dao
-dao--发起访问请求-->sql
-sql--得到数据集-->dao
-dao--返回数据列表-->servlet
-servlet--返回数据串,可以使用json-->html</pre>
-
-<h1 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h1><h2 id="配置jQuery"><a href="#配置jQuery" class="headerlink" title="配置jQuery"></a>配置jQuery</h2><p>在<code>web</code>/<code>webapp</code>（具体目录名根据项目类型判断）目录下新建一个<code>js</code>目录，导入<code>jQuery-x.x.x.js</code>文件，脚本下载地址：<a href="https://jquery.com/download/" target="_blank" rel="noopener">jQuery下载</a></p>
-<h2 id="准备index-html"><a href="#准备index-html" class="headerlink" title="准备index.html"></a>准备index.html</h2><p>编写一个<code>index.html</code>文件，导入<code>jQuery</code>脚本，提供一个按钮和空表格（只有表头），为按钮和表格指定<code>id</code>以便脚本调用：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Hello Maven<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">href</span>=<span class="string">"css/style.css"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"js/jquery-3.5.0.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"view"</span>&gt;</span>View Mysql By Ajax + MyBatis<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">id</span>=<span class="string">"data"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>ID<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Name<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Age<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>网页效果：<br><img src="https://img-blog.csdnimg.cn/2020050121015593.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h2 id="准备dao"><a href="#准备dao" class="headerlink" title="准备dao"></a>准备dao</h2><p>笔者在<code>dao</code>层用<code>MyBatis + MyBatis
-Generator</code>实现了一个读取数据库这种<code>users</code>数据表的方法，这个方法会访问<code>users</code>数据表，并返回一个存有数据的<code>List</code>列表（此处不是本文重点，如果不会用<code>MyBatis</code>，也可以使用<code>JDBC</code>实现）：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> mapper.UsersMapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSession;</span><br><span class="line"><span class="keyword">import</span> pojo.Users;</span><br><span class="line"><span class="keyword">import</span> pojo.UsersExample;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UsersUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Users&gt; <span class="title">getAllUsers</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    InputStream stream = Resources.getResourceAsStream(<span class="string">"mybatis-config.xml"</span>);</span><br><span class="line">    SqlSessionFactory factory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(stream);</span><br><span class="line">    SqlSession session = factory.openSession();</span><br><span class="line">    UsersExample example = <span class="keyword">new</span> UsersExample();</span><br><span class="line">    example.createCriteria().andIdIsNotNull();</span><br><span class="line">    UsersMapper mapper = myBatisSession.getMapper(UsersMapper<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    <span class="keyword">return</span> mapper.selectByExample(example);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="准备servlet"><a href="#准备servlet" class="headerlink" title="准备servlet"></a>准备servlet</h2><p>接着在<code>service</code>层实现一个<code>servlet</code>。</p>
-<p>此处使用<code>alibaba</code>的<code>fastjson.jar</code>（没有<code>jar</code>包的请自行下载，笔者此处使用<code>Maven</code>配置）实现列表与<code>json</code>的快速转换，最后通过<code>resp.getWriter().append()</code>把<code>json</code>字符串传出：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSON;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSONArray;</span><br><span class="line"><span class="keyword">import</span> dao.UsersUtil;</span><br><span class="line"><span class="keyword">import</span> pojo.Users;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.io.Resources;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UsersServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    List&lt;Users&gt; usersList = UsersUtil.getAllUsers();</span><br><span class="line">    <span class="comment">//JSON转字符串写入resp</span></span><br><span class="line">    resp.getWriter().append(JSON.toJSONString(jsonArray));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.doGet(req, resp);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="jQuery实现ajax"><a href="#jQuery实现ajax" class="headerlink" title="jQuery实现ajax"></a>jQuery实现ajax</h1><p>在js目录中创建<code>loadDataAjax.js</code>脚本，该脚本会在网页加载完成后为<code>view</code>按钮分配<code>click</code>方法，点击后会发送<code>ajax</code>请求，得到数据并加入表格。</p>
-<ul>
-<li><code>$(function(){ pass })</code>: 网页加载完成时会自动调用函数体</li>
-<li><code>$(&quot;#id&quot;).click(function(){ pass })</code>: 监听对应id的按钮，提供<code>click</code>方法</li>
-<li><code>$.ajax()</code>: <code>ajax</code>请求</li>
-</ul>
-<p>关于<code>ajax</code>请求的参数：</p>
-<ul>
-<li><code>url</code>: 请求地址</li>
-<li><code>type</code>: 指定请求类型<code>(get/post)</code></li>
-<li><code>dataType</code>: 指定返回的数据类型</li>
-<li><code>.done</code>: 访问成功调用的方法，其中参数<code>msg</code>是<code>resp</code>返回的数据</li>
-<li><code>.fail</code>: 访问失败调用的方法</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//网页加载完成时调用</span></span><br><span class="line">$(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//为id=view的按钮提供click方法</span></span><br><span class="line">  $(<span class="string">"#view"</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">//发送ajax请求</span></span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">      url: <span class="built_in">encodeURI</span>(<span class="string">"sql"</span>),</span><br><span class="line">      type: <span class="string">"get"</span>,</span><br><span class="line">      dataType: <span class="string">"json"</span></span><br><span class="line">    &#125;)</span><br><span class="line">      <span class="comment">//访问成功</span></span><br><span class="line">      .done(<span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//清空id=data的表格第一行（表头）以外的数据</span></span><br><span class="line">        $(<span class="string">"#data tr:not(:first)"</span>).empty();</span><br><span class="line">        <span class="comment">//遍历返回的json数组</span></span><br><span class="line">        $.each(msg, <span class="function"><span class="keyword">function</span> (<span class="params">index, user</span>) </span>&#123;</span><br><span class="line">          <span class="comment">//向表格中添加json数组每个元素的内容</span></span><br><span class="line">          $(<span class="string">"#data"</span>).append(<span class="string">"&lt;tr&gt;"</span> +</span><br><span class="line">            <span class="string">"&lt;td&gt;"</span> + user.id + <span class="string">"&lt;/td&gt;"</span> +</span><br><span class="line">            <span class="string">"&lt;td&gt;"</span> + user.name + <span class="string">"&lt;/td&gt;"</span> +</span><br><span class="line">            <span class="string">"&lt;td&gt;"</span> + user.age + <span class="string">"&lt;/td&gt;"</span> +</span><br><span class="line">            <span class="string">"&lt;/tr&gt;"</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;)</span><br><span class="line">      <span class="comment">//访问失败</span></span><br><span class="line">      .fail(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        alert(<span class="string">"ERROR!"</span>)</span><br><span class="line">      &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="string">``</span><span class="string">`    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">最后在`</span>index.html<span class="string">`中导入脚本：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span>&lt;script type=<span class="string">"text/javascript"</span> src=<span class="string">"js/loadDataAjax.js"</span>&gt;&lt;<span class="regexp">/script&gt;`</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">网页成功返回数据并写入列表：  </span></span><br><span class="line"><span class="regexp">![在这里插入图片描述](https:/</span><span class="regexp">/img-blog.csdnimg.cn/</span><span class="number">20200501205341689.</span>png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70)</span><br><span class="line"></span><br><span class="line"># 附：关于Maven项目引入js无法使用的问题</span><br><span class="line"></span><br><span class="line"><span class="string">`Maven`</span>中的<span class="string">`css`</span>、<span class="string">`js`</span>文件都会被过滤器过滤，要使文件可以正常使用，我们需要在<span class="string">`WEB-INF/web.xml`</span>中加入以下配置：</span><br><span class="line"></span><br><span class="line"><span class="string">``</span><span class="string">`xml</span></span><br><span class="line"><span class="string">&lt;servlet-mapping&gt;</span></span><br><span class="line"><span class="string">  &lt;servlet-name&gt;default&lt;/servlet-name&gt;</span></span><br><span class="line"><span class="string">  &lt;url-pattern&gt;*.js&lt;/url-pattern&gt;</span></span><br><span class="line"><span class="string">&lt;/servlet-mapping&gt;</span></span><br><span class="line"><span class="string">&lt;servlet-mapping&gt;</span></span><br><span class="line"><span class="string">  &lt;servlet-name&gt;default&lt;/servlet-name&gt;</span></span><br><span class="line"><span class="string">  &lt;url-pattern&gt;*.css&lt;/url-pattern&gt;</span></span><br><span class="line"><span class="string">&lt;/servlet-mapping&gt;</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/06/17/C%E8%AF%AD%E8%A8%80%E5%9C%A8%E6%8E%A7%E5%88%B6%E5%8F%B0%E4%B8%8A%E5%AE%9E%E7%8E%B0%E9%BC%A0%E6%A0%87%E6%93%8D%E4%BD%9C%E7%9A%84%E6%96%B9%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Koorye">
-      <meta itemprop="description" content="Koorye的个人知识分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/17/C%E8%AF%AD%E8%A8%80%E5%9C%A8%E6%8E%A7%E5%88%B6%E5%8F%B0%E4%B8%8A%E5%AE%9E%E7%8E%B0%E9%BC%A0%E6%A0%87%E6%93%8D%E4%BD%9C%E7%9A%84%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">C语言用鼠标操作控制台的方法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-06-17 00:06:15" itemprop="dateCreated datePublished" datetime="2020-06-17T00:06:15+08:00">2020-06-17</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-16 23:21:55" itemprop="dateModified" datetime="2020-06-16T23:21:55+08:00">2020-06-16</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在制作面向用户系统时，我们往往需要设置除输入参数外更为灵活的操作方式，例如鼠标点击、按键按下（无阻塞输入）等；同时，我们需要制作更为精美的<code>UI</code>而不是简陋的黑白界面。然而，纯C语言本身并不提供这些函数，为实现这些操作，我们需要调用<code>windows.h</code>库中的函数（当然大前提是用户使用<code>windows</code>系统）。</p>
-<p>为实现鼠标操作，我们所涉及到的有关函数有：</p>
-<h1 id="了解windows库函数"><a href="#了解windows库函数" class="headerlink" title="了解windows库函数"></a>了解windows库函数</h1><ol>
-<li><code>GetCursorPos(POINT* point);</code> 获得鼠标在桌面中的坐标（左上角为原点），其中<code>POINT</code>是一个结构体类，包含x和y两个成员以表示横坐标和纵坐标。</li>
-<li><code>GetWindowRect(HWND hwnd,LPRECT* lprect);</code>获得指定窗口的坐标信息（包括顶部和底部的横坐标，左端和右端的纵坐标），其中<code>HWND</code>是一个句柄类（句柄概念在后文中再说明），<code>LPRECT</code>是一个结构体类，包含<code>top</code>,<code>bottom</code>,<code>left</code>,<code>right</code>分别表示顶部、底部、左端、右端的坐标。</li>
-<li><p><code>GetAsyncKeyState(int vKey);</code>判断指定按键是否按下，<code>vKey</code>为按键对应的<code>ASCII</code>值，如图所示。<br><img src="https://img-blog.csdnimg.cn/2020042013212916.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/2020042013231477.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200420132325797.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-</li>
-<li><p><code>FindWindow(LPCSTR lpClassName,LPCSTR lpWindowName);</code>返回指定窗口的句柄，<code>lpClassName</code>指向一个用于指定类名的字符串，若为NULL则查找所有窗口；<code>lpWindowName</code>指定一个用于查找窗口名。</p>
-</li>
-</ol>
-<p>接下来还有一些<code>windows.h</code>库中的特殊函数：</p>
-<ol>
-<li><code>SetConsoleTitle(LPCSTR lpcstr);</code>为程序设定标题。</li>
-<li><code>Sleep(int int);</code>休眠，即暂停程序<code>int</code>秒后继续运行。</li>
-</ol>
-<h1 id="了解句柄"><a href="#了解句柄" class="headerlink" title="了解句柄"></a>了解句柄</h1><p>接下来说明句柄的概念：句柄是一种特殊指针（另一种说法为一种整型），用于标识应用程序中的对象（如窗口，按钮，图标等）。当前系统中每一个进程，每一个控件，都根据其虚拟内存地址拥有其对应的唯一句柄。于是，我们可以通过一个句柄找到对应的对象来指定操作。</p>
-<p>知道以上函数后，我们就可以正式编写程序了。</p>
-<h1 id="实现思路与代码"><a href="#实现思路与代码" class="headerlink" title="实现思路与代码"></a>实现思路与代码</h1><p>思路：通过一个循环反复检测鼠标是否按下，如果按下，则检测当前鼠标光标在控制台中所对应的坐标，通过对控制台中<code>UI</code>的坐标进行对应来判断操作。值得一提的是，<code>windows.h</code>库中没有直接返回鼠标光标在控制台窗口中坐标的函数，于是我们通过得到鼠标光标在桌面中的坐标和控制台窗口在桌面中的坐标，来计算鼠标光标与控制台窗口的相对位置。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MouseOpreate</span><span class="params">(<span class="keyword">int</span> *x,<span class="keyword">int</span> *y)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">  ...</span><br><span class="line">  SetConsoleTitle(<span class="string">"憨憨"</span>);<span class="comment">//设定窗口标题</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">int</span> x,y;</span><br><span class="line">  MouseOpreate(&amp;x,&amp;y);</span><br><span class="line">  <span class="keyword">if</span>((<span class="number">0</span>&lt;=x &amp;&amp; x&lt;=<span class="number">100</span>)&amp;&amp;(<span class="number">0</span>&lt;=y &amp;&amp; y&lt;=<span class="number">20</span>))&#123;<span class="comment">//通过UI在程序中对应的坐标指定操作</span></span><br><span class="line">     ...</span><br><span class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(...)&#123;</span><br><span class="line">    ... </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">void</span> MouseOpreate(<span class="keyword">int</span> *x,<span class="keyword">int</span> *y)&#123;</span><br><span class="line">  POINT *ptrpos;<span class="comment">//声明POINT结构体类存储鼠标坐标</span></span><br><span class="line">  LPRECT <span class="built_in">rect</span>;<span class="comment">//声明LPRECT结构体指针存储窗口坐标信息</span></span><br><span class="line">  HWND hwnd=FindWindow(<span class="literal">NULL</span>,<span class="string">"憨憨"</span>);<span class="comment">//根据上述设定的标题查找句柄，第一个形参设为NULL意味着查找系统中所有句柄</span></span><br><span class="line">  ptrpos=(POINT*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(POINT)+<span class="number">64</span>);</span><br><span class="line">  <span class="built_in">rect</span>=(LPRECT*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(LPRECT)+<span class="number">64</span>);<span class="comment">//为结构体指针分配内存空间</span></span><br><span class="line">  <span class="keyword">for</span>(;;)&#123;</span><br><span class="line">    Sleep(<span class="number">500</span>);<span class="comment">//通过休眠指定循环周期为500毫秒</span></span><br><span class="line">    <span class="keyword">if</span>(GetAsyncKeyState(VK_LBUTTON))&#123;<span class="comment">//如果鼠标左键按下，其中VK_LBUTTON是windows.h库中定义的宏，对应鼠标左键对应的ASCII值</span></span><br><span class="line">      GetWindowRect(hwnd,<span class="built_in">rect</span>);<span class="comment">//根据查找标题"憨憨"得到的句柄返回对于窗口的坐标并存储在rect中</span></span><br><span class="line">      GetCursorPos(ptrpos);<span class="comment">//返回鼠标对应的坐标并存储在ptrpos中</span></span><br><span class="line">      *x=ptrpos-&gt;x-<span class="built_in">rect</span>-&gt;left;<span class="comment">//鼠标横坐标-控制台窗口左端横坐标得到鼠标相对控制台窗口的横坐标</span></span><br><span class="line">      *y=ptrpos-&gt;y-<span class="built_in">rect</span>-&gt;top;<span class="comment">//同理得到鼠标相对的纵坐标</span></span><br><span class="line">      <span class="keyword">break</span>;<span class="comment">//得到坐标后跳出循环</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>接下来，我们只需要在检测位置画上对应的<code>UI</code>，就可以完成判定了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/06/17/30%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%9C%8B%E5%9B%BE%E8%AF%86%E5%AD%97%EF%BC%81python%E4%BD%BF%E7%94%A8tensorflow.keras%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Koorye">
-      <meta itemprop="description" content="Koorye的个人知识分享">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/17/30%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%9C%8B%E5%9B%BE%E8%AF%86%E5%AD%97%EF%BC%81python%E4%BD%BF%E7%94%A8tensorflow.keras%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="post-title-link" itemprop="url">30行代码实现看图识字！python使用tensorflow.keras搭建简单神经网络</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-06-17 00:06:15" itemprop="dateCreated datePublished" datetime="2020-06-17T00:06:15+08:00">2020-06-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-16 22:22:53" itemprop="dateModified" datetime="2020-06-16T22:22:53+08:00">2020-06-16</time>
-              </span>
 
           
 
@@ -732,10 +356,467 @@ CNTK</code>和<code>Theano</code>的高阶应用程序接口，进行深度学�
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/21/%E4%BD%BF%E7%94%A8c3p0%E8%BF%9E%E6%8E%A5%E6%B1%A0%E8%AE%BF%E9%97%AEMySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="Koorye的个人知识分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/21/%E4%BD%BF%E7%94%A8c3p0%E8%BF%9E%E6%8E%A5%E6%B1%A0%E8%AE%BF%E9%97%AEMySQL/" class="post-title-link" itemprop="url">使用c3p0连接池访问MySQL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-21 15:24:16" itemprop="dateCreated datePublished" datetime="2020-04-21T15:24:16+08:00">2020-04-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-17 11:07:38" itemprop="dateModified" datetime="2020-06-17T11:07:38+08:00">2020-06-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>连接池是创建和管理一个连接的缓冲池的技术，这些连接准备好被任何需要它们的线程使用。即如果有大量用户访问数据库，连接池便可以为每个用户提供连接，用户访问完之后收回连接以备再次使用。</p>
+<p>连接池可以极大的改善用户的 Java 应用程序的性能，同时减少全部资源的使用。</p>
+          <!--noindex-->
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/20/%E7%94%A8html+js%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E7%99%BB%E5%BD%95%E7%AA%97%E5%8F%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="Koorye的个人知识分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/20/%E7%94%A8html+js%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E7%99%BB%E5%BD%95%E7%AA%97%E5%8F%A3/" class="post-title-link" itemprop="url">用HTML+js实现一个简单登录窗口</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-20 14:18:26" itemprop="dateCreated datePublished" datetime="2020-04-20T14:18:26+08:00">2020-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-17 11:07:18" itemprop="dateModified" datetime="2020-06-17T11:07:18+08:00">2020-06-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>原生HTML+JavaScript实现登录窗口</p>
+          <!--noindex-->
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/20/%E7%94%A8Python%E5%88%B6%E4%BD%9C%E8%87%AA%E5%B7%B1%E6%83%B3%E8%A6%81%E7%9A%84%E8%AF%8D%E4%BA%91%E5%9B%BE%E5%90%A7%EF%BC%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="Koorye的个人知识分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/20/%E7%94%A8Python%E5%88%B6%E4%BD%9C%E8%87%AA%E5%B7%B1%E6%83%B3%E8%A6%81%E7%9A%84%E8%AF%8D%E4%BA%91%E5%9B%BE%E5%90%A7%EF%BC%81/" class="post-title-link" itemprop="url">用Python制作自己想要的词云图吧！</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-20 13:38:56" itemprop="dateCreated datePublished" datetime="2020-04-20T13:38:56+08:00">2020-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-17 11:06:31" itemprop="dateModified" datetime="2020-06-17T11:06:31+08:00">2020-06-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们经常可以见到可视化表示的生动形象的词频图片，这便是词云，比如统计2019年的搜索热词，我们便可以把搜索量前十的词语做成词云图，搜索量越大，图中出现的词频数就越高，如此就可以生成鲜明的可视化词频图了，那么这样的图片如何通过python批量生成呢？</p>
+          <!--noindex-->
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/20/%E4%B8%AA%E4%BA%BA%E6%95%B4%E7%90%86%E7%9A%84%E5%89%8D%E7%AB%AF%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83html-css-js/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="Koorye的个人知识分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/20/%E4%B8%AA%E4%BA%BA%E6%95%B4%E7%90%86%E7%9A%84%E5%89%8D%E7%AB%AF%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83html-css-js/" class="post-title-link" itemprop="url">个人整理前端风格规范html-css-js</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-20 13:31:57" itemprop="dateCreated datePublished" datetime="2020-04-20T13:31:57+08:00">2020-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-17 11:04:30" itemprop="dateModified" datetime="2020-06-17T11:04:30+08:00">2020-06-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>前端风格规范</p>
+          <!--noindex-->
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/20/%E4%B8%AA%E4%BA%BA%E6%95%B4%E7%90%86%E7%9A%84python%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83%E2%80%94%E2%80%94%E6%91%98%E8%87%AA%E3%80%8AGoogle%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E3%80%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="Koorye的个人知识分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/20/%E4%B8%AA%E4%BA%BA%E6%95%B4%E7%90%86%E7%9A%84python%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83%E2%80%94%E2%80%94%E6%91%98%E8%87%AA%E3%80%8AGoogle%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E3%80%8B/" class="post-title-link" itemprop="url">个人整理Python风格规范——摘自《Google开源项目风格指南》</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-20 13:30:40" itemprop="dateCreated datePublished" datetime="2020-04-20T13:30:40+08:00">2020-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-17 11:04:10" itemprop="dateModified" datetime="2020-06-17T11:04:10+08:00">2020-06-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Python风格规范</p>
+          <!--noindex-->
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/20/%E4%B8%AA%E4%BA%BA%E6%95%B4%E7%90%86%E7%9A%84C++%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83%E2%80%94%E2%80%94%E6%91%98%E8%87%AA%E3%80%8AGoogle%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E3%80%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="Koorye的个人知识分享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/20/%E4%B8%AA%E4%BA%BA%E6%95%B4%E7%90%86%E7%9A%84C++%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83%E2%80%94%E2%80%94%E6%91%98%E8%87%AA%E3%80%8AGoogle%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E3%80%8B/" class="post-title-link" itemprop="url">个人整理C/C++风格规范——摘自《Google开源项目风格指南》</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-20 13:29:32" itemprop="dateCreated datePublished" datetime="2020-04-20T13:29:32+08:00">2020-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-17 11:03:32" itemprop="dateModified" datetime="2020-06-17T11:03:32+08:00">2020-06-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>C/C++风格规范</p>
+          <!--noindex-->
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -805,13 +886,45 @@ CNTK</code>和<code>Theano</code>的高阶应用程序接口，进行深度学�
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
   </nav>
 </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Koorye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Koorye" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:a1311586225@gmail.com" title="E-Mail → mailto:a1311586225@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
 
 
 
       </div>
 
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">Tag Cloud</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+            <canvas width="250" height="250" id="resCanvas" style="width:100%">
+             <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/" rel="tag">HTML</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a><span class="tag-list-count">2</span></li></ul>
+            </canvas>
+          </div>
+        </div>
+      
     </div>
   </aside>
   <div id="sidebar-dimmer"></div>
