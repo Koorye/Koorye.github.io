@@ -20,28 +20,29 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="Qt访问数据库的坑还是挺多的。在5.13及以上版本中，QMYSQL驱动被去除了，不能直接使用。在新版本中访问MySQL还是挺麻烦的，故在此记录一下。">
+  <meta name="description" content="最近有人问我怎么搭建博客，在此记录一下。 前置准备：配置好Node.js和Git，并注册一个GitHub账号。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Qt5.13及以上版本如何访问MySQL数据库">
-<meta property="og:url" content="http://koorye.github.io/2020/06/05/%E3%80%90%E6%9C%80%E6%96%B0%E3%80%91Qt5.13%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:title" content="利用GitHub + Hexo搭建博客">
+<meta property="og:url" content="http://koorye.github.io/2020/07/11/%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/index.html">
 <meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:description" content="Qt访问数据库的坑还是挺多的。在5.13及以上版本中，QMYSQL驱动被去除了，不能直接使用。在新版本中访问MySQL还是挺麻烦的，故在此记录一下。">
+<meta property="og:description" content="最近有人问我怎么搭建博客，在此记录一下。 前置准备：配置好Node.js和Git，并注册一个GitHub账号。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200605003342255.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200605003352823.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/2020060501065774.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200605010939768.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200605014215699.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
-<meta property="article:published_time" content="2020-06-04T17:45:32.000Z">
-<meta property="article:modified_time" content="2020-06-17T03:12:59.181Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711135050422.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711135548370.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711141212369.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711141614922.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711140423506.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711142627934.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711143334721.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711143729640.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711144333378.png">
+<meta property="article:published_time" content="2020-07-11T05:18:35.000Z">
+<meta property="article:modified_time" content="2020-07-11T06:54:21.218Z">
 <meta property="article:author" content="Koorye">
-<meta property="article:tag" content="MySQL">
-<meta property="article:tag" content="C++">
-<meta property="article:tag" content="Qt">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200605003342255.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711135050422.png">
 
-<link rel="canonical" href="http://koorye.github.io/2020/06/05/%E3%80%90%E6%9C%80%E6%96%B0%E3%80%91Qt5.13%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/">
+<link rel="canonical" href="http://koorye.github.io/2020/07/11/%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
 
 
 <script id="page-configurations">
@@ -54,7 +55,7 @@
   };
 </script>
 
-  <title>Qt5.13及以上版本如何访问MySQL数据库 | 不会真有人以为Koorye会写代码吧</title>
+  <title>利用GitHub + Hexo搭建博客 | 不会真有人以为Koorye会写代码吧</title>
   
 
 
@@ -203,7 +204,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/06/05/%E3%80%90%E6%9C%80%E6%96%B0%E3%80%91Qt5.13%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/11/%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -216,7 +217,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Qt5.13及以上版本如何访问MySQL数据库
+          利用GitHub + Hexo搭建博客
         </h1>
 
         <div class="post-meta">
@@ -225,28 +226,22 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-06-05 01:45:32" itemprop="dateCreated datePublished" datetime="2020-06-05T01:45:32+08:00">2020-06-05</time>
+              <time title="创建时间：2020-07-11 13:18:35 / 修改时间：14:54:21" itemprop="dateCreated datePublished" datetime="2020-07-11T13:18:35+08:00">2020-07-11</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-17 11:12:59" itemprop="dateModified" datetime="2020-06-17T11:12:59+08:00">2020-06-17</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                  <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
                 </span>
             </span>
 
           
-            <span id="/2020/06/05/%E3%80%90%E6%9C%80%E6%96%B0%E3%80%91Qt5.13%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-meta-item leancloud_visitors" data-flag-title="Qt5.13及以上版本如何访问MySQL数据库" title="阅读次数">
+            <span id="/2020/07/11/%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/" class="post-meta-item leancloud_visitors" data-flag-title="利用GitHub + Hexo搭建博客" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -258,7 +253,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
+              <span>2.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -277,43 +272,64 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Qt访问数据库的坑还是挺多的。在5.13及以上版本中，QMYSQL驱动被去除了，不能直接使用。在新版本中访问MySQL还是挺麻烦的，故在此记录一下。</p>
+        <p>最近有人问我怎么搭建博客，在此记录一下。</p>
+<p>前置准备：配置好Node.js和Git，并注册一个GitHub账号。</p>
 <a id="more"></a>
-<hr>
-<h1 id="安装Qt时的坑"><a href="#安装Qt时的坑" class="headerlink" title="安装Qt时的坑"></a>安装Qt时的坑</h1><p>首先前往官网下载Qt：<a href="http://download.qt.io/archive/qt/" target="_blank" rel="noopener">Qt下载地址</a></p>
-<p>这里我选择最新的5.14.2目录下的<code>qt-opensource-windows-x86-5.14.2.exe</code>.</p>
-<p>下载后双击安装，注意选择组件界面：</p>
-<p><img src="https://img-blog.csdnimg.cn/20200605003342255.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200605003352823.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>此处有两个注意事项：</p>
-<ol>
-<li>必须选上Sources，里面有MySQL依赖的dll</li>
-<li>要根据MySQL的位数选择对应的编译器，如64位的MySQL必须使用64位的MingW才能正常访问（网传如此，笔者未测试过32位是否使用）</li>
-</ol>
-<p>别的组件根据自己的需求添加即可，安装部分就讲到这里。</p>
-<hr>
-<h1 id="配置驱动"><a href="#配置驱动" class="headerlink" title="配置驱动"></a>配置驱动</h1><p>此时我们就可以查看一下Qt中有哪些sql驱动了。</p>
-<p>新建一个Qt Console Application项目用于测试，选择MingW-64bit作为Debugger.</p>
-<p>在.pro文件中加入以下语句，引入sql功能：</p>
-<p><code>QT += sql</code></p>
-<p>main.cpp写法如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QCoreApplication&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QSqlDatabase&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QDebug&gt;</span></span></span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">  <span class="function">QCoreApplication <span class="title">a</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line">  </span><br><span class="line">  QStringList drivers = QSqlDatabase::drivers();</span><br><span class="line">  foreach(QString driver, drivers)</span><br><span class="line">    qDebug() &lt;&lt; driver;</span><br><span class="line">    </span><br><span class="line">  <span class="keyword">return</span> a.exec();</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">  <span class="function">QCoreApplication <span class="title">a</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line">    </span><br><span class="line">  QStringList drivers = QSqlDatabase::drivers();</span><br><span class="line">  foreach(QString driver, drivers)</span><br><span class="line">    qDebug() &lt;&lt; driver;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> a.exec();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出结果：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">"QSQLITE"</span><br><span class="line">"QODBC"</span><br><span class="line">"QODBC3"</span><br><span class="line">"QPSQL"</span><br><span class="line">"QPSQL7"</span><br></pre></td></tr></table></figure>
-<p>输出结果中并没有我们想要的QMYSQL驱动，我们需要另行配置。</p>
-<h2 id="添加驱动"><a href="#添加驱动" class="headerlink" title="添加驱动"></a>添加驱动</h2><p>打开<code>\Qt5.14.2\5.14.2\Src\qtbase\src\plugins\sqldrivers\mysql</code>目录下的mysql.pro文件启动项目，对mysql.pro作出以下修改：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># QMAKE_USE +&#x3D; mysql # 暂时屏蔽mysql</span><br><span class="line">...</span><br><span class="line">INCLUDEPATH +&#x3D; &quot;D:\software\system\mysql-8.0.19-winx64\include&quot; # MySQL安装路径下的include目录</span><br><span class="line">LIBS +&#x3D; &quot;D:\software\system\mysql-8.0.19-winx64\lib\libmysql.lib&quot; # MySQL安装路径下的库文件</span><br><span class="line">DESTDIR  &#x3D; ..&#x2F;mysql&#x2F;lib&#x2F; # 输出目录</span><br></pre></td></tr></table></figure>
-<p>运行之后会报错，不要紧，找到同级目录下的lib目录，所需dll已经生成：<br><img src="https://img-blog.csdnimg.cn/2020060501065774.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>将生成的dll文件放入对应编译器的<code>plugins\sqldrivers</code>目录中，这里存放了所有sql驱动，此处我放到<code>Qt5.14.2\5.14.2\mingw73_64\plugins\sqldrivers</code>中：<br><img src="https://img-blog.csdnimg.cn/20200605010939768.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>再次运行测试程序，输出结果：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">"QSQLITE"</span><br><span class="line">"QMYSQL"</span><br><span class="line">"QMYSQL3"</span><br><span class="line">"QODBC"</span><br><span class="line">"QODBC3"</span><br><span class="line">"QPSQL"</span><br><span class="line">"QPSQL7"</span><br></pre></td></tr></table></figure>
-<p>我们所需的QMYSQL驱动已经存在。</p>
-<h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><p>有了驱动之后还不够，我们还需要引入mysql中的dll文件，打开mysql安装路径：<code>mysql-8.0.19-winx64\lib</code>，复制其中的<code>libmysql.dll</code>和<code>libmysql.lib</code>到项目编译后的目录中，本例为与项目目录同级的<code>build-
-sql_test-Desktop_Qt_5_14_2_MinGW_64_bit-Debug</code>，这也意味着最后的打包程序中也需要手动添加这两个依赖。</p>
-<p><img src="https://img-blog.csdnimg.cn/20200605014215699.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTkwMTIwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<hr>
-<h1 id="访问操作"><a href="#访问操作" class="headerlink" title="访问操作"></a>访问操作</h1><p>我们来试验一个简单的遍历全表：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QCoreApplication&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QSqlDatabase&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QSqlQuery&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QDebug&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">  <span class="function">QCoreApplication <span class="title">a</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line">  </span><br><span class="line">  QSqlDatabase db = QSqlDatabase::addDatabase(<span class="string">"QMYSQL"</span>); <span class="comment">// 数据库类型</span></span><br><span class="line">  db.setHostName(<span class="string">"localhost"</span>); <span class="comment">// 主机名</span></span><br><span class="line">  db.setPort(<span class="number">3306</span>);</span><br><span class="line">  db.setDatabaseName(<span class="string">"hello_mysql"</span>); <span class="comment">// 数据库名称</span></span><br><span class="line">  db.setUserName(<span class="string">"root"</span>); <span class="comment">// 用户名</span></span><br><span class="line">  db.setPassword(<span class="string">"123"</span>); <span class="comment">// 密码</span></span><br><span class="line"> </span><br><span class="line">  <span class="keyword">if</span>(!db.<span class="built_in">open</span>())&#123;</span><br><span class="line">    qDebug()&lt;&lt;<span class="string">"Unable to establish a database connection"</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  QSqlQuery query(db);</span><br><span class="line"></span><br><span class="line">  query.exec(<span class="string">"select * from user"</span>);</span><br><span class="line">  <span class="keyword">while</span>(query.next())</span><br><span class="line">    qDebug()&lt;&lt;query.value(<span class="number">0</span>).toString() <span class="comment">// 访问方式一，通过列数索引</span></span><br><span class="line">    &lt;&lt;query.value(<span class="string">"name"</span>).toString(); <span class="comment">// 访问方式二，通过列名</span></span><br><span class="line"></span><br><span class="line">  db.<span class="built_in">close</span>();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> a.exec();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出结果：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">"1" "雪之下雪乃"</span><br><span class="line">"2" "小木曾雪菜"</span><br><span class="line">"4" "友利奈绪"</span><br><span class="line">"5" "晓美焰"</span><br><span class="line">"6" "冬马和纱"</span><br><span class="line">"7" "雪之下阳乃"</span><br></pre></td></tr></table></figure>
-<p>这就是新版Qt访问MySQL的全过程。</p>
-
+<h1 id="创建本地文件"><a href="#创建本地文件" class="headerlink" title="创建本地文件"></a>创建本地文件</h1><p>使用npm包管理器全局安装Hexo：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo -g</span><br></pre></td></tr></table></figure>
+<p>找到一个合适的目录，创建一个空文件夹，接着在这个文件夹内创建博客文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd D:\Koorye.github.io</span><br><span class="line">hexo init</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711135050422.png" alt="image-20200711135050422"></p>
+<p>接下来，将markdown文件放在source/_posts目录中，就会显示到博客上。</p>
+<h1 id="部署到GitHub"><a href="#部署到GitHub" class="headerlink" title="部署到GitHub"></a>部署到GitHub</h1><h2 id="新建仓库"><a href="#新建仓库" class="headerlink" title="新建仓库"></a>新建仓库</h2><p>新建一个公共仓库，名称必须为xxx.github.io，这将是你博客的域名。</p>
+<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711135548370.png" alt="image-20200711135548370"></p>
+<h2 id="配置本地文件"><a href="#配置本地文件" class="headerlink" title="配置本地文件"></a>配置本地文件</h2><p>接下来对本地博客文件的<code>_config.yml</code>进行配置，将仓库路径写到repository上：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repository:</span> <span class="string">git@github.com:Koorye/Koorye.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+<h2 id="配置Git"><a href="#配置Git" class="headerlink" title="配置Git"></a>配置Git</h2><h3 id="创建账号"><a href="#创建账号" class="headerlink" title="创建账号"></a>创建账号</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name "username"  // username替换成你的用户名</span><br><span class="line">git config --global user.email "email"  // email替换成你的邮箱</span><br></pre></td></tr></table></figure>
+<h3 id="创建SSH密钥"><a href="#创建SSH密钥" class="headerlink" title="创建SSH密钥"></a>创建SSH密钥</h3><p>检查<code>C:\Users\你的用户名</code>文件夹中是否有.ssh文件夹，没有则用如下命令新建一个密钥：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C "你的邮箱地址"</span><br></pre></td></tr></table></figure>
+<p>之后会生成如下文件：</p>
+<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711141212369.png" alt="image-20200711141212369"></p>
+<h3 id="连接到GitHub"><a href="#连接到GitHub" class="headerlink" title="连接到GitHub"></a>连接到GitHub</h3><p>点击GitHub右上角的个人头像，找到Settings，然后点击左侧栏的SSH and GPG keys.</p>
+<p>点击New SSH key，将生成的id_rsa.pub中内容复制到Key中，Title随意：</p>
+<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711141614922.png" alt="image-20200711141608696"></p>
+<p>创建好的SSH Key：</p>
+<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711140423506.png" alt="image-20200711140423506"></p>
+<h3 id="测试连接"><a href="#测试连接" class="headerlink" title="测试连接"></a>测试连接</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh git@github.com</span><br></pre></td></tr></table></figure>
+<p>返回如下提示即配置成功：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\a1311&gt; ssh git@github.com</span><br><span class="line">PTY allocation request failed on channel 0</span><br><span class="line">Hi Koorye! You've successfully authenticated, but GitHub does not provide shell access.</span><br><span class="line">Connection to github.com closed.</span><br></pre></td></tr></table></figure>
+<h3 id="hexo上传"><a href="#hexo上传" class="headerlink" title="hexo上传"></a>hexo上传</h3><p>首先了解一下hexo的命令行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hexo init  // 初始化一个博客</span><br><span class="line">hexo clean  // 清理静态文件</span><br><span class="line">hexo new xxx  // 新建一个文章，也可以直接复制markdown文件到source/_post目录中</span><br><span class="line">hexo new page xxx  // 新建一个分类页面</span><br><span class="line">hexo g  // 或hexo generate 编译生成静态文件</span><br><span class="line">hexo s  // 或hexo server 部署到本地服务器，通过localhost://4000访问</span><br><span class="line">hexo d  // 或hexo deploy 部署到远程服务器，这里我们配置到GitHub仓库</span><br></pre></td></tr></table></figure>
+<p>了解一下命令后，我们通常使用clean(清理缓存)+generate(生成文件)+deploy(部署)上传博客：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<p>返回如下，博客就部署完成：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">PS D:\Koorye.github.io&gt; hexo d</span><br><span class="line">INFO  Deploying: git</span><br><span class="line">INFO  Clearing .deploy_git folder...</span><br><span class="line">INFO  Copying files from public folder...</span><br><span class="line">INFO  Copying files from extend dirs...</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">warning: LF will be replaced by CRLF in tags/神经网络/index.html.</span><br><span class="line">The file will have its original line endings in your working directory</span><br><span class="line">On branch master</span><br><span class="line">Everything up-to-date</span><br><span class="line">Branch 'master' set up to track remote branch 'master' from 'git@github.com:Koorye/Koorye.github.io.git'.</span><br></pre></td></tr></table></figure></p>
+<p>检查一下github仓库，可以看到文件已经上传：</p>
+<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711142627934.png" alt="image-20200711142627934"></p>
+<p>此时，我们便可以通过访问<a href="https://Koorye.github.io">https://Koorye.github.io</a>看到自己的博客啦，部署略有延迟，请等待几分钟再查看。</p>
+<h1 id="使用Next主题"><a href="#使用Next主题" class="headerlink" title="使用Next主题"></a>使用Next主题</h1><h2 id="下载主题"><a href="#下载主题" class="headerlink" title="下载主题"></a>下载主题</h2><p>原版的主题比较简单，而且缺少很多功能，相比之下，next主题是很好的选择。</p>
+<p>使用git clone下载主题：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+<p>下载之后，博客文件themes目录中就会有next目录。</p>
+<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711143334721.png" alt="image-20200711143334721"></p>
+<p>修改配置文件<code>_config.yml</code>的theme为next：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="comment">## Plugins: https://hexo.io/plugins/</span></span><br><span class="line"><span class="comment">## Themes: https://hexo.io/themes/</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br></pre></td></tr></table></figure>
+<p>之后，重新编译打开网页，next就改变啦：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<p>访问<a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a>，这里笔者已经修改了很多配置才有这样的效果：</p>
+<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711143729640.png" alt="image-20200711143729640"></p>
+<p>关于next主题的各种配置，本文不再赘述。</p>
+<h1 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h1><p>这里举例安装live2d插件，其他插件的安装大同小异：</p>
+<p><a href="https://huaji8.top/post/live2d-plugin-2.0/" target="_blank" rel="noopener">插件官网，可浏览模型样式</a></p>
+<p><a href="https://github.com/EYHN/hexo-helper-live2d" target="_blank" rel="noopener">插件GitHub地址</a></p>
+<p>这里我们安装这只叫hijiki的黑猫：</p>
+<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711144333378.png" alt="image-20200711144333378"></p>
+<p>按照官网的步骤，先安装插件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-helper-live2d</span><br></pre></td></tr></table></figure>
+<p>然后配置<code>_config.yml</code>，加入以下内容，自行设定width和height：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">live2d:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">scriptFrom:</span> <span class="string">local</span></span><br><span class="line">  <span class="attr">model:</span></span><br><span class="line">    <span class="attr">use:</span> <span class="string">live2d-widget-model-hijiki</span></span><br><span class="line">  <span class="attr">display:</span></span><br><span class="line">    <span class="attr">position:</span> <span class="string">right</span></span><br><span class="line">    <span class="attr">width:</span> <span class="number">200</span></span><br><span class="line">    <span class="attr">height:</span> <span class="number">400</span></span><br><span class="line">  <span class="attr">mobile:</span></span><br><span class="line">    <span class="attr">show:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>再次编译打开网页，hijiki就会在屏幕的右下角啦。</p>
+<h1 id="关于markdown书写格式"><a href="#关于markdown书写格式" class="headerlink" title="关于markdown书写格式"></a>关于markdown书写格式</h1><p>hexo的markdown开头需要写明一些配置，例子如下，这样文章才能正确显示标题、日期等信息：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 对比jQuery与Vue+axios的Ajax</span><br><span class="line">date: 2020-5-7 13:23:01</span><br><span class="line">categories: 前端</span><br><span class="line">tags: </span><br><span class="line"><span class="bullet">- </span>前端</span><br><span class="line"><span class="bullet">- </span>Web</span><br><span class="line"><span class="bullet">- </span>JavaScript</span><br><span class="line"><span class="bullet">- </span>jQuery</span><br><span class="line"><span class="bullet">- </span>Vue</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -321,11 +337,6 @@ sql_test-Desktop_Qt_5_14_2_MinGW_64_bit-Debug</code>，这也意味着最后的�
     
 
       <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
-              <a href="/tags/C/" rel="tag"># C++</a>
-              <a href="/tags/Qt/" rel="tag"># Qt</a>
-          </div>
 
         
 
@@ -333,13 +344,10 @@ sql_test-Desktop_Qt_5_14_2_MinGW_64_bit-Debug</code>，这也意味着最后的�
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/27/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AE%8C%E6%88%90vue-cli%E8%84%9A%E6%89%8B%E6%9E%B6%E9%85%8D%E7%BD%AE/" rel="prev" title="从零开始完成vue-cli脚手架配置">
-      <i class="fa fa-chevron-left"></i> 从零开始完成vue-cli脚手架配置
+    <a href="/2020/06/16/%E6%B5%85%E8%B0%88%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C(CNN)%E2%80%94%E2%80%94%E5%8D%B7%E7%A7%AF%E3%80%81%E6%89%B9%E6%A0%87%E5%87%86%E5%8C%96%E3%80%81%E6%B1%A0%E5%8C%96%E3%80%81%E5%A4%B1%E6%B4%BB/" rel="prev" title="浅谈卷积神经网络(CNN)——卷积、批标准化、池化、失活">
+      <i class="fa fa-chevron-left"></i> 浅谈卷积神经网络(CNN)——卷积、批标准化、池化、失活
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/06/09/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E8%BF%9B%E9%98%B6%E7%94%A8%E6%B3%95%E2%80%94%E2%80%94%E9%A2%84%E6%9F%A5%E4%B8%8E%E5%88%86%E7%BB%84/" rel="next" title="正则表达式的进阶用法——预查与分组">
-      正则表达式的进阶用法——预查与分组 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -398,7 +406,7 @@ sql_test-Desktop_Qt_5_14_2_MinGW_64_bit-Debug</code>，这也意味着最后的�
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装Qt时的坑"><span class="nav-number">1.</span> <span class="nav-text">安装Qt时的坑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置驱动"><span class="nav-number">2.</span> <span class="nav-text">配置驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加驱动"><span class="nav-number">2.1.</span> <span class="nav-text">添加驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加依赖"><span class="nav-number">2.2.</span> <span class="nav-text">添加依赖</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#访问操作"><span class="nav-number">3.</span> <span class="nav-text">访问操作</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建本地文件"><span class="nav-number">1.</span> <span class="nav-text">创建本地文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署到GitHub"><span class="nav-number">2.</span> <span class="nav-text">部署到GitHub</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#新建仓库"><span class="nav-number">2.1.</span> <span class="nav-text">新建仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置本地文件"><span class="nav-number">2.2.</span> <span class="nav-text">配置本地文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Git"><span class="nav-number">2.3.</span> <span class="nav-text">配置Git</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建账号"><span class="nav-number">2.3.1.</span> <span class="nav-text">创建账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建SSH密钥"><span class="nav-number">2.3.2.</span> <span class="nav-text">创建SSH密钥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连接到GitHub"><span class="nav-number">2.3.3.</span> <span class="nav-text">连接到GitHub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试连接"><span class="nav-number">2.3.4.</span> <span class="nav-text">测试连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo上传"><span class="nav-number">2.3.5.</span> <span class="nav-text">hexo上传</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用Next主题"><span class="nav-number">3.</span> <span class="nav-text">使用Next主题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载主题"><span class="nav-number">3.1.</span> <span class="nav-text">下载主题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装插件"><span class="nav-number">4.</span> <span class="nav-text">安装插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于markdown书写格式"><span class="nav-number">5.</span> <span class="nav-text">关于markdown书写格式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
