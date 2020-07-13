@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>WSL不支持Docker？不存在的，升级WSL2并安装Docker</title>
+      <link href="/2020/07/13/%E5%8D%87%E7%BA%A7WSL2%E5%B9%B6%E5%AE%89%E8%A3%85Docker/"/>
+      <url>/2020/07/13/%E5%8D%87%E7%BA%A7WSL2%E5%B9%B6%E5%AE%89%E8%A3%85Docker/</url>
+      
+        <content type="html"><![CDATA[<p>原先的WSL不支持Docker守护线程，然而，WSL2的更新彻底解决了这个问题。</p><p>WSL2彻底重构WSL，支持原生Docker的安装、启动，同时运行速度也大大加快。这么好的WSL哪里才能买得到呢？</p><a id="more"></a><h1 id="升级WSL2"><a href="#升级WSL2" class="headerlink" title="升级WSL2"></a>升级WSL2</h1><h2 id="升级Windows版本"><a href="#升级Windows版本" class="headerlink" title="升级Windows版本"></a>升级Windows版本</h2><p>要使用WSL2，请确定你windows的系统版本为18917或更高，并且已经安装WSL。</p><p>按下win+R，输入<code>winver</code>查看当前版本：</p><p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200713134653039.png" alt="image-20200713134653039"></p><p>笔者的版本已经更新到20161.1000，可以使用WSL2：</p><p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200713134803937.png" alt="image-20200713134803937"></p><p>如果你的版本低于18917，请搜打开Windows更新设置，点击检查更新：</p><p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200713135037578.png" alt="image-20200713135037578"></p><p>如果检查不到新版本，请加入Windows预览体验计划：</p><p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200713135201249.png" alt="image-20200713135201249"></p><p>之后再检查更新，就可以发现新版本。</p><h2 id="下载新内核"><a href="#下载新内核" class="headerlink" title="下载新内核"></a>下载新内核</h2><p>官方地址：<a href="https://aka.ms/wsl2kernel" target="_blank" rel="noopener">下载Linux内核更新包</a></p><p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200713134102238.png" alt="image-20200713134102238"></p><p>接下来只需无脑安装即可。</p><h2 id="更换版本"><a href="#更换版本" class="headerlink" title="更换版本"></a>更换版本</h2><p>打开命令行，输入<code>wsl -l -v</code>检查现有版本：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\a1311&gt; wsl -l -v</span><br><span class="line">  NAME      STATE           VERSION</span><br><span class="line">* Ubuntu    Stopped         1</span><br></pre></td></tr></table></figure><p>可以看到，笔者这里用的是Ubuntu，接下来将其版本升级到2，输入<code>wsl --set-version Ubuntu 2</code>，当然具体的WSL名字根据你电脑中的WSL确定：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-version Ubuntu 2</span><br><span class="line">正在进行转换，这可能需要几分钟时间...</span><br><span class="line">有关与 WSL 2 的主要区别的信息，请访问 https://aka.ms/wsl2</span><br><span class="line">转换完成。</span><br></pre></td></tr></table></figure><p>接下来，设置默认启动版本为WSL2，输入<code>wsl --set-default-version 2</code></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\a1311&gt; wsl --set-default-version 2</span><br><span class="line">有关与 WSL 2 的主要区别的信息，请访问 https://aka.ms/wsl2</span><br></pre></td></tr></table></figure><p>到这里，WSL2的升级就完成了。</p><p>再次检查：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\a1311&gt; wsl -l -v</span><br><span class="line">  NAME      STATE           VERSION</span><br><span class="line">* Ubuntu    Stopped         2</span><br></pre></td></tr></table></figure><h1 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h1><p>卸载旧版本Docker：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove docker docker-engine docker.io containerd runc</span><br></pre></td></tr></table></figure><p>安装依赖：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install \</span><br><span class="line">    apt-transport-https \</span><br><span class="line">    ca-certificates \</span><br><span class="line">    curl \</span><br><span class="line">    gnupg-agent \</span><br><span class="line">    software-properties-common -y</span><br></pre></td></tr></table></figure><p>添加Docker源：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</span><br><span class="line"></span><br><span class="line">sudo add-apt-repository \</span><br><span class="line">   "deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu \</span><br><span class="line"><span class="meta">   $</span><span class="bash">(lsb_release -cs) \</span></span><br><span class="line">   stable"</span><br><span class="line"></span><br><span class="line">sudo apt update</span><br></pre></td></tr></table></figure><p>安装Docker：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y docker-ce</span><br></pre></td></tr></table></figure><p>到这里Docker就安装完成了，接下来进行测试。</p><p>启动服务：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service docker start</span><br></pre></td></tr></table></figure><p>测试hello-world，<code>docker run hello-world</code></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ docker run hello-world</span><br><span class="line"></span><br><span class="line">Hello from Docker!</span><br><span class="line">This message shows that your installation appears to be working correctly.</span><br><span class="line"></span><br><span class="line">To generate this message, Docker took the following steps:</span><br><span class="line"> 1. The Docker client contacted the Docker daemon.</span><br><span class="line"> 2. The Docker daemon pulled the &quot;hello-world&quot; image from the Docker Hub.</span><br><span class="line">    (amd64)</span><br><span class="line"> 3. The Docker daemon created a new container from that image which runs the</span><br><span class="line">    executable that produces the output you are currently reading.</span><br><span class="line"> 4. The Docker daemon streamed that output to the Docker client, which sent it</span><br><span class="line">    to your terminal.</span><br><span class="line"></span><br><span class="line">To try something more ambitious, you can run an Ubuntu container with:</span><br><span class="line"> $ docker run -it ubuntu bash</span><br><span class="line"></span><br><span class="line">Share images, automate workflows, and more with a free Docker ID:</span><br><span class="line"> https:&#x2F;&#x2F;hub.docker.com&#x2F;</span><br><span class="line"></span><br><span class="line">For more examples and ideas, visit:</span><br><span class="line"> https:&#x2F;&#x2F;docs.docker.com&#x2F;get-started&#x2F;</span><br></pre></td></tr></table></figure><p>测试成功！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 其他 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>利用GitHub + Hexo搭建博客</title>
       <link href="/2020/07/11/%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/"/>
       <url>/2020/07/11/%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
@@ -195,13 +220,13 @@
             
             <tag> 前端 </tag>
             
+            <tag> Vue </tag>
+            
             <tag> Web </tag>
             
             <tag> JavaScript </tag>
             
             <tag> jQuery </tag>
-            
-            <tag> Vue </tag>
             
         </tags>
       
@@ -354,9 +379,9 @@
             
             <tag> Maven </tag>
             
-            <tag> MyBatis </tag>
-            
             <tag> Spring </tag>
+            
+            <tag> MyBatis </tag>
             
         </tags>
       
