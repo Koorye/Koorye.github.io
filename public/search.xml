@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>【Spring Data JPA自学笔记一】JPA是什么？JPA访问数据库初体验</title>
+      <link href="/2020/07/15/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91JPA%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9FJPA%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E4%BD%93%E9%AA%8C/"/>
+      <url>/2020/07/15/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91JPA%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9FJPA%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E4%BD%93%E9%AA%8C/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>JPA是Java Persistence API的简称，中文名Java持久层API，是JDK 5.0注解或XML描述对象－关系表的映射关系，并将运行期的实体对象持久化到数据库中。</p><p>Sun引入新的JPA ORM规范出于两个原因：其一，简化现有Java EE和Java SE应用开发工作；其二，Sun希望整合ORM技术，实现天下归一。</p><p>——摘自百度百科</p></blockquote><a id="more"></a><h1 id="JPA是什么？"><a href="#JPA是什么？" class="headerlink" title="JPA是什么？"></a>JPA是什么？</h1><h2 id="JDBC的诞生"><a href="#JDBC的诞生" class="headerlink" title="JDBC的诞生"></a>JDBC的诞生</h2><p>要说JPA，还要从JDBC说起。我们知道，JDBC是Java为规范数据库访问而推出的一套接口。</p><p>数据库的种类有很多，而每一套数据库都有自己的访问方法，如果不同的数据库，如MySQL、Oracle等都有自己的一套代码来访问，那显然是不太合理的，更换一套数据库就意味着需要更换整套代码。</p><p>于是，JDBC规范出现了，JDBC本身并不工作，而是定义了一套接口，各个数据库公司只需要负责实现JDBC提供的接口，这样一来，一套代码就可以实现访问不同的数据库了。</p><h2 id="JPA的诞生"><a href="#JPA的诞生" class="headerlink" title="JPA的诞生"></a>JPA的诞生</h2><p>JPA的出现也是类似，为了封装JDBC，很多公司制作了自己的框架，而这些框架同样有着自己的一套代码。</p><p>于是，JPA规范出现了。JPA只是定义了一套接口，其本身并不工作，而是让各个框架的公司负责实现JPA提供接口。这样一来，一套代码就可以实现不同的数据库框架，如Hibernate、EclipseLink、OpenJpa等。</p><pre class="mermaid">graph LRjpa[JPA规范]subgraph JDBC框架hibernate(Hibernate)eclipseLink(EclipseLink)openJpa(OpenJpa)endjdbc[JDBC规范]subgraph 数据库驱动mysql(MySQL Driver)oracle(Oracle Driver)endjpa --> hibernatejpa --> eclipseLinkjpa --> openJpahibernate --> jdbceclipseLink --> jdbcopenJpa --> jdbcjdbc --> mysqljdbc --> oracle</pre><h1 id="如何使用JPA？"><a href="#如何使用JPA？" class="headerlink" title="如何使用JPA？"></a>如何使用JPA？</h1><h2 id="配置JPA"><a href="#配置JPA" class="headerlink" title="配置JPA"></a>配置JPA</h2><h3 id="配置pom-xml"><a href="#配置pom-xml" class="headerlink" title="配置pom.xml"></a>配置pom.xml</h3><p>新建一个Maven工程，此处我们选用Hibernate实现JPA：</p><p>在pom.xml中引入必要的包：</p><ul><li><code>hibernate-entitymanager</code>(Hibernate的JPA支持)</li><li><code>hibernate-c3po</code>(Hibernate连接池)</li><li><code>mysql-connector-java</code>(MySQL驱动)  </li><li>为了方便，引入junit、log4j、lombok</li></ul><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">  <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- https://mvnrepository.com/artifact/junit/junit --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-entitymanager<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.4.10.Final<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-c3p0 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-c3p0<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.4.10.Final<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- https://mvnrepository.com/artifact/log4j/log4j --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.17<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>8.0.19<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.projectlombok/lombok --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.18.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure><h3 id="配置persistence-xml"><a href="#配置persistence-xml" class="headerlink" title="配置persistence.xml"></a>配置persistence.xml</h3><p>使用JPA，首先需要准备配置文件，其目录必须在<code>META-INF</code>文件夹中，如果是Maven工程，其目录就在<code>src/main/resources/META-INF</code>中。</p><p>在<code>src/main/resources/META-INF</code>中创建名为<code>persistence.xml</code>的配置文件，配置数据库的基本信息：</p><ul><li><p><code>&lt;persistence-unit&gt;</code>标签代表一个数据库配置，其中transaction-type有两个选项：</p><ul><li>RESOURCE_LOCAL  本地的，指只有一个数据库</li><li>JTA  分布式，指有多个数据库交互数据</li></ul></li><li><p><code>&lt;provider&gt;</code>标签用于指定JPA接口的实现框架</p></li><li><p><code>&lt;property&gt;</code>标签中是一些数据库的基本配置，其中有一些特殊配置：</p></li><li>hibernate.show_sql  控制台显示sql语句<ul><li>hibernate.hbm2ddl.auto  设置访问数据库的操作，其中的value有三个选项：<ul><li>create  每次访问数据库都删除原表，创建新表</li><li>update  如果数据库中表不存在就创建新表，否则访问该表</li><li>none  不创新新表</li></ul></li></ul></li></ul><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">persistence</span> <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/persistence"</span> <span class="attr">version</span>=<span class="string">"2.0"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">persistence-unit</span> <span class="attr">name</span>=<span class="string">"myJpa"</span> <span class="attr">transaction-type</span>=<span class="string">"RESOURCE_LOCAL"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">provider</span>&gt;</span>org.hibernate.jpa.HibernatePersistenceProvider<span class="tag">&lt;/<span class="name">provider</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"javax.persistence.jdbc.user"</span> <span class="attr">value</span>=<span class="string">"root"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"javax.persistence.jdbc.password"</span> <span class="attr">value</span>=<span class="string">"root"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"javax.persistence.jdbc.driver"</span> <span class="attr">value</span>=<span class="string">"com.mysql.cj.jdbc.Driver"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"javax.persistence.jdbc.url"</span> <span class="attr">value</span>=<span class="string">"jdbc:mysql://localhost:3306/demo?useUnicode=true<span class="symbol">&amp;amp;</span>characterEncoding=UTF-8<span class="symbol">&amp;amp;</span>serverTimezone=UTC"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"hibernate.show_sql"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"hibernate.hbm2ddl.auto"</span> <span class="attr">value</span>=<span class="string">"update"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">persistence-unit</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">persistence</span>&gt;</span></span><br></pre></td></tr></table></figure><h2 id="实现POJO类"><a href="#实现POJO类" class="headerlink" title="实现POJO类"></a>实现POJO类</h2><p>接下来，要根据表的字段实现一个对象类，使类的属性和表的字段名一一对应。</p><p>原表共有两个字段，id int和name varchar(32)：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> select * from user;</span></span><br><span class="line">+----+-----------------+</span><br><span class="line">| id | name            |</span><br><span class="line">+----+-----------------+</span><br><span class="line">|  1 | 冬马和纱        |</span><br><span class="line">|  2 | 小木曾雪菜       |</span><br><span class="line">+----+-----------------+</span><br></pre></td></tr></table></figure><p>于是我们创建一个类，并通过注解配置Jpa：</p><ul><li><code>@Entity</code>表示该对象成为被JPA管理的实体</li><li><code>@Table</code>指定数据表名</li><li><p><code>@Id</code>指定主键</p></li><li><p><code>@GenerateValue</code>指定自增方式，有四个选项：</p><ul><li><code>GenerationType.IDENTITY</code>  以自增主键的形式实现(仅支持有自增主键的数据库，如MySQL)</li><li><code>GenerationType.SEQUENCE</code>  以序列的形式显示(如支持有序列的数据库，如Oracle)</li><li><code>GenerationType.TABLE</code>  使用一个特定的数据表存储主键</li><li><code>GenerationType.Auto</code>  主键由程序控制</li></ul></li><li><p><code>@Column</code>指定该属性和数据库中字段的对应关系</p></li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.koorye.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"user"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Id</span></span><br><span class="line">  <span class="meta">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)</span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"id"</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> userId;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"name"</span>)</span><br><span class="line">  <span class="keyword">private</span> String userName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>需要说明，笔者偷懒使用Lombok的<code>@Data</code>注解自动生成GetSet和ToString方法，如果不使用该注解，请在类中写明GetSet和ToString方法。</p><h2 id="调用JPA方法"><a href="#调用JPA方法" class="headerlink" title="调用JPA方法"></a>调用JPA方法</h2><p>到这里，JPA就可以使用了。</p><p>JPA方法分为7步：</p><ul><li>创建<code>EntityManagerFactory</code>工厂类</li><li>通过工厂创建一个<code>EntityManager</code></li><li>通过<code>EntityManager</code>得到一个事务</li><li>开启事务</li><li>调用JPA方法访问数据库</li><li>关闭事务</li><li>释放资源</li></ul><p>先来简单体验一下：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.koorye.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.koorye.pojo.User;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.EntityManager;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.EntityManagerFactory;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.EntityTransaction;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Persistence;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JpaTest</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    EntityManagerFactory factory = Persistence.createEntityManagerFactory(<span class="string">"myJpa"</span>);</span><br><span class="line">    EntityManager manager = factory.createEntityManager();</span><br><span class="line">    EntityTransaction transaction = manager.getTransaction();</span><br><span class="line"></span><br><span class="line">    transaction.begin();</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setUserName(<span class="string">"鹿目圆香"</span>);</span><br><span class="line">    manager.persist(user);</span><br><span class="line">    transaction.commit();</span><br><span class="line"></span><br><span class="line">    manager.close();</span><br><span class="line">    factory.close();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>运行结果：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: insert into user (name) values (?)</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure><p>数据库：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> select * from user;</span></span><br><span class="line">+----+-----------------+</span><br><span class="line">| id | name            |</span><br><span class="line">+----+-----------------+</span><br><span class="line">|  1 | 冬马和纱        |</span><br><span class="line">|  2 | 小木曾雪菜      |</span><br><span class="line">|  3 | 鹿目圆香        |</span><br><span class="line">+----+-----------------+</span><br><span class="line">3 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure><p>新字段成功添加！</p><h3 id="关于EntityManager"><a href="#关于EntityManager" class="headerlink" title="关于EntityManager"></a>关于EntityManager</h3><p>EntityManager中有不同的方法，来实现不同的访问操作：</p><ul><li>persist  保存一个字段，如果该字段不存在则新增，如果存在则报错</li><li>merge  更新一个字段，如果该字段不存在则新增，如果存在更新其内容</li><li>remove  移除一个字段</li><li>find  查找字段(立即加载)</li><li>getReference  查找字段(延迟加载)</li></ul>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> MySQL </tag>
+            
+            <tag> Java </tag>
+            
+            <tag> Spring </tag>
+            
+            <tag> JPA </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>WSL不支持Docker？不存在的，升级WSL2并安装Docker</title>
       <link href="/2020/07/13/%E5%8D%87%E7%BA%A7WSL2%E5%B9%B6%E5%AE%89%E8%A3%85Docker/"/>
       <url>/2020/07/13/%E5%8D%87%E7%BA%A7WSL2%E5%B9%B6%E5%AE%89%E8%A3%85Docker/</url>
@@ -220,13 +245,13 @@
             
             <tag> 前端 </tag>
             
-            <tag> Vue </tag>
-            
             <tag> Web </tag>
             
             <tag> JavaScript </tag>
             
             <tag> jQuery </tag>
+            
+            <tag> Vue </tag>
             
         </tags>
       
@@ -251,13 +276,13 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> Web </tag>
             
-            <tag> MyBatis </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> Java </tag>
+            
+            <tag> MyBatis </tag>
             
             <tag> Spring Boot </tag>
             
@@ -284,9 +309,9 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> Web </tag>
+            
+            <tag> Java </tag>
             
             <tag> Spring Boot </tag>
             
@@ -313,9 +338,9 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> Web </tag>
+            
+            <tag> Java </tag>
             
             <tag> Spring Boot </tag>
             
@@ -342,9 +367,9 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> Web </tag>
+            
+            <tag> Java </tag>
             
             <tag> Spring Boot </tag>
             
@@ -371,17 +396,17 @@
       
         <tags>
             
+            <tag> Web </tag>
+            
+            <tag> MySQL </tag>
+            
             <tag> Java </tag>
             
-            <tag> Web </tag>
+            <tag> MyBatis </tag>
             
             <tag> Maven </tag>
             
             <tag> Spring </tag>
-            
-            <tag> MyBatis </tag>
-            
-            <tag> MySQL </tag>
             
         </tags>
       
@@ -410,13 +435,13 @@
             
             <tag> Web </tag>
             
-            <tag> MySQL </tag>
-            
             <tag> HTML </tag>
             
             <tag> JavaScript </tag>
             
             <tag> jQuery </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -441,13 +466,13 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> Web </tag>
             
-            <tag> MyBatis </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> Java </tag>
+            
+            <tag> MyBatis </tag>
             
         </tags>
       
@@ -472,13 +497,13 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> Web </tag>
             
-            <tag> MyBatis </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> Java </tag>
+            
+            <tag> MyBatis </tag>
             
         </tags>
       
@@ -503,9 +528,9 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> Web </tag>
+            
+            <tag> Java </tag>
             
             <tag> Maven </tag>
             
@@ -586,9 +611,9 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> Java </tag>
             
         </tags>
       
