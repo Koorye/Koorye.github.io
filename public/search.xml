@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>【Spring Data JPA自学笔记二】初始Spring Data JPA</title>
+      <title>【Spring Data JPA自学笔记二】初识Spring Data JPA</title>
       <link href="/2020/07/15/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91%E5%88%9D%E8%AF%86Spring%20Data%20JPA/"/>
       <url>/2020/07/15/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91%E5%88%9D%E8%AF%86Spring%20Data%20JPA/</url>
       
@@ -14,9 +14,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
             
@@ -39,9 +39,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
             
@@ -268,15 +268,15 @@
       
         <tags>
             
+            <tag> Web </tag>
+            
             <tag> 前端 </tag>
             
-            <tag> Web </tag>
+            <tag> Vue </tag>
             
             <tag> JavaScript </tag>
             
             <tag> jQuery </tag>
-            
-            <tag> Vue </tag>
             
         </tags>
       
@@ -301,13 +301,13 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
             
+            <tag> Web </tag>
+            
             <tag> MyBatis </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring Boot </tag>
             
@@ -334,9 +334,9 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Web </tag>
             
             <tag> Spring Boot </tag>
             
@@ -363,9 +363,9 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Web </tag>
             
             <tag> Spring Boot </tag>
             
@@ -392,9 +392,9 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Web </tag>
             
             <tag> Spring Boot </tag>
             
@@ -421,15 +421,15 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Maven </tag>
+            
+            <tag> Web </tag>
             
             <tag> MyBatis </tag>
             
-            <tag> Maven </tag>
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
             
@@ -456,17 +456,17 @@
       
         <tags>
             
+            <tag> Web </tag>
+            
             <tag> 前端 </tag>
             
-            <tag> Web </tag>
+            <tag> MySQL </tag>
             
             <tag> HTML </tag>
             
             <tag> JavaScript </tag>
             
             <tag> jQuery </tag>
-            
-            <tag> MySQL </tag>
             
         </tags>
       
@@ -491,13 +491,13 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
             
+            <tag> Web </tag>
+            
             <tag> MyBatis </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -522,13 +522,13 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
             
+            <tag> Web </tag>
+            
             <tag> MyBatis </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -553,11 +553,11 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
             
             <tag> Maven </tag>
+            
+            <tag> Web </tag>
             
         </tags>
       
@@ -636,9 +636,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
