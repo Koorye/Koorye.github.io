@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="之前的所有操作都是在单表查询的前提下，这一期我们要了解Spring Data JPA多表查询的各种配置。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Spring Data JPA自学笔记五】一对多、多对多和级联">
+<meta property="og:url" content="http://koorye.github.io/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91%E4%B8%80%E5%AF%B9%E5%A4%9A%E3%80%81%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%92%8C%E7%BA%A7%E8%81%94/index.html">
+<meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
+<meta property="og:description" content="之前的所有操作都是在单表查询的前提下，这一期我们要了解Spring Data JPA多表查询的各种配置。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200717171555165.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200717173840271.png">
+<meta property="article:published_time" content="2020-07-17T08:20:48.000Z">
+<meta property="article:modified_time" content="2020-07-17T12:35:20.221Z">
+<meta property="article:author" content="Koorye">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Spring">
+<meta property="article:tag" content="JPA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200717171555165.png">
+
+<link rel="canonical" href="http://koorye.github.io/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91%E4%B8%80%E5%AF%B9%E5%A4%9A%E3%80%81%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%92%8C%E7%BA%A7%E8%81%94/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【Spring Data JPA自学笔记五】一对多、多对多和级联 | 不会真有人以为Koorye会写代码吧</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不会真有人以为Koorye会写代码吧</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不会吧不会吧</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91%E4%B8%80%E5%AF%B9%E5%A4%9A%E3%80%81%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%92%8C%E7%BA%A7%E8%81%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="什么都想学一点">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Spring Data JPA自学笔记五】一对多、多对多和级联
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-17 16:20:48 / 修改时间：20:35:20" itemprop="dateCreated datePublished" datetime="2020-07-17T16:20:48+08:00">2020-07-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91%E4%B8%80%E5%AF%B9%E5%A4%9A%E3%80%81%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%92%8C%E7%BA%A7%E8%81%94/" class="post-meta-item leancloud_visitors" data-flag-title="【Spring Data JPA自学笔记五】一对多、多对多和级联" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>13k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>12 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>之前的所有操作都是在单表查询的前提下，这一期我们要了解Spring Data JPA多表查询的各种配置。</p>
+<a id="more"></a>
+<h1 id="数据库表的关系"><a href="#数据库表的关系" class="headerlink" title="数据库表的关系"></a>数据库表的关系</h1><p>数据库表之间的关系可以分为一对一，一对多和多对多，其中一对一可以视为一对多的一种特殊情况。</p>
+<h2 id="一对多"><a href="#一对多" class="headerlink" title="一对多"></a>一对多</h2><p>所谓一对多关系，即第一个表中的单个行可以与第二个表中的一个或多个行相关，但第二个表中的一个行只可以与第一个表中的一个行相关。</p>
+<p>一个简单的例子，如果有一个地址表和一个用户表，那么，一个用户只能有一个地址，而一个地址可以有一个、很多或没有用户。</p>
+<p>在这个例子中，地址是一，用户则是多。</p>
+<p>在MySQL中，我们通常把多的一方通过外键约束到一的一方的主键上。</p>
+<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200717171555165.png" alt="image-20200717171555165" style="zoom: 67%;" /></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 地址表</span></span><br><span class="line">+-------+--------+</span><br><span class="line">| a_id  | a_name |</span><br><span class="line">+-------+--------+</span><br><span class="line">| 10001 | 北京   |</span><br><span class="line">| 10002 | 上海   |</span><br><span class="line">| 10003 | 广州   |</span><br><span class="line">| 10004 | 深圳   |</span><br><span class="line">+-------+--------+</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 用户表</span></span><br><span class="line">+------+-----------------+--------------+</span><br><span class="line">| u_id | u_name          | u_address_id |</span><br><span class="line">+------+-----------------+--------------+</span><br><span class="line">|    1 | 冬马和纱        |        10001 |</span><br><span class="line">|    3 | 鹿目圆香        |        10001 |</span><br><span class="line">|    4 | 晓美焰          |        10003 |</span><br><span class="line">|    5 | 雪之下雪乃      |        10001 |</span><br><span class="line">|   10 | 由比滨结衣      |        10004 |</span><br><span class="line">+------+-----------------+--------------+</span><br></pre></td></tr></table></figure>
+<p>图解：</p>
+<pre class="mermaid">graph LR
+
+subgraph 主表 地址表 一
+beijing(北京)
+shanghai(上海)
+guangzhou(广州)
+shenzhen(深圳)
+end
+subgraph 从表 用户表 多
+touma(东马和纱)
+matouka(鹿目圆香)
+houmura(晓美焰)
+yukinoshita(雪之下雪乃)
+yuigahama(由比滨结衣)
+end
+
+beijing --> touma
+beijing --> matouka
+beijing --> yukinoshita
+guangzhou --> houmura
+shenzhen --> yuigahama</pre>
+
+<h2 id="多对多"><a href="#多对多" class="headerlink" title="多对多"></a>多对多</h2><p>所谓一对多关系，即第一个表中的单个行可以与第二个表中的一个或多个行相关，第二个表中的单个行也可以与第二个表中的一个或多个行相关。</p>
+<p>比如顾客和商品之间的关系：一个顾客可以购买很多商品，一种商品也可以被很多顾客购买。</p>
+<p>要在MySQL中实现多对多关系，需要借助中间表实现。</p>
+<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200717173840271.png" alt="image-20200717173840271" style="zoom: 67%;" /></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 顾客表</span></span><br><span class="line">+------+-----------------+</span><br><span class="line">| c_id | c_name          |</span><br><span class="line">+------+-----------------+</span><br><span class="line">|    1 | 冬马和纱        |</span><br><span class="line">|    2 | 小木曾雪菜      |</span><br><span class="line">|    3 | 雪之下雪乃      |</span><br><span class="line">|    4 | 由比滨结衣      |</span><br><span class="line">+------+-----------------+</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 产品表</span></span><br><span class="line">+------+-----------+</span><br><span class="line">| p_id | p_name    |</span><br><span class="line">+------+-----------+</span><br><span class="line">|    1 | 咖啡      |</span><br><span class="line">|    2 | 牛奶      |</span><br><span class="line">|    3 | 巧克力    |</span><br><span class="line">+------+-----------+</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 中间表</span></span><br><span class="line">+----------------+---------------+</span><br><span class="line">| cp_customer_id | cp_product_id |</span><br><span class="line">+----------------+---------------+</span><br><span class="line">|              3 |             1 |</span><br><span class="line">|              4 |             2 |</span><br><span class="line">|              1 |             2 |</span><br><span class="line">|              1 |             3 |</span><br><span class="line">|              2 |             3 |</span><br><span class="line">+----------------+---------------+</span><br></pre></td></tr></table></figure>
+<p>图解：</p>
+<pre class="mermaid">graph LR
+
+subgraph 顾客表
+touma(冬马和纱)
+ogiso(小木曾雪菜)
+yukinoshita(雪之下雪乃)
+yuigahama(由比滨结衣)
+end
+
+subgraph 产品表
+coffee(咖啡)
+milk(牛奶)
+chocolate(巧克力)
+end
+
+yukinoshita --- coffee
+yuigahama --- milk
+touma --- milk
+touma --- chocolate
+ogiso --- chocolate</pre>
+
+<h1 id="Spring-Data-JPA实现一对多"><a href="#Spring-Data-JPA实现一对多" class="headerlink" title="Spring Data JPA实现一对多"></a>Spring Data JPA实现一对多</h1><h2 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h2><p>首先我们来实现上面一对多的例子，按照单表查询的规范，先配置好两个实体类和Dao接口：</p>
+<p>User类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.koorye.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Getter;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Setter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"user"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Id</span></span><br><span class="line">  <span class="meta">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)</span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"u_id"</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"u_name"</span>)</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ID: "</span> + id + <span class="string">", Name: "</span> + name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Address类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.koorye.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.*;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"address"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Address</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Id</span></span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"a_id"</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"a_name"</span>)</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ID: "</span> + id + <span class="string">", Name: "</span> + name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>UserDao接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.koorye.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.koorye.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.JpaRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.JpaSpecificationExecutor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">User</span>, <span class="title">Integer</span>&gt;, <span class="title">JpaSpecificationExecutor</span>&lt;<span class="title">User</span>&gt; </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>AddressDao接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.koorye.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.koorye.pojo.Address;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.JpaRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.JpaSpecificationExecutor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AddressDao</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">Address</span>, <span class="title">Integer</span>&gt;, <span class="title">JpaSpecificationExecutor</span>&lt;<span class="title">Address</span>&gt; </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="实现一对多"><a href="#实现一对多" class="headerlink" title="实现一对多"></a>实现一对多</h2><p> Spring Data JPA为一对多提供了注解的解决方案：</p>
+<ul>
+<li><code>@OneToMany(targetEitity = 对方实体类的字节码)</code></li>
+<li><code>@ManyToOne(targetEitity = 对方实体类的字节码)</code></li>
+<li><code>@JoinColumn(name = &quot;自身表的外键&quot;, referencedColumnName = &quot;对方表的主键&quot;)</code></li>
+</ul>
+<p>为了实现一对多关系，我们在主表的实体类中添加一个Set集合存储用户信息，然后在从表的实体类中添加一个Address表示地址。</p>
+<p>接着，将注解添加到用户集合和地址上。</p>
+<p>User类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Id</span></span><br><span class="line">  <span class="meta">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)</span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"u_id"</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"u_name"</span>)</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@ManyToOne</span>(targetEntity = Address<span class="class">.<span class="keyword">class</span>, <span class="title">cascade</span> </span>= CascadeType.ALL)</span><br><span class="line">  <span class="meta">@JoinColumn</span>(name = <span class="string">"u_address_id"</span>, referencedColumnName = <span class="string">"a_id"</span>)</span><br><span class="line">  <span class="keyword">private</span> Address address;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ID: "</span> + id + <span class="string">", Name: "</span> + name + <span class="string">", Address: "</span> + address.getName();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Address类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Address</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Id</span></span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"a_id"</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"a_name"</span>)</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@OneToMany</span>(targetEntity = User<span class="class">.<span class="keyword">class</span>, <span class="title">cascade</span> </span>= CascadeType.ALL)</span><br><span class="line">  <span class="meta">@JoinColumn</span>(name = <span class="string">"u_address_id"</span>, referencedColumnName = <span class="string">"a_id"</span>)</span><br><span class="line">  <span class="keyword">private</span> Set&lt;User&gt; userSet = <span class="keyword">new</span> HashSet&lt;User&gt;();</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String str = <span class="string">", Users: "</span>;</span><br><span class="line">    <span class="keyword">for</span> (User user : userSet) &#123;</span><br><span class="line">      str = str.concat(user.getName() + <span class="string">", "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    str = str.substring(<span class="number">0</span>, str.length() - <span class="number">2</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ID: "</span> + id + <span class="string">", Name: "</span> + name + str;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>此时笔者对User和Address类都配置了注解，<strong>这意味着两个实体类对两表的关系都拥有维护权</strong>。</p>
+<p>让我们测试一个案例，从地址表中查询得到一个地址，赋给一个新增的用户：</p>
+<p>在这里，我们可以通过User的<code>setAddress</code>方法设定地址，此处体现的是多对一的关系。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="meta">@Transactional</span></span><br><span class="line">  <span class="meta">@Rollback</span>(value = <span class="keyword">false</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestOneToMany</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Address address = addressDao.findByName(<span class="string">"北京"</span>);</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setName(<span class="string">"小木曾雪菜"</span>);</span><br><span class="line">    user.setAddress(address);</span><br><span class="line"></span><br><span class="line">    userDao.save(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重新查表：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+------+-----------------+--------------+</span><br><span class="line">| u_id | u_name          | u_address_id |</span><br><span class="line">+------+-----------------+--------------+</span><br><span class="line">|    1 | 冬马和纱        |        10001 |</span><br><span class="line">|    3 | 鹿目圆香        |        10001 |</span><br><span class="line">|    4 | 晓美焰          |        10003 |</span><br><span class="line">|    5 | 雪之下雪乃      |        10001 |</span><br><span class="line">|   10 | 由比滨结衣      |        10004 |</span><br><span class="line">|   11 | 小木曾雪菜      |        10001 |</span><br><span class="line">+------+-----------------+--------------+</span><br></pre></td></tr></table></figure>
+<p>新字段成功添加，Spring Data JPA自动根据得到的地址为新增用户分配了<code>u_address_id</code>.</p>
+<p>同样的，由于配置了双向关系，我们也可以利用Address的<code>getUserSet</code>方法，再通过<code>UserSet.add</code>方法添加新用户。此处体现的是一对多的关系。</p>
+<p>举例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="meta">@Transactional</span></span><br><span class="line">  <span class="meta">@Rollback</span>(value = <span class="keyword">false</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestOneToMany</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Address address = addressDao.findByName(<span class="string">"上海"</span>);</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setName(<span class="string">"比企谷小町"</span>);</span><br><span class="line">    address.getUserSet().add(user);</span><br><span class="line"></span><br><span class="line">    userDao.save(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查询结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+------+-----------------+--------------+</span><br><span class="line">| u_id | u_name          | u_address_id |</span><br><span class="line">+------+-----------------+--------------+</span><br><span class="line">|    1 | 冬马和纱        |        10001 |</span><br><span class="line">|    3 | 鹿目圆香        |        10001 |</span><br><span class="line">|    4 | 晓美焰          |        10003 |</span><br><span class="line">|    5 | 雪之下雪乃      |        10001 |</span><br><span class="line">|   10 | 由比滨结衣      |        10004 |</span><br><span class="line">|   11 | 小木曾雪菜      |        10001 |</span><br><span class="line">|   12 | 比企谷小町      |        10002 |</span><br><span class="line">+------+-----------------+--------------+</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，如果同时使用<code>user.setAddress(address)</code>和<code>address.getUserSet().add(user)</code>方法，可能会导致<strong>爆栈</strong>！因此尽可能不要这样使用。</p>
+<h2 id="放弃维护权"><a href="#放弃维护权" class="headerlink" title="放弃维护权"></a>放弃维护权</h2><p>刚才我们配置了双向关系，然而，在本例中，<code>user.setAddress</code>比<code>address.getUserSet().add</code>更加友好，我们可以通过放弃一对多关系的维护权来配置单向的多对一关系。</p>
+<p>放弃一对多关系的维护权：</p>
+<p><code>@OneToMany(mapperBy = &quot;对方表实体类指向该表实体类对应的属性名&quot;)</code>(当然<code>@ManyToOne</code>也一样)</p>
+<p>放弃维护权之后，测试：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="meta">@Transactional</span></span><br><span class="line">  <span class="meta">@Rollback</span>(value = <span class="keyword">false</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestOneToMany</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Address address = addressDao.findByName(<span class="string">"广州"</span>);</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setName(<span class="string">"五更琉璃"</span>);</span><br><span class="line">    address.getUserSet().add(user);</span><br><span class="line"></span><br><span class="line">    userDao.save(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查表：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+------+-----------------+--------------+</span><br><span class="line">| u_id | u_name          | u_address_id |</span><br><span class="line">+------+-----------------+--------------+</span><br><span class="line">|    1 | 冬马和纱        |        10001 |</span><br><span class="line">|    3 | 鹿目圆香        |        10001 |</span><br><span class="line">|    4 | 晓美焰          |        10003 |</span><br><span class="line">|    5 | 雪之下雪乃      |        10001 |</span><br><span class="line">|   10 | 由比滨结衣      |        10004 |</span><br><span class="line">|   11 | 小木曾雪菜      |        10001 |</span><br><span class="line">|   12 | 比企谷小町      |        10002 |</span><br><span class="line">|   13 | 五更琉璃        |         NULL |</span><br><span class="line">+------+-----------------+--------------+</span><br></pre></td></tr></table></figure>
+<p>新字段的<code>u_address_id</code>被置为<code>NULL</code>，外联关联失败！</p>
+<p>然而，多对一关系的维护权仍然是生效的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="meta">@Rollback</span>(value = <span class="keyword">false</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestOneToMany</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Address address = addressDao.findByName(<span class="string">"广州"</span>);</span><br><span class="line">  User user = userDao.findByName(<span class="string">"五更琉璃"</span>);</span><br><span class="line">  user.setAddress(address);</span><br><span class="line"></span><br><span class="line">  userDao.save(user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查表：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+------+-----------------+--------------+</span><br><span class="line">| u_id | u_name          | u_address_id |</span><br><span class="line">+------+-----------------+--------------+</span><br><span class="line">|    1 | 冬马和纱        |        10001 |</span><br><span class="line">|    3 | 鹿目圆香        |        10001 |</span><br><span class="line">|    4 | 晓美焰          |        10003 |</span><br><span class="line">|    5 | 雪之下雪乃      |        10001 |</span><br><span class="line">|   10 | 由比滨结衣      |        10004 |</span><br><span class="line">|   11 | 小木曾雪菜      |        10001 |</span><br><span class="line">|   12 | 比企谷小町      |        10002 |</span><br><span class="line">|   13 | 五更琉璃        |        10003 |</span><br><span class="line">+------+-----------------+--------------+</span><br></pre></td></tr></table></figure>
+<p>新用户的<code>u_address_id</code>字段设置成功。</p>
+<h1 id="Spring-Data-JPA实现多对多"><a href="#Spring-Data-JPA实现多对多" class="headerlink" title="Spring Data JPA实现多对多"></a>Spring Data JPA实现多对多</h1><p>Spring Data JPA同样为我们提供了多对多的注解方案。</p>
+<h2 id="基本配置-1"><a href="#基本配置-1" class="headerlink" title="基本配置"></a>基本配置</h2><p>同样我们先配置好Customer类和Product类，并提供CustomerDao和ProductDao接口。</p>
+<p>Customer类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.koorye.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Getter;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Setter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"customer"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Id</span></span><br><span class="line">  <span class="meta">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)</span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"c_id"</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"c_name"</span>)</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ID: "</span> + id + <span class="string">", Name: "</span> + name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Product类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.koorye.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Getter;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Setter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"product"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Id</span></span><br><span class="line">  <span class="meta">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)</span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"p_id"</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"p_name"</span>)</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ID: "</span> + id + <span class="string">", Name: "</span> + name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CustomerDao接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.koorye.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.koorye.pojo.Customer;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.JpaRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.JpaSpecificationExecutor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CustomerDao</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">Customer</span>, <span class="title">Integer</span>&gt;, <span class="title">JpaSpecificationExecutor</span>&lt;<span class="title">Customer</span>&gt; </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ProductDao接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.koorye.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.koorye.pojo.Product;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.JpaRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.JpaSpecificationExecutor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ProductDao</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">Product</span>, <span class="title">Integer</span>&gt;, <span class="title">JpaSpecificationExecutor</span>&lt;<span class="title">Product</span>&gt; </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="实现多对多"><a href="#实现多对多" class="headerlink" title="实现多对多"></a>实现多对多</h2><p>既然是多对多，那么两边都要使用Set的形式配置。</p>
+<p>接着，Spring Data JPA为多对多关系提供了两个注解：</p>
+<ul>
+<li><p><code>@ManyToMany(targetEntity = 对方实体类的字节码)</code>  映射多对多关系</p>
+</li>
+<li><p><code>@JoinTable(name = &quot;中间表名称&quot;,</code></p>
+<pre><code>                 `joinColumns = {@JoinColumn(name = &quot;中间表对应自身表的外键&quot;, `
+                                                                     `referencedColumnName = &quot;自身表的主键&quot;)}, `
+                 `inverJoinColumns = {@JoinColumn(name = &quot;中间表对应对方表的外键&quot;, `
+                                                                       `    referencedColumnName = &quot;外方表的主键&quot;)})`
+</code></pre></li>
+</ul>
+<p>写的有些乱，让我们看一下例子：</p>
+<p>Customer类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Id</span></span><br><span class="line">  <span class="meta">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)</span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"c_id"</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"c_name"</span>)</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@ManyToMany</span>(targetEntity = Product<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">  @<span class="title">JoinTable</span>(<span class="title">name</span> </span>= <span class="string">"customer__product"</span>,</span><br><span class="line">      joinColumns = &#123;<span class="meta">@JoinColumn</span>(name = <span class="string">"cp_customer_id"</span>, referencedColumnName = <span class="string">"c_id"</span>)&#125;,</span><br><span class="line">      inverseJoinColumns = &#123;<span class="meta">@JoinColumn</span>(name = <span class="string">"cp_product_id"</span>, referencedColumnName = <span class="string">"p_id"</span>)&#125;)</span><br><span class="line">  <span class="keyword">private</span> Set&lt;Product&gt; productSet;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ID: "</span> + id + <span class="string">", Name: "</span> + name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Product类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Id</span></span><br><span class="line">  <span class="meta">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)</span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"p_id"</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Column</span>(name = <span class="string">"p_name"</span>)</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@ManyToMany</span>(targetEntity = Customer<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">  @<span class="title">JoinTable</span>(<span class="title">name</span> </span>= <span class="string">"customer__product"</span>,</span><br><span class="line">      joinColumns = &#123;<span class="meta">@JoinColumn</span>(name = <span class="string">"cp_product_id"</span>, referencedColumnName = <span class="string">"p_id"</span>)&#125;,</span><br><span class="line">      inverseJoinColumns = &#123;<span class="meta">@JoinColumn</span>(name = <span class="string">"cp_customer_id"</span>, referencedColumnName = <span class="string">"c_id"</span>)&#125;)</span><br><span class="line">  <span class="keyword">private</span> Set&lt;Customer&gt; customerSet;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ID: "</span> + id + <span class="string">", Name: "</span> + name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>案例，给一个已有顾客添加一个已有商品：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="meta">@Transactional</span></span><br><span class="line">  <span class="meta">@Rollback</span>(value = <span class="keyword">false</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestManyToMany</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Customer customer = customerDao.findByName(<span class="string">"小木曾雪菜"</span>);</span><br><span class="line">    Product product = productDao.findByName(<span class="string">"咖啡"</span>);</span><br><span class="line">    customer.getProductSet().add(product);</span><br><span class="line">    customerDao.save(customer);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查表：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----------------+---------------+</span><br><span class="line">| cp_customer_id | cp_product_id |</span><br><span class="line">+----------------+---------------+</span><br><span class="line">|              3 |             1 |</span><br><span class="line">|              4 |             2 |</span><br><span class="line">|              1 |             2 |</span><br><span class="line">|              1 |             3 |</span><br><span class="line">|              2 |             3 |</span><br><span class="line">|              2 |             1 |</span><br><span class="line">+----------------+---------------+</span><br></pre></td></tr></table></figure>
+<p>新字段成功添加。</p>
+<p>案例，查询用户购买的商品：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="meta">@Transactional</span></span><br><span class="line">  <span class="meta">@Rollback</span>(value = <span class="keyword">false</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestManyToMany</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Customer customer = customerDao.findByName(<span class="string">"冬马和纱"</span>);</span><br><span class="line">    Set&lt;Product&gt; productSet = customer.getProductSet();</span><br><span class="line">    <span class="keyword">for</span> (Product product : productSet) &#123;</span><br><span class="line">      System.out.println(product);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select customer0_.c_id as c_id1_0_, customer0_.c_name as c_name2_0_ from customer customer0_ where customer0_.c_name=?</span><br><span class="line">Hibernate: select productset0_.cp_customer_id as cp_custo2_1_0_, productset0_.cp_product_id as cp_produ1_1_0_, product1_.p_id as p_id1_2_1_, product1_.p_name as p_name2_2_1_ from customer__product productset0_ inner join product product1_ on productset0_.cp_product_id=product1_.p_id where productset0_.cp_customer_id=?</span><br><span class="line">ID: 3, Name: 巧克力</span><br><span class="line">ID: 2, Name: 牛奶</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+<p>多对多同样支持放弃维护权，本文不再演示。</p>
+<h1 id="级联"><a href="#级联" class="headerlink" title="级联"></a>级联</h1><p>级联是Spring Data JPA提供的强大功能，指多个对象之间的映射关系，建立数据之间的级联关系提高管理效率：</p>
+<ul>
+<li>级联插入  插入两条关联的记录时，插入其中一条，另一条也会自动插入</li>
+<li>级联删除  删除一条记录时，其他表中和该记录有关的记录也会自动删除</li>
+</ul>
+<p>级联的配置非常简单，只需要在<code>@OneToMany</code> / <code>@ManyToOne</code> / <code>@ManyToMany</code>中配置<code>cascade = CascadeType.All</code>即可，指所有操作都进行级联。</p>
+<p>除外还有：</p>
+<ul>
+<li><code>CascadeType.PERSIST</code>  保存时级联</li>
+<li><code>CascadeType.MERGE</code>  更新时级联</li>
+<li><code>CascadeType.ROMOVE</code>  删除时更新</li>
+<li>…</li>
+</ul>
+<p>案例，添加一个新顾客和一个新商品，并给新顾客添加该新商品：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="meta">@Rollback</span>(value = <span class="keyword">false</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestManyToMany</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Customer customer = <span class="keyword">new</span> Customer();</span><br><span class="line">  customer.setName(<span class="string">"鹿目圆香"</span>);</span><br><span class="line"></span><br><span class="line">  Product product = <span class="keyword">new</span> Product();</span><br><span class="line">  product.setName(<span class="string">"猫"</span>);</span><br><span class="line"></span><br><span class="line">  Set&lt;Product&gt; productSet = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">  productSet.add(product);</span><br><span class="line">  customer.setProductSet(productSet);</span><br><span class="line"></span><br><span class="line">  customerDao.save(customer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查表：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> select * from customer;</span></span><br><span class="line">+------+-----------------+</span><br><span class="line">| c_id | c_name          |</span><br><span class="line">+------+-----------------+</span><br><span class="line">|    1 | 冬马和纱        |</span><br><span class="line">|    2 | 小木曾雪菜      |</span><br><span class="line">|    3 | 雪之下雪乃      |</span><br><span class="line">|    4 | 由比滨结衣      |</span><br><span class="line">|    5 | 鹿目圆香        |</span><br><span class="line">+------+-----------------+</span><br><span class="line">5 rows in set (0.01 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> select * from product;</span></span><br><span class="line">+------+-----------+</span><br><span class="line">| p_id | p_name    |</span><br><span class="line">+------+-----------+</span><br><span class="line">|    1 | 咖啡      |</span><br><span class="line">|    2 | 牛奶      |</span><br><span class="line">|    3 | 巧克力    |</span><br><span class="line">|    4 | 猫        |</span><br><span class="line">+------+-----------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> select * from customer__product;</span></span><br><span class="line">+----------------+---------------+</span><br><span class="line">| cp_customer_id | cp_product_id |</span><br><span class="line">+----------------+---------------+</span><br><span class="line">|              3 |             1 |</span><br><span class="line">|              4 |             2 |</span><br><span class="line">|              1 |             2 |</span><br><span class="line">|              1 |             3 |</span><br><span class="line">|              2 |             3 |</span><br><span class="line">|              2 |             1 |</span><br><span class="line">|              5 |             4 |</span><br><span class="line">+----------------+---------------+</span><br><span class="line">7 rows in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+<p>新字段成功添加并关联。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+              <a href="/tags/JPA/" rel="tag"># JPA</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2/" rel="prev" title="【Spring Data JPA自学笔记四】动态查询">
+      <i class="fa fa-chevron-left"></i> 【Spring Data JPA自学笔记四】动态查询
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库表的关系"><span class="nav-number">1.</span> <span class="nav-text">数据库表的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一对多"><span class="nav-number">1.1.</span> <span class="nav-text">一对多</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多对多"><span class="nav-number">1.2.</span> <span class="nav-text">多对多</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Data-JPA实现一对多"><span class="nav-number">2.</span> <span class="nav-text">Spring Data JPA实现一对多</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本配置"><span class="nav-number">2.1.</span> <span class="nav-text">基本配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现一对多"><span class="nav-number">2.2.</span> <span class="nav-text">实现一对多</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#放弃维护权"><span class="nav-number">2.3.</span> <span class="nav-text">放弃维护权</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Data-JPA实现多对多"><span class="nav-number">3.</span> <span class="nav-text">Spring Data JPA实现多对多</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本配置-1"><span class="nav-number">3.1.</span> <span class="nav-text">基本配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现多对多"><span class="nav-number">3.2.</span> <span class="nav-text">实现多对多</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#级联"><span class="nav-number">4.</span> <span class="nav-text">级联</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Koorye"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Koorye</p>
+  <div class="site-description" itemprop="description">什么都想学一点</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Koorye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Koorye" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:a1311586225@gmail.com" title="E-Mail → mailto:a1311586225@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">Tag Cloud</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+            <canvas width="250" height="250" id="resCanvas" style="width:100%">
+             <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/" rel="tag">HTML</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a><span class="tag-list-count">2</span></li></ul>
+            </canvas>
+          </div>
+        </div>
+      
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koorye</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">161k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:26</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"6pc9L1Sa5eA6t2wvNQkmITTV-gzGzoHsz","app_key":"2CMvevJL0UGpH6jg5qTkCe56","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
