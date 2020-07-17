@@ -4,6 +4,37 @@
   
     
     <entry>
+      <title>【Spring Data JPA自学笔记四】动态查询</title>
+      <link href="/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2/"/>
+      <url>/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2/</url>
+      
+        <content type="html"><![CDATA[<p>上一期介绍了Spring Data JPA的各种查询方法，这一期来详细讲一下动态查询类，<code>JpaSpecificationExecutor</code>.</p><a id="more"></a><h1 id="JpaSpecificationExecutor接口"><a href="#JpaSpecificationExecutor接口" class="headerlink" title="JpaSpecificationExecutor接口"></a>JpaSpecificationExecutor接口</h1><p><code>JpaSpecificationExecutor</code>提供了<code>findOne</code>、<code>findAll</code>、<code>count</code>方法的几个重载：</p><ul><li><code>Optional&lt;T&gt; findOne(Specification&lt;T&gt; spec);</code>  根据规范查找一个结果</li><li><code>List&lt;T&gt; findAll(Specification&lt;T&gt; spec);</code>  根据规范查找所有结果</li><li><code>Page&lt;T&gt; findAll(Specification&lt;T&gt; spec, Pageable pageable);</code>  根据规范和分页方式查找结果</li><li><code>List&lt;T&gt; findAll(Specification&lt;T&gt; spec, Sort sort);</code>  根据规范和排序方式查找结果</li><li><code>long count(Specification&lt;T&gt; spec);</code>  根据规范统计个数</li></ul><p>上一期我们提到了<code>PagingAndSortingRepository</code>接口，这个接口提供了排序和分页查找的方法，然而它却不支持条件查询，<code>JpaSpecificationExecutor</code>接口解决了这个问题。</p><h1 id="初见Specification类"><a href="#初见Specification类" class="headerlink" title="初见Specification类"></a>初见Specification类</h1><p><code>Specification</code>类用于确定规范，那么这个规范要如何确定呢？接下来我们细看一下这个类：</p><p><code>Specification</code>需要提供一个泛型确定实体类，类中有一个<code>toPredicate</code>方法需要我们重载，而<code>toPerdicate</code>方法拥有3个参数：</p><ul><li><code>root</code>  用于获取类属性</li><li><code>criteriaQuery</code>  添加条件(不常用)</li><li><code>criteriaBuilder</code>  添加条件</li></ul><p>举例：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Specification&lt;User&gt; spec = <span class="keyword">new</span> Specification&lt;User&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Predicate <span class="title">toPredicate</span><span class="params">(Root&lt;User&gt; root, CriteriaQuery&lt;?&gt; criteriaQuery, CriteriaBuilder criteriaBuilder)</span> </span>&#123;</span><br><span class="line">      Path&lt;Object&gt; name = root.get(<span class="string">"name"</span>);</span><br><span class="line">      <span class="keyword">return</span> criteriaBuilder.equal(name, <span class="string">"冬马和纱"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  </span><br><span class="line">  List&lt;User&gt; userList = userDao.findAll(spec);</span><br><span class="line">  <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">    System.out.println(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>这里笔者使用root的get方法获取一个类属性，注意返回值使用<code>Path&lt;Object&gt;</code>接收；接着使用<code>criteriaBuilder</code>添加equal条件：</p><ul><li><code>criteriaBuilder.equal(name, &quot;冬马和纱&quot;)</code> 即 <code>name = &quot;冬马和纱&quot;</code></li></ul><p>返回结果：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select user0_.u_id as u_id1_1_, user0_.u_address_id as u_addres3_1_, user0_.u_name as u_name2_1_ from user user0_ where user0_.u_name=?</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">ID: 1, Name: 冬马和纱, Address: 北京</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure><p>当然，在Java 8及以上版本，我们可以使用Lambda表达式使代码更美观：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Specification&lt;User&gt; spec = (Specification&lt;User&gt;) (root, criteriaQuery, criteriaBuilder) -&gt; &#123;</span><br><span class="line">  Path&lt;Object&gt; name = root.get(<span class="string">"name"</span>);</span><br><span class="line">  <span class="keyword">return</span> criteriaBuilder.equal(name, <span class="string">"冬马和纱"</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><h1 id="Specification的更多功能"><a href="#Specification的更多功能" class="headerlink" title="Specification的更多功能"></a>Specification的更多功能</h1><h2 id="Specification的条件"><a href="#Specification的条件" class="headerlink" title="Specification的条件"></a>Specification的条件</h2><p>对于<code>toPredicate</code>方法中的<code>criteriaBuilder</code>参数，除了equal判等之外，还有更多强大的功能：</p><ul><li><code>equal</code> / <code>notEqual</code>  判等</li><li><code>like</code> / <code>notLike</code>  模糊查询</li><li><code>gt</code> / <code>ge</code> / <code>lt</code> / <code>le</code>  大于、大于等于、小于、小于等于</li><li><code>between</code>  范围查询</li></ul><p>需要注意的是，除了判等方法可以直接传递参数之外，其他方法都需要使用<code>as</code>指定数据类型，如：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Specification&lt;User&gt; spec = (Specification&lt;User&gt;) (root, criteriaQuery, criteriaBuilder) -&gt; &#123;</span><br><span class="line">    Path&lt;Object&gt; name = root.get(<span class="string">"name"</span>);</span><br><span class="line">    return criteriaBuilder.like(name.as(String.class), "冬马%");</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  List&lt;User&gt; userList = userDao.findAll(spec);</span><br><span class="line">  <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">    System.out.println(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>返回结果：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select user0_.u_id as u_id1_1_, user0_.u_address_id as u_addres3_1_, user0_.u_name as u_name2_1_ from user user0_ where user0_.u_name like ?</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">ID: 1, Name: 冬马和纱, Address: 北京</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure><h2 id="Specification多条件查询"><a href="#Specification多条件查询" class="headerlink" title="Specification多条件查询"></a>Specification多条件查询</h2><p><code>toPredicate</code>的<code>criteriaBuilder</code>参数提供了条件处理的方法：and / or / not.</p><p>很好理解，不多做解释。</p><p>举例：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Specification&lt;User&gt; spec = (Specification&lt;User&gt;) (root, criteriaQuery, criteriaBuilder) -&gt; &#123;</span><br><span class="line">    Path&lt;Object&gt; id = root.get(<span class="string">"id"</span>);</span><br><span class="line">    Path&lt;Object&gt; address = root.get(<span class="string">"address"</span>);</span><br><span class="line">    Predicate p1 = criteriaBuilder.ge(id.as(Integer<span class="class">.<span class="keyword">class</span>), 2)</span>;</span><br><span class="line">    Predicate p2 = criteriaBuilder.equal(address, <span class="number">10001</span>);</span><br><span class="line">    <span class="keyword">return</span> criteriaBuilder.and(p1, p2);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  List&lt;User&gt; userList = userDao.findAll(spec);</span><br><span class="line">  <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">    System.out.println(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>返回结果：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select user0_.u_id as u_id1_1_, user0_.u_address_id as u_addres3_1_, user0_.u_name as u_name2_1_ from user user0_ where cast(user0_.u_id as signed)&gt;=2 and user0_.u_address_id=10001</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">ID: 3, Name: 鹿目圆香, Address: 北京</span><br><span class="line">ID: 5, Name: 雪之下雪乃, Address: 北京</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure><h1 id="排序和分页"><a href="#排序和分页" class="headerlink" title="排序和分页"></a>排序和分页</h1><p>在旧版本中，<code>Sort</code>和<code>Pageable</code>可以通过构造方法设定参数，然而在2.2版本之后，构造方法不再被支持。</p><h2 id="使用Sort"><a href="#使用Sort" class="headerlink" title="使用Sort"></a>使用Sort</h2><p>新版本中使用<code>Sort.by</code>设定参数，第一个参数表示排序方向，第二个参数表示排序对象。</p><p>举例：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Specification&lt;User&gt; spec = (Specification&lt;User&gt;) (root, criteriaQuery, criteriaBuilder) -&gt; &#123;</span><br><span class="line">    Path&lt;Object&gt; address = root.get(<span class="string">"address"</span>);</span><br><span class="line">    <span class="keyword">return</span> criteriaBuilder.equal(address, <span class="number">10001</span>);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  List&lt;User&gt; userList = userDao.findAll(spec, Sort.by(Sort.Direction.DESC, <span class="string">"id"</span>));</span><br><span class="line">  <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">    System.out.println(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>返回结果：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select user0_.u_id as u_id1_1_, user0_.u_address_id as u_addres3_1_, user0_.u_name as u_name2_1_ from user user0_ where user0_.u_address_id=10001 order by user0_.u_id desc</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">ID: 5, Name: 雪之下雪乃, Address: 北京</span><br><span class="line">ID: 3, Name: 鹿目圆香, Address: 北京</span><br><span class="line">ID: 1, Name: 冬马和纱, Address: 北京</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure><p>如果要进行多条件排序查询，可以使用<code>Sort.and(Sort)</code>，本文不再演示。</p><h2 id="使用PageRequest"><a href="#使用PageRequest" class="headerlink" title="使用PageRequest"></a>使用PageRequest</h2><p><code>PageRequest.of()</code>方法返回一个<code>Pageable</code>对象，需要提供两个参数，第一个参数表示开始页(<strong>从第零页开始</strong>)，第二个参数表示每页的数据量。</p><p><code>findAll(Spec, Pageable)</code>方法返回一个Page对象，这个对象有以下常用方法：</p><ul><li><code>getTotalElements</code>  返回元素总数</li><li><code>getTotalPages</code>  返回总页数</li><li><code>getContent</code>  以List形式返回当前页面的元素</li></ul><p>举例：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Specification&lt;User&gt; spec = (Specification&lt;User&gt;) (root, criteriaQuery, criteriaBuilder) -&gt; &#123;</span><br><span class="line">    Path&lt;Object&gt; id = root.get(<span class="string">"id"</span>);</span><br><span class="line">    <span class="keyword">return</span> criteriaBuilder.gt(id.as(Integer<span class="class">.<span class="keyword">class</span>), 1)</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">  Page&lt;User&gt; userPage = userDao.findAll(spec, PageRequest.of(<span class="number">1</span>, <span class="number">2</span>));</span><br><span class="line">  List&lt;User&gt; userList = userPage.getContent();</span><br><span class="line">  <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">    System.out.println(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>返回结果：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select user0_.u_id as u_id1_1_, user0_.u_address_id as u_addres3_1_, user0_.u_name as u_name2_1_ from user user0_ where cast(user0_.u_id as signed)&gt;1 limit ?, ?</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">Hibernate: select count(user0_.u_id) as col_0_0_ from user user0_ where cast(user0_.u_id as signed)&gt;1</span><br><span class="line">ID: 5, Name: 雪之下雪乃, Address: 北京</span><br><span class="line">ID: 10, Name: 由比滨结衣, Address: 深圳</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> MySQL </tag>
+            
+            <tag> Spring </tag>
+            
+            <tag> JPA </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>【Spring Data JPA自学笔记三】Spring Data JPA的基础和高级查询方法</title>
       <link href="/2020/07/16/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Data%20JPA%E7%9A%84%E5%9F%BA%E7%A1%80%E5%92%8C%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95/"/>
       <url>/2020/07/16/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Data%20JPA%E7%9A%84%E5%9F%BA%E7%A1%80%E5%92%8C%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95/</url>
@@ -20,9 +51,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
             
@@ -51,9 +82,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
             
@@ -82,9 +113,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
             
@@ -344,13 +375,13 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
             
+            <tag> Web </tag>
+            
             <tag> MyBatis </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring Boot </tag>
             
@@ -377,9 +408,9 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Web </tag>
             
             <tag> Spring Boot </tag>
             
@@ -406,9 +437,9 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Web </tag>
             
             <tag> Spring Boot </tag>
             
@@ -435,9 +466,9 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Web </tag>
             
             <tag> Spring Boot </tag>
             
@@ -464,15 +495,15 @@
       
         <tags>
             
+            <tag> Java </tag>
+            
             <tag> Web </tag>
+            
+            <tag> MyBatis </tag>
             
             <tag> MySQL </tag>
             
-            <tag> Java </tag>
-            
             <tag> Maven </tag>
-            
-            <tag> MyBatis </tag>
             
             <tag> Spring </tag>
             
@@ -503,13 +534,13 @@
             
             <tag> Web </tag>
             
+            <tag> MySQL </tag>
+            
             <tag> HTML </tag>
             
             <tag> JavaScript </tag>
             
             <tag> jQuery </tag>
-            
-            <tag> MySQL </tag>
             
         </tags>
       
@@ -534,13 +565,13 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
             
+            <tag> Web </tag>
+            
             <tag> MyBatis </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -565,13 +596,13 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
             
+            <tag> Web </tag>
+            
             <tag> MyBatis </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -596,9 +627,9 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Web </tag>
             
             <tag> Maven </tag>
             
@@ -679,9 +710,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       

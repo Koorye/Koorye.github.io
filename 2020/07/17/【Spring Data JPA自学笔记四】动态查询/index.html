@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="上一期介绍了Spring Data JPA的各种查询方法，这一期来详细讲一下动态查询类，JpaSpecificationExecutor.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Spring Data JPA自学笔记四】动态查询">
+<meta property="og:url" content="http://koorye.github.io/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2/index.html">
+<meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
+<meta property="og:description" content="上一期介绍了Spring Data JPA的各种查询方法，这一期来详细讲一下动态查询类，JpaSpecificationExecutor.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-17T07:13:24.000Z">
+<meta property="article:modified_time" content="2020-07-17T08:15:11.053Z">
+<meta property="article:author" content="Koorye">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="Spring">
+<meta property="article:tag" content="JPA">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://koorye.github.io/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【Spring Data JPA自学笔记四】动态查询 | 不会真有人以为Koorye会写代码吧</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不会真有人以为Koorye会写代码吧</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不会吧不会吧</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="什么都想学一点">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Spring Data JPA自学笔记四】动态查询
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-17 15:13:24 / 修改时间：16:15:11" itemprop="dateCreated datePublished" datetime="2020-07-17T15:13:24+08:00">2020-07-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2/" class="post-meta-item leancloud_visitors" data-flag-title="【Spring Data JPA自学笔记四】动态查询" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>上一期介绍了Spring Data JPA的各种查询方法，这一期来详细讲一下动态查询类，<code>JpaSpecificationExecutor</code>.</p>
+<a id="more"></a>
+<h1 id="JpaSpecificationExecutor接口"><a href="#JpaSpecificationExecutor接口" class="headerlink" title="JpaSpecificationExecutor接口"></a>JpaSpecificationExecutor接口</h1><p><code>JpaSpecificationExecutor</code>提供了<code>findOne</code>、<code>findAll</code>、<code>count</code>方法的几个重载：</p>
+<ul>
+<li><code>Optional&lt;T&gt; findOne(Specification&lt;T&gt; spec);</code>  根据规范查找一个结果</li>
+<li><code>List&lt;T&gt; findAll(Specification&lt;T&gt; spec);</code>  根据规范查找所有结果</li>
+<li><code>Page&lt;T&gt; findAll(Specification&lt;T&gt; spec, Pageable pageable);</code>  根据规范和分页方式查找结果</li>
+<li><code>List&lt;T&gt; findAll(Specification&lt;T&gt; spec, Sort sort);</code>  根据规范和排序方式查找结果</li>
+<li><code>long count(Specification&lt;T&gt; spec);</code>  根据规范统计个数</li>
+</ul>
+<p>上一期我们提到了<code>PagingAndSortingRepository</code>接口，这个接口提供了排序和分页查找的方法，然而它却不支持条件查询，<code>JpaSpecificationExecutor</code>接口解决了这个问题。</p>
+<h1 id="初见Specification类"><a href="#初见Specification类" class="headerlink" title="初见Specification类"></a>初见Specification类</h1><p><code>Specification</code>类用于确定规范，那么这个规范要如何确定呢？接下来我们细看一下这个类：</p>
+<p><code>Specification</code>需要提供一个泛型确定实体类，类中有一个<code>toPredicate</code>方法需要我们重载，而<code>toPerdicate</code>方法拥有3个参数：</p>
+<ul>
+<li><code>root</code>  用于获取类属性</li>
+<li><code>criteriaQuery</code>  添加条件(不常用)</li>
+<li><code>criteriaBuilder</code>  添加条件</li>
+</ul>
+<p>举例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Specification&lt;User&gt; spec = <span class="keyword">new</span> Specification&lt;User&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Predicate <span class="title">toPredicate</span><span class="params">(Root&lt;User&gt; root, CriteriaQuery&lt;?&gt; criteriaQuery, CriteriaBuilder criteriaBuilder)</span> </span>&#123;</span><br><span class="line">      Path&lt;Object&gt; name = root.get(<span class="string">"name"</span>);</span><br><span class="line">      <span class="keyword">return</span> criteriaBuilder.equal(name, <span class="string">"冬马和纱"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  </span><br><span class="line">  List&lt;User&gt; userList = userDao.findAll(spec);</span><br><span class="line">  <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">    System.out.println(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里笔者使用root的get方法获取一个类属性，注意返回值使用<code>Path&lt;Object&gt;</code>接收；接着使用<code>criteriaBuilder</code>添加equal条件：</p>
+<ul>
+<li><code>criteriaBuilder.equal(name, &quot;冬马和纱&quot;)</code> 即 <code>name = &quot;冬马和纱&quot;</code></li>
+</ul>
+<p>返回结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select user0_.u_id as u_id1_1_, user0_.u_address_id as u_addres3_1_, user0_.u_name as u_name2_1_ from user user0_ where user0_.u_name=?</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">ID: 1, Name: 冬马和纱, Address: 北京</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+<p>当然，在Java 8及以上版本，我们可以使用Lambda表达式使代码更美观：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Specification&lt;User&gt; spec = (Specification&lt;User&gt;) (root, criteriaQuery, criteriaBuilder) -&gt; &#123;</span><br><span class="line">  Path&lt;Object&gt; name = root.get(<span class="string">"name"</span>);</span><br><span class="line">  <span class="keyword">return</span> criteriaBuilder.equal(name, <span class="string">"冬马和纱"</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="Specification的更多功能"><a href="#Specification的更多功能" class="headerlink" title="Specification的更多功能"></a>Specification的更多功能</h1><h2 id="Specification的条件"><a href="#Specification的条件" class="headerlink" title="Specification的条件"></a>Specification的条件</h2><p>对于<code>toPredicate</code>方法中的<code>criteriaBuilder</code>参数，除了equal判等之外，还有更多强大的功能：</p>
+<ul>
+<li><code>equal</code> / <code>notEqual</code>  判等</li>
+<li><code>like</code> / <code>notLike</code>  模糊查询</li>
+<li><code>gt</code> / <code>ge</code> / <code>lt</code> / <code>le</code>  大于、大于等于、小于、小于等于</li>
+<li><code>between</code>  范围查询</li>
+</ul>
+<p>需要注意的是，除了判等方法可以直接传递参数之外，其他方法都需要使用<code>as</code>指定数据类型，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Specification&lt;User&gt; spec = (Specification&lt;User&gt;) (root, criteriaQuery, criteriaBuilder) -&gt; &#123;</span><br><span class="line">    Path&lt;Object&gt; name = root.get(<span class="string">"name"</span>);</span><br><span class="line">    return criteriaBuilder.like(name.as(String.class), "冬马%");</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  List&lt;User&gt; userList = userDao.findAll(spec);</span><br><span class="line">  <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">    System.out.println(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>返回结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select user0_.u_id as u_id1_1_, user0_.u_address_id as u_addres3_1_, user0_.u_name as u_name2_1_ from user user0_ where user0_.u_name like ?</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">ID: 1, Name: 冬马和纱, Address: 北京</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+<h2 id="Specification多条件查询"><a href="#Specification多条件查询" class="headerlink" title="Specification多条件查询"></a>Specification多条件查询</h2><p><code>toPredicate</code>的<code>criteriaBuilder</code>参数提供了条件处理的方法：and / or / not.</p>
+<p>很好理解，不多做解释。</p>
+<p>举例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Specification&lt;User&gt; spec = (Specification&lt;User&gt;) (root, criteriaQuery, criteriaBuilder) -&gt; &#123;</span><br><span class="line">    Path&lt;Object&gt; id = root.get(<span class="string">"id"</span>);</span><br><span class="line">    Path&lt;Object&gt; address = root.get(<span class="string">"address"</span>);</span><br><span class="line">    Predicate p1 = criteriaBuilder.ge(id.as(Integer<span class="class">.<span class="keyword">class</span>), 2)</span>;</span><br><span class="line">    Predicate p2 = criteriaBuilder.equal(address, <span class="number">10001</span>);</span><br><span class="line">    <span class="keyword">return</span> criteriaBuilder.and(p1, p2);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  List&lt;User&gt; userList = userDao.findAll(spec);</span><br><span class="line">  <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">    System.out.println(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>返回结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select user0_.u_id as u_id1_1_, user0_.u_address_id as u_addres3_1_, user0_.u_name as u_name2_1_ from user user0_ where cast(user0_.u_id as signed)&gt;=2 and user0_.u_address_id=10001</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">ID: 3, Name: 鹿目圆香, Address: 北京</span><br><span class="line">ID: 5, Name: 雪之下雪乃, Address: 北京</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+<h1 id="排序和分页"><a href="#排序和分页" class="headerlink" title="排序和分页"></a>排序和分页</h1><p>在旧版本中，<code>Sort</code>和<code>Pageable</code>可以通过构造方法设定参数，然而在2.2版本之后，构造方法不再被支持。</p>
+<h2 id="使用Sort"><a href="#使用Sort" class="headerlink" title="使用Sort"></a>使用Sort</h2><p>新版本中使用<code>Sort.by</code>设定参数，第一个参数表示排序方向，第二个参数表示排序对象。</p>
+<p>举例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Specification&lt;User&gt; spec = (Specification&lt;User&gt;) (root, criteriaQuery, criteriaBuilder) -&gt; &#123;</span><br><span class="line">    Path&lt;Object&gt; address = root.get(<span class="string">"address"</span>);</span><br><span class="line">    <span class="keyword">return</span> criteriaBuilder.equal(address, <span class="number">10001</span>);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  List&lt;User&gt; userList = userDao.findAll(spec, Sort.by(Sort.Direction.DESC, <span class="string">"id"</span>));</span><br><span class="line">  <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">    System.out.println(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>返回结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select user0_.u_id as u_id1_1_, user0_.u_address_id as u_addres3_1_, user0_.u_name as u_name2_1_ from user user0_ where user0_.u_address_id=10001 order by user0_.u_id desc</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">ID: 5, Name: 雪之下雪乃, Address: 北京</span><br><span class="line">ID: 3, Name: 鹿目圆香, Address: 北京</span><br><span class="line">ID: 1, Name: 冬马和纱, Address: 北京</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+<p>如果要进行多条件排序查询，可以使用<code>Sort.and(Sort)</code>，本文不再演示。</p>
+<h2 id="使用PageRequest"><a href="#使用PageRequest" class="headerlink" title="使用PageRequest"></a>使用PageRequest</h2><p><code>PageRequest.of()</code>方法返回一个<code>Pageable</code>对象，需要提供两个参数，第一个参数表示开始页(<strong>从第零页开始</strong>)，第二个参数表示每页的数据量。</p>
+<p><code>findAll(Spec, Pageable)</code>方法返回一个Page对象，这个对象有以下常用方法：</p>
+<ul>
+<li><code>getTotalElements</code>  返回元素总数</li>
+<li><code>getTotalPages</code>  返回总页数</li>
+<li><code>getContent</code>  以List形式返回当前页面的元素</li>
+</ul>
+<p>举例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Specification&lt;User&gt; spec = (Specification&lt;User&gt;) (root, criteriaQuery, criteriaBuilder) -&gt; &#123;</span><br><span class="line">    Path&lt;Object&gt; id = root.get(<span class="string">"id"</span>);</span><br><span class="line">    <span class="keyword">return</span> criteriaBuilder.gt(id.as(Integer<span class="class">.<span class="keyword">class</span>), 1)</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">  Page&lt;User&gt; userPage = userDao.findAll(spec, PageRequest.of(<span class="number">1</span>, <span class="number">2</span>));</span><br><span class="line">  List&lt;User&gt; userList = userPage.getContent();</span><br><span class="line">  <span class="keyword">for</span> (User user : userList) &#123;</span><br><span class="line">    System.out.println(user);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>返回结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select user0_.u_id as u_id1_1_, user0_.u_address_id as u_addres3_1_, user0_.u_name as u_name2_1_ from user user0_ where cast(user0_.u_id as signed)&gt;1 limit ?, ?</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">Hibernate: select address0_.a_id as a_id1_0_0_, address0_.a_name as a_name2_0_0_ from address address0_ where address0_.a_id=?</span><br><span class="line">Hibernate: select count(user0_.u_id) as col_0_0_ from user user0_ where cast(user0_.u_id as signed)&gt;1</span><br><span class="line">ID: 5, Name: 雪之下雪乃, Address: 北京</span><br><span class="line">ID: 10, Name: 由比滨结衣, Address: 深圳</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+              <a href="/tags/JPA/" rel="tag"># JPA</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/16/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Data%20JPA%E7%9A%84%E5%9F%BA%E7%A1%80%E5%92%8C%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95/" rel="prev" title="【Spring Data JPA自学笔记三】Spring Data JPA的基础和高级查询方法">
+      <i class="fa fa-chevron-left"></i> 【Spring Data JPA自学笔记三】Spring Data JPA的基础和高级查询方法
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JpaSpecificationExecutor接口"><span class="nav-number">1.</span> <span class="nav-text">JpaSpecificationExecutor接口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初见Specification类"><span class="nav-number">2.</span> <span class="nav-text">初见Specification类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Specification的更多功能"><span class="nav-number">3.</span> <span class="nav-text">Specification的更多功能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Specification的条件"><span class="nav-number">3.1.</span> <span class="nav-text">Specification的条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Specification多条件查询"><span class="nav-number">3.2.</span> <span class="nav-text">Specification多条件查询</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排序和分页"><span class="nav-number">4.</span> <span class="nav-text">排序和分页</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Sort"><span class="nav-number">4.1.</span> <span class="nav-text">使用Sort</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用PageRequest"><span class="nav-number">4.2.</span> <span class="nav-text">使用PageRequest</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Koorye"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Koorye</p>
+  <div class="site-description" itemprop="description">什么都想学一点</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Koorye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Koorye" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:a1311586225@gmail.com" title="E-Mail → mailto:a1311586225@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">Tag Cloud</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+            <canvas width="250" height="250" id="resCanvas" style="width:100%">
+             <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/" rel="tag">HTML</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a><span class="tag-list-count">2</span></li></ul>
+            </canvas>
+          </div>
+        </div>
+      
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koorye</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">148k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"6pc9L1Sa5eA6t2wvNQkmITTV-gzGzoHsz","app_key":"2CMvevJL0UGpH6jg5qTkCe56","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
