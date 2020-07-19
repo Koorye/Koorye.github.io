@@ -20,30 +20,37 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="什么都想学一点">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:url" content="http://koorye.github.io/index.html">
+  <meta name="description" content="本文将使用Spring Boot完成上一期RabbitMQ5种模型的整合。 配置RabbitMQ使用Idea快速构建一个Spring Boot项目，选择Web和Spring for RabbitMQ依赖：  接下来配置application.properties，当然你也可以选择application.yml，配置基本的RabbitMQ信息： 1234567spring.application.n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【RabbitMQ自学笔记三】Spring Boot整合RabbitMQ">
+<meta property="og:url" content="http://koorye.github.io/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Boot%E6%95%B4%E5%90%88RabbitMQ/index.html">
 <meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:description" content="什么都想学一点">
+<meta property="og:description" content="本文将使用Spring Boot完成上一期RabbitMQ5种模型的整合。 配置RabbitMQ使用Idea快速构建一个Spring Boot项目，选择Web和Spring for RabbitMQ依赖：  接下来配置application.properties，当然你也可以选择application.yml，配置基本的RabbitMQ信息： 1234567spring.application.n">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/07/19/5m31FRkfdjl8UWu.png">
+<meta property="article:published_time" content="2020-07-19T07:29:48.000Z">
+<meta property="article:modified_time" content="2020-07-19T08:30:12.321Z">
 <meta property="article:author" content="Koorye">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="RabbitMQ">
+<meta property="article:tag" content="Spring Boot">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/07/19/5m31FRkfdjl8UWu.png">
 
-<link rel="canonical" href="http://koorye.github.io/">
+<link rel="canonical" href="http://koorye.github.io/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Boot%E6%95%B4%E5%90%88RabbitMQ/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>不会真有人以为Koorye会写代码吧</title>
+  <title>【RabbitMQ自学笔记三】Spring Boot整合RabbitMQ | 不会真有人以为Koorye会写代码吧</title>
   
 
 
@@ -185,9 +192,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -203,10 +211,9 @@
       <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Boot%E6%95%B4%E5%90%88RabbitMQ/" class="post-title-link" itemprop="url">【RabbitMQ自学笔记三】Spring Boot整合RabbitMQ</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          【RabbitMQ自学笔记三】Spring Boot整合RabbitMQ
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -260,7 +267,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>本文将使用Spring Boot完成上一期RabbitMQ5种模型的整合。</p>
+        <p>本文将使用Spring Boot完成上一期RabbitMQ5种模型的整合。</p>
 <h1 id="配置RabbitMQ"><a href="#配置RabbitMQ" class="headerlink" title="配置RabbitMQ"></a>配置RabbitMQ</h1><p>使用Idea快速构建一个Spring Boot项目，选择Web和Spring for RabbitMQ依赖：</p>
 <p><img src="https://i.loli.net/2020/07/19/5m31FRkfdjl8UWu.png" alt="image-20200719153509950"></p>
 <p>接下来配置application.properties，当然你也可以选择application.yml，配置基本的RabbitMQ信息：</p>
@@ -321,683 +328,36 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[ INFO ] Consumer3 get message: This is an info and err.</span><br><span class="line">[ INFO ] Consumer1 get message: This is an info.</span><br><span class="line">[ INFO ] Consumer2 get message: This is an err.</span><br><span class="line">[ INFO ] Consumer1 get message: This is an info and err.</span><br><span class="line">[ INFO ] Consumer2 get message: This is an info and err.</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
 <p>测试成功。</p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/RabbitMQ/" rel="tag"># RabbitMQ</a>
+              <a href="/tags/Spring-Boot/" rel="tag"># Spring Boot</a>
+          </div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/18/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91RabbitMQ%E7%9A%84%E4%BA%94%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%9C%BA%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Koorye">
-      <meta itemprop="description" content="什么都想学一点">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/18/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91RabbitMQ%E7%9A%84%E4%BA%94%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%9C%BA%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">【RabbitMQ自学笔记二】RabbitMQ的五种交换机模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-18 20:05:05 / 修改时间：21:12:04" itemprop="dateCreated datePublished" datetime="2020-07-18T20:05:05+08:00">2020-07-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/07/18/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91RabbitMQ%E7%9A%84%E4%BA%94%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%9C%BA%E6%A8%A1%E5%BC%8F/" class="post-meta-item leancloud_visitors" data-flag-title="【RabbitMQ自学笔记二】RabbitMQ的五种交换机模式" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>13k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>12 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>上一期的Hello World模型是RabbitMQ最简单的工作模式，这一期我们将继续深入，了解RabbitMQ更为复杂的工作模式。</p>
-          <!--noindex-->
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/18/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E4%BB%80%E4%B9%88%E6%98%AFMQ%EF%BC%9FRabbitMQ%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8EHello%20World/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Koorye">
-      <meta itemprop="description" content="什么都想学一点">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/18/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E4%BB%80%E4%B9%88%E6%98%AFMQ%EF%BC%9FRabbitMQ%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8EHello%20World/" class="post-title-link" itemprop="url">【RabbitMQ自学笔记一】什么是MQ？RabbitMQ的安装与Hello World</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-18 16:27:25 / 修改时间：19:47:45" itemprop="dateCreated datePublished" datetime="2020-07-18T16:27:25+08:00">2020-07-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/07/18/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E4%BB%80%E4%B9%88%E6%98%AFMQ%EF%BC%9FRabbitMQ%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8EHello%20World/" class="post-meta-item leancloud_visitors" data-flag-title="【RabbitMQ自学笔记一】什么是MQ？RabbitMQ的安装与Hello World" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>6.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>6 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>MQ（Message Queue）消息队列，是基础数据结构中“先进先出”的一种数据结构。一般用来解决应用解耦，异步消息，流量削锋等问题，实现高性能，高可用，可伸缩和最终一致性架构。</p>
-<p>—— 摘自百度百科</p>
-</blockquote>
-          <!--noindex-->
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/18/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91RabbitMQ%E7%9A%84%E4%BA%94%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%9C%BA%E6%A8%A1%E5%BC%8F/" rel="prev" title="【RabbitMQ自学笔记二】RabbitMQ的五种交换机模式">
+      <i class="fa fa-chevron-left"></i> 【RabbitMQ自学笔记二】RabbitMQ的五种交换机模式
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
   
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91%E4%B8%80%E5%AF%B9%E5%A4%9A%E3%80%81%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%92%8C%E7%BA%A7%E8%81%94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Koorye">
-      <meta itemprop="description" content="什么都想学一点">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91%E4%B8%80%E5%AF%B9%E5%A4%9A%E3%80%81%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%92%8C%E7%BA%A7%E8%81%94/" class="post-title-link" itemprop="url">【Spring Data JPA自学笔记五】一对多、多对多和级联</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-17 16:20:48 / 修改时间：20:35:20" itemprop="dateCreated datePublished" datetime="2020-07-17T16:20:48+08:00">2020-07-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91%E4%B8%80%E5%AF%B9%E5%A4%9A%E3%80%81%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%92%8C%E7%BA%A7%E8%81%94/" class="post-meta-item leancloud_visitors" data-flag-title="【Spring Data JPA自学笔记五】一对多、多对多和级联" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>13k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>12 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>之前的所有操作都是在单表查询的前提下，这一期我们要了解Spring Data JPA多表查询的各种配置。</p>
-          <!--noindex-->
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Koorye">
-      <meta itemprop="description" content="什么都想学一点">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2/" class="post-title-link" itemprop="url">【Spring Data JPA自学笔记四】动态查询</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-17 15:13:24 / 修改时间：16:15:11" itemprop="dateCreated datePublished" datetime="2020-07-17T15:13:24+08:00">2020-07-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/07/17/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2/" class="post-meta-item leancloud_visitors" data-flag-title="【Spring Data JPA自学笔记四】动态查询" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>5.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>上一期介绍了Spring Data JPA的各种查询方法，这一期来详细讲一下动态查询类，<code>JpaSpecificationExecutor</code>.</p>
-          <!--noindex-->
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/16/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Data%20JPA%E7%9A%84%E5%9F%BA%E7%A1%80%E5%92%8C%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Koorye">
-      <meta itemprop="description" content="什么都想学一点">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/16/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Data%20JPA%E7%9A%84%E5%9F%BA%E7%A1%80%E5%92%8C%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">【Spring Data JPA自学笔记三】Spring Data JPA的基础和高级查询方法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-16 20:37:37 / 修改时间：23:32:38" itemprop="dateCreated datePublished" datetime="2020-07-16T20:37:37+08:00">2020-07-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/07/16/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Data%20JPA%E7%9A%84%E5%9F%BA%E7%A1%80%E5%92%8C%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95/" class="post-meta-item leancloud_visitors" data-flag-title="【Spring Data JPA自学笔记三】Spring Data JPA的基础和高级查询方法" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>上一期我们初识了Spring Data JPA，完成了基本配置和简单查询。今天我们将深入了解Spring Data JPA提供的一些复杂查询方法。</p>
-          <!--noindex-->
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/15/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91%E5%88%9D%E8%AF%86Spring%20Data%20JPA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Koorye">
-      <meta itemprop="description" content="什么都想学一点">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/15/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91%E5%88%9D%E8%AF%86Spring%20Data%20JPA/" class="post-title-link" itemprop="url">【Spring Data JPA自学笔记二】初识Spring Data JPA</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-15 19:19:05" itemprop="dateCreated datePublished" datetime="2020-07-15T19:19:05+08:00">2020-07-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 23:41:15" itemprop="dateModified" datetime="2020-07-16T23:41:15+08:00">2020-07-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/07/15/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91%E5%88%9D%E8%AF%86Spring%20Data%20JPA/" class="post-meta-item leancloud_visitors" data-flag-title="【Spring Data JPA自学笔记二】初识Spring Data JPA" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>9.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>9 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>Spring Data JPA是Spring数据家族的一部分，它使得实现基于JPA访问数据库变得很容易。它增强了对JPA的支持，使得构建使用数据访问技术的spring驱动的应用程序变得更加容易。</p>
-</blockquote>
-          <!--noindex-->
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/15/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91JPA%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9FJPA%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E4%BD%93%E9%AA%8C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Koorye">
-      <meta itemprop="description" content="什么都想学一点">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/15/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91JPA%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9FJPA%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E4%BD%93%E9%AA%8C/" class="post-title-link" itemprop="url">【Spring Data JPA自学笔记一】JPA是什么？JPA访问数据库初体验</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-15 16:33:34" itemprop="dateCreated datePublished" datetime="2020-07-15T16:33:34+08:00">2020-07-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 23:41:24" itemprop="dateModified" datetime="2020-07-16T23:41:24+08:00">2020-07-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/07/15/%E3%80%90Spring%20Data%20JPA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91JPA%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9FJPA%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E4%BD%93%E9%AA%8C/" class="post-meta-item leancloud_visitors" data-flag-title="【Spring Data JPA自学笔记一】JPA是什么？JPA访问数据库初体验" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>JPA是Java Persistence API的简称，中文名Java持久层API，是JDK 5.0注解或XML描述对象－关系表的映射关系，并将运行期的实体对象持久化到数据库中。</p>
-<p>Sun引入新的JPA ORM规范出于两个原因：其一，简化现有Java EE和Java SE应用开发工作；其二，Sun希望整合ORM技术，实现天下归一。</p>
-<p>——摘自百度百科</p>
-</blockquote>
-          <!--noindex-->
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 
 
@@ -1049,6 +409,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#配置RabbitMQ"><span class="nav-number">1.</span> <span class="nav-text">配置RabbitMQ</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#整合5种模型"><span class="nav-number">2.</span> <span class="nav-text">整合5种模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hello-World模型"><span class="nav-number">2.1.</span> <span class="nav-text">Hello World模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Publisher"><span class="nav-number">2.1.1.</span> <span class="nav-text">Publisher</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consumer"><span class="nav-number">2.1.2.</span> <span class="nav-text">Consumer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Work工作模型"><span class="nav-number">2.2.</span> <span class="nav-text">Work工作模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布-订阅模型"><span class="nav-number">2.3.</span> <span class="nav-text">发布 &#x2F; 订阅模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Publisher-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">Publisher</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consumer-1"><span class="nav-number">2.3.2.</span> <span class="nav-text">Consumer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#路由-直连-模型"><span class="nav-number">2.4.</span> <span class="nav-text">路由(直连)模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Publisher-2"><span class="nav-number">2.4.1.</span> <span class="nav-text">Publisher</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consumer-2"><span class="nav-number">2.4.2.</span> <span class="nav-text">Consumer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主题-通配符-模式"><span class="nav-number">2.5.</span> <span class="nav-text">主题(通配符)模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Publisher-3"><span class="nav-number">2.5.1.</span> <span class="nav-text">Publisher</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consumer-3"><span class="nav-number">2.5.2.</span> <span class="nav-text">Consumer</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
