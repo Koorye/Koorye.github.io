@@ -20,17 +20,25 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="什么都想学一点">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:url" content="http://koorye.github.io/tags/MySQL/page/2/index.html">
+  <meta name="description" content="搭建RabbitMQ集群可以在一台RabbitMQ宕机时让另一台继续工作，同时可以添加更多节点来扩展消息通信的吞吐量。本期我们就来搭建RabbitMQ集群。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【RabbitMQ自学笔记四】Docker搭建RabbitMQ集群架构">
+<meta property="og:url" content="http://koorye.github.io/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Docker%E6%90%AD%E5%BB%BARabbitMQ%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/index.html">
 <meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:description" content="什么都想学一点">
+<meta property="og:description" content="搭建RabbitMQ集群可以在一台RabbitMQ宕机时让另一台继续工作，同时可以添加更多节点来扩展消息通信的吞吐量。本期我们就来搭建RabbitMQ集群。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/07/19/Qb1GLiCZ46UVoBE.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/19/U5vOQWhczIXCDRs.png">
+<meta property="article:published_time" content="2020-07-19T08:38:11.000Z">
+<meta property="article:modified_time" content="2020-07-19T11:46:13.096Z">
 <meta property="article:author" content="Koorye">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="RabbitMQ">
+<meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/07/19/Qb1GLiCZ46UVoBE.png">
 
-<link rel="canonical" href="http://koorye.github.io/tags/MySQL/page/2/">
+<link rel="canonical" href="http://koorye.github.io/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Docker%E6%90%AD%E5%BB%BARabbitMQ%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/">
 
 
 <script id="page-configurations">
@@ -38,12 +46,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: MySQL | 不会真有人以为Koorye会写代码吧</title>
+  <title>【RabbitMQ自学笔记四】Docker搭建RabbitMQ集群架构 | 不会真有人以为Koorye会写代码吧</title>
   
 
 
@@ -185,75 +193,199 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">MySQL
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Docker%E6%90%AD%E5%BB%BARabbitMQ%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="什么都想学一点">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【RabbitMQ自学笔记四】Docker搭建RabbitMQ集群架构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-19 16:38:11 / 修改时间：19:46:13" itemprop="dateCreated datePublished" datetime="2020-07-19T16:38:11+08:00">2020-07-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Docker%E6%90%AD%E5%BB%BARabbitMQ%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/" class="post-meta-item leancloud_visitors" data-flag-title="【RabbitMQ自学笔记四】Docker搭建RabbitMQ集群架构" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+        <p>搭建RabbitMQ集群可以在一台RabbitMQ宕机时让另一台继续工作，同时可以添加更多节点来扩展消息通信的吞吐量。本期我们就来搭建RabbitMQ集群。</p>
+<a id="more"></a>
+<h1 id="RabbitMQ的集群模式"><a href="#RabbitMQ的集群模式" class="headerlink" title="RabbitMQ的集群模式"></a>RabbitMQ的集群模式</h1><h2 id="普通模式"><a href="#普通模式" class="headerlink" title="普通模式"></a>普通模式</h2><p>RabbitMQ的普通模式支持交换机、队列结构等同步，但不支持队列中消息体的同步。这也意味着，如果主机宕机，从机中并不会存有消息体的内容。</p>
+<p>这种模式下，从机事实上不能在主机宕机时代替主机继续使用。</p>
+<pre class="mermaid">graph LR
+
+subgraph Host
+exchange1(Exchange)
+message1(Message)
+end
+
+subgraph Slave1
+exchange2(Exchange)
+message2(Message)
+end
+
+subgraph Slave2
+exchange3(Exchange)
+message3(Message)
+end
+
+exchange1 --> exchange2
+exchange1 --> exchange3</pre>
+
+
+
+<h2 id="镜像模式"><a href="#镜像模式" class="headerlink" title="镜像模式"></a>镜像模式</h2><p>镜像模式基于普通模式实现。</p>
+<p>镜像模式下，队列中的消息体同样可以同步。其原理是，队列会打包成一个镜像发放给从机。</p>
+<pre class="mermaid">graph LR
+
+subgraph Host
+exchange1(Exchange)
+message1(Message)
+end
+
+subgraph Slave1
+exchange2(Exchange)
+message2(Message)
+end
+
+subgraph Slave2
+exchange3(Exchange)
+message3(Message)
+end
+
+exchange1 --> exchange2
+exchange1 --> exchange3
+
+message1 --> message2
+message1 --> message3</pre>
+
+<h1 id="实现普通模式集群"><a href="#实现普通模式集群" class="headerlink" title="实现普通模式集群"></a>实现普通模式集群</h1><h2 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h2><p>笔者使用docker模拟多台RabbitMQ服务器。</p>
+<p>下载RabbitMQ镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker pull rabbitmq:3.8.5-management</span><br></pre></td></tr></table></figure>
+<p>启动3个端口：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d \</span><br><span class="line">  --name rabbit01 \</span><br><span class="line">  --hostname rabbit01 \</span><br><span class="line">  -e RABBITMQ_ERLANG_COOKIE='rabbitmqcookie' \</span><br><span class="line">  -p 5656:5672 \</span><br><span class="line">  -p 15656:15672 \</span><br><span class="line">  rabbitmq:3.8.5-management</span><br><span class="line"></span><br><span class="line">sudo docker run -d \</span><br><span class="line">  --name rabbit02 \</span><br><span class="line">  --hostname rabbit02 \</span><br><span class="line">  -e RABBITMQ_ERLANG_COOKIE='rabbitmqcookie' \</span><br><span class="line">  -p 5657:5672 \</span><br><span class="line">  -p 15657:15672 \</span><br><span class="line">  rabbitmq:3.8.5-management</span><br><span class="line"></span><br><span class="line">sudo docker run -d \</span><br><span class="line">  --name rabbit03 \</span><br><span class="line">  --hostname rabbit03 \</span><br><span class="line">  -e RABBITMQ_ERLANG_COOKIE='rabbitmqcookie' \</span><br><span class="line">  -p 5658:5672 \</span><br><span class="line">  -p 15658:15672 \</span><br><span class="line">  rabbitmq:3.8.5-management</span><br></pre></td></tr></table></figure>
+<p>启动之后，我们就可以通过<a href="localhost:15672">localhost:15672</a>、<a href="localhost:15673">localhost:15673</a>、<a href="localhost:15674">localhost:15674</a>访问三个RabbitMQ容器了。</p>
+<h2 id="配置docker自定义网络"><a href="#配置docker自定义网络" class="headerlink" title="配置docker自定义网络"></a>配置docker自定义网络</h2><p>创建网络：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker network create mq_net</span><br></pre></td></tr></table></figure>
+<p>连接网络：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo docker network connect mq_net rabbit01</span><br><span class="line">sudo docker network connect mq_net rabbit02</span><br><span class="line">sudo docker network connect mq_net rabbit03</span><br></pre></td></tr></table></figure>
+<p>我们可以测试一下容器之间网络是否连通：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sudo docker exec -it rabbit02 /bin/bash  # 进入rabbit02容器</span><br><span class="line">apt update                               # 更新源</span><br><span class="line">apt install inetutils-ping               # 下载ping工具</span><br><span class="line">ping rabbit01                            # ping到rabbit01容器</span><br><span class="line">PING rabbit01 (172.18.0.2): 56 data bytes</span><br><span class="line">64 bytes from 172.18.0.2: icmp_seq=0 ttl=64 time=0.117 ms</span><br><span class="line">64 bytes from 172.18.0.2: icmp_seq=1 ttl=64 time=0.091 ms</span><br><span class="line">64 bytes from 172.18.0.2: icmp_seq=2 ttl=64 time=0.087 ms</span><br><span class="line">64 bytes from 172.18.0.2: icmp_seq=3 ttl=64 time=0.090 ms</span><br><span class="line">64 bytes from 172.18.0.2: icmp_seq=4 ttl=64 time=0.097 ms</span><br><span class="line">^C--- rabbit01 ping statistics ---</span><br><span class="line">5 packets transmitted, 5 packets received, 0% packet loss</span><br><span class="line">round-trip min/avg/max/stddev = 0.087/0.096/0.117/0.000 ms</span><br></pre></td></tr></table></figure>
+<p>测试成功。</p>
+<h2 id="连接容器"><a href="#连接容器" class="headerlink" title="连接容器"></a>连接容器</h2><p>进入rabbit01：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo docker exec -it rabbit01 bash</span><br><span class="line">rabbitmqctl stop_app</span><br><span class="line">rabbitmqctl reset</span><br><span class="line">rabbitmqctl start_app</span><br></pre></td></tr></table></figure>
+<p>进入rabbit02：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo docker exec -it rabbit02 bash</span><br><span class="line">rabbitmqctl stop_app</span><br><span class="line">rabbitmqctl reset</span><br><span class="line">rabbitmqctl join_cluster --ram rabbit@rabbit01</span><br><span class="line">rabbitmqctl start_app</span><br></pre></td></tr></table></figure>
+<p>进入rabbit03：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo docker exec -it rabbit03 bash</span><br><span class="line">rabbitmqctl stop_app</span><br><span class="line">rabbitmqctl reset</span><br><span class="line">rabbitmqctl join_cluster --ram rabbit@rabbit01</span><br><span class="line">rabbitmqctl start_app</span><br></pre></td></tr></table></figure>
+<p>此时查看管理页面，发现配置成功：</p>
+<p><img src="https://i.loli.net/2020/07/19/Qb1GLiCZ46UVoBE.png" alt="image-20200719193024841"></p>
+<h1 id="实现镜像模式集群"><a href="#实现镜像模式集群" class="headerlink" title="实现镜像模式集群"></a>实现镜像模式集群</h1><h2 id="设置策略"><a href="#设置策略" class="headerlink" title="设置策略"></a>设置策略</h2><p>先来了解一下策略命令：</p>
+<p><code>rabbitmqctl list_policies</code>  查看当前所有策略</p>
+<p><code>rabbitmqctl set_policy 策略名 &#39;正则表达式&#39; &#39;{&quot;ha-mode&quot;:&quot;模式&quot;,&quot;ha-sync-mode&quot;:&quot;automatic&quot;}&#39;</code></p>
+<p>正则表达式用于匹配队列名，”^”表示匹配所有，”^hello”表示以hello开头</p>
+<p>模式有：</p>
+<ul>
+<li>all  所有节点都执行策略</li>
+<li>exactly  随机抽取对应数量的节点执行策略，需要配合ha-params指定参数</li>
+<li>nodes  指定对应的节点执行策略，需要配合ha-params指定参数</li>
+</ul>
+<p>“ha-sync-mode”:”automatic”表示自动同步</p>
+<p>进入rabbit01执行即可，从机无需再执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo docker exec -it rabbit01 bash</span><br><span class="line">rabbitmqctl set_policy mirror '^' '&#123;"ha-mode":"all","ha-sync-mode":"automatic"&#125;'</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+<p>查看管理页面，注意到策略被添加：</p>
+<p><img src="https://i.loli.net/2020/07/19/U5vOQWhczIXCDRs.png" alt="image-20200719194444235"></p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-04-29T19:03:21+08:00"
-              content="2020-04-29">
-          04-29
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/RabbitMQ/" rel="tag"># RabbitMQ</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/04/29/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%BA%8C%E3%80%91Maven%20Web%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AEMyBatis%E6%A1%86%E6%9E%B6%E5%B9%B6%E8%AF%BB%E5%8F%96MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url">
-            <span itemprop="name">【Maven配置二】Web项目配置MyBatis框架并读取MySQL数据库</span>
-          </a>
-      </div>
+        
 
-    </header>
-  </article>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-04-21T15:24:16+08:00"
-              content="2020-04-21">
-          04-21
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/04/21/%E4%BD%BF%E7%94%A8c3p0%E8%BF%9E%E6%8E%A5%E6%B1%A0%E8%AE%BF%E9%97%AEMySQL/" itemprop="url">
-            <span itemprop="name">使用c3p0连接池访问MySQL</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Boot%E6%95%B4%E5%90%88RabbitMQ/" rel="prev" title="【RabbitMQ自学笔记三】Spring Boot整合RabbitMQ">
+      <i class="fa fa-chevron-left"></i> 【RabbitMQ自学笔记三】Spring Boot整合RabbitMQ
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-  </div>
+      </footer>
+    
+  </article>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/tags/MySQL/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/tags/MySQL/">1</a><span class="page-number current">2</span>
-  </nav>
 
 
 
@@ -305,6 +437,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMQ的集群模式"><span class="nav-number">1.</span> <span class="nav-text">RabbitMQ的集群模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#普通模式"><span class="nav-number">1.1.</span> <span class="nav-text">普通模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像模式"><span class="nav-number">1.2.</span> <span class="nav-text">镜像模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现普通模式集群"><span class="nav-number">2.</span> <span class="nav-text">实现普通模式集群</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动容器"><span class="nav-number">2.1.</span> <span class="nav-text">启动容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置docker自定义网络"><span class="nav-number">2.2.</span> <span class="nav-text">配置docker自定义网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接容器"><span class="nav-number">2.3.</span> <span class="nav-text">连接容器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现镜像模式集群"><span class="nav-number">3.</span> <span class="nav-text">实现镜像模式集群</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#设置策略"><span class="nav-number">3.1.</span> <span class="nav-text">设置策略</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
