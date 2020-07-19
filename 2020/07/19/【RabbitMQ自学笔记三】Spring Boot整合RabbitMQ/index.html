@@ -20,16 +20,16 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="本文将使用Spring Boot完成上一期RabbitMQ5种模型的整合。 配置RabbitMQ使用Idea快速构建一个Spring Boot项目，选择Web和Spring for RabbitMQ依赖：  接下来配置application.properties，当然你也可以选择application.yml，配置基本的RabbitMQ信息： 1234567spring.application.n">
+  <meta name="description" content="本文将使用Spring Boot完成上一期RabbitMQ5种模型的整合。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【RabbitMQ自学笔记三】Spring Boot整合RabbitMQ">
 <meta property="og:url" content="http://koorye.github.io/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Boot%E6%95%B4%E5%90%88RabbitMQ/index.html">
 <meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:description" content="本文将使用Spring Boot完成上一期RabbitMQ5种模型的整合。 配置RabbitMQ使用Idea快速构建一个Spring Boot项目，选择Web和Spring for RabbitMQ依赖：  接下来配置application.properties，当然你也可以选择application.yml，配置基本的RabbitMQ信息： 1234567spring.application.n">
+<meta property="og:description" content="本文将使用Spring Boot完成上一期RabbitMQ5种模型的整合。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://i.loli.net/2020/07/19/5m31FRkfdjl8UWu.png">
 <meta property="article:published_time" content="2020-07-19T07:29:48.000Z">
-<meta property="article:modified_time" content="2020-07-19T08:30:12.321Z">
+<meta property="article:modified_time" content="2020-07-19T08:35:46.296Z">
 <meta property="article:author" content="Koorye">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="RabbitMQ">
@@ -223,7 +223,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-07-19 15:29:48 / 修改时间：16:30:12" itemprop="dateCreated datePublished" datetime="2020-07-19T15:29:48+08:00">2020-07-19</time>
+              <time title="创建时间：2020-07-19 15:29:48 / 修改时间：16:35:46" itemprop="dateCreated datePublished" datetime="2020-07-19T15:29:48+08:00">2020-07-19</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,6 +268,7 @@
 
       
         <p>本文将使用Spring Boot完成上一期RabbitMQ5种模型的整合。</p>
+<a id="more"></a>
 <h1 id="配置RabbitMQ"><a href="#配置RabbitMQ" class="headerlink" title="配置RabbitMQ"></a>配置RabbitMQ</h1><p>使用Idea快速构建一个Spring Boot项目，选择Web和Spring for RabbitMQ依赖：</p>
 <p><img src="https://i.loli.net/2020/07/19/5m31FRkfdjl8UWu.png" alt="image-20200719153509950"></p>
 <p>接下来配置application.properties，当然你也可以选择application.yml，配置基本的RabbitMQ信息：</p>
