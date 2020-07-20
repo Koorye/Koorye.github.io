@@ -4,6 +4,48 @@
   
     
     <entry>
+      <title>【Redis自学笔记六】Redis集群搭建，主从复制和哨兵模式</title>
+      <link href="/2020/07/21/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%85%AD%E3%80%91Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%EF%BC%8C%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/"/>
+      <url>/2020/07/21/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%85%AD%E3%80%91Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%EF%BC%8C%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【Redis自学笔记五】配置文件、持久化与发布订阅</title>
+      <link href="/2020/07/21/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E3%80%81%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85/"/>
+      <url>/2020/07/21/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E3%80%81%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85/</url>
+      
+        <content type="html"><![CDATA[<p>本期我们来细看Redis的配置文件，通过配置文件了解Redis的持久化等机制。</p><a id="more"></a><h1 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h1><p>unit单位对大小写不敏感：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 1k =&gt; 1000 bytes</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 1kb =&gt; 1024 bytes</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 1m =&gt; 1000000 bytes</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 1mb =&gt; 1024*1024 bytes</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 1g =&gt; 1000000000 bytes</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 1gb =&gt; 1024*1024*1024 bytes</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> units are <span class="keyword">case</span> insensitive so 1GB 1Gb 1gB are all the same.</span></span><br></pre></td></tr></table></figure><p>绑定IP，注释或设为0.0.0.0代表所有IP都可以访问：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bind 127.0.0.1</span><br></pre></td></tr></table></figure><p>端口号，默认6379：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">port 6379</span><br></pre></td></tr></table></figure><p>保护模式(没有设置密码则只能从本地访问)，默认打开：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protected-mode yes</span><br></pre></td></tr></table></figure><p>以守护进程的方式运行，默认关闭：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">daemonize no</span><br><span class="line">pidfile /var/run/redis_6379.pid  # 如果以守护进程方式运行就需要指定一个pid文件</span><br></pre></td></tr></table></figure><p>日志级别(debug / verbose / notice / warning)，默认notice：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">loglevel notice</span><br><span class="line">logfile ""  # 日志文件，为空表示标准输出</span><br></pre></td></tr></table></figure><p>数据库数量，默认16：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">databases 16</span><br></pre></td></tr></table></figure><p>设置密码，默认空：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requirepass 你设置的密码</span><br></pre></td></tr></table></figure><p>最多客户端数量，默认10000：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maxclients 10000</span><br></pre></td></tr></table></figure><p>最大内存：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maxmemory &lt;bytes&gt;</span><br></pre></td></tr></table></figure><p>内存已满的处理策略，默认<code>noeviction</code>：</p><ul><li><code>volatile-lru</code>  只对设置过期时间的key进入lru</li><li><code>allkeys-lru</code>  删除lru算法的key</li><li><code>volatile-random</code>  随机删除即将过期的key</li><li><code>allkeys-random</code>   随机删除</li><li><code>volatile-ttl</code>  删除即将过期的</li><li><code>noeviction</code>  永不过期，报错</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maxmemory-policy noeviction</span><br></pre></td></tr></table></figure><h1 id="持久化介绍"><a href="#持久化介绍" class="headerlink" title="持久化介绍"></a>持久化介绍</h1><h2 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h2><p>RDB(Redis DataBase)，Redis在内存中的数据库记录定时dump到磁盘上的RDB持久化。</p><p>RDB其实就是把数据以快照的形式保存到磁盘上，会在指定的时间间隔内将内存的数据写入磁盘。这种持久化是Redis默认的持久化方式。</p><p>优势：</p><ul><li>RDB文件紧凑，全量备份，非常适合用于进行备份和灾难恢复。</li><li>生成RDB文件的时候，redis主进程会fork一个子进程来处理所有保存工作，主进程不需要进行任何磁盘IO操作。</li><li>RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快。</li></ul><p>劣势：</p><ul><li>如果你想保证数据的高可用性，即最大限度的避免数据丢失，那么RDB将不是一个很好的选择。因为系统一旦在定时持久化之前出现宕机现象，此前没有来得及写入磁盘的数据都将丢失。</li><li>由于RDB是通过fork子进程来协助完成数据持久化工作的，因此，如果当数据集较大时，可能会导致整个服务器停止服务几百毫秒，甚至是1秒钟。</li></ul><h2 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h2><p>AOF(Append Only File)，Redis的操作日志以追加的方式写入文件。</p><p>优势：</p><ul><li><p>该机制可以带来更高的数据安全性，即数据持久性。Redis中提供了3种同步策略，即每秒同步、每修改同步和不同步。事实上，每秒同步也是异步完成的，其效率也是非常高的，所差的是一旦系统出现宕机现象，那么这一秒钟之内修改的数据将会丢失。而每修改同步，我们可以将其视为同步持久化，即每次发生的数据变化都会被立即记录到磁盘中。</p></li><li><p>由于该机制对日志文件的写入操作采用的是append模式，因此在写入过程中即使出现宕机现象，也不会破坏日志文件中已经存在的内容。然而如果我们本次操作只是写入了一半数据就出现了系统崩溃问题，不用担心，在Redis下一次启动之前，我们可以通过redis-check-aof工具来帮助我们解决数据一致性的问题。</p></li><li><p>如果日志过大，Redis可以自动启用rewrite机制。即Redis以append模式不断的将修改数据写入到老的磁盘文件中，同时Redis还会创建一个新的文件用于记录此期间有哪些修改命令被执行。因此在进行rewrite切换时可以更好的保证数据安全性。</p></li><li><p>AOF包含一个格式清晰、易于理解的日志文件用于记录所有的修改操作。事实上，我们也可以通过该文件完成数据的重建。</p></li></ul><p>劣势：</p><ul><li>对于相同数量的数据集而言，AOF文件通常要大于RDB文件。RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快。</li><li>根据同步策略的不同，AOF在运行效率上往往会慢于RDB。总之，每秒同步策略的效率是比较高的，同步禁用策略的效率和RDB一样高效。</li></ul><h1 id="持久化配置"><a href="#持久化配置" class="headerlink" title="持久化配置"></a>持久化配置</h1><h2 id="RDB-1"><a href="#RDB-1" class="headerlink" title="RDB"></a>RDB</h2><p><code>save second number</code>  表示second秒内若有number条数据更新，就生成快照(事实上flush和退出命令也会生成快照)。下面是默认配置：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">save 900 1  # 900秒内有1条数据更新就生成快照</span><br><span class="line">save 300 10  # 300秒内有10条数据更新就生成快照</span><br><span class="line">save 60 10000  # 60秒内有10000条数据更新就生成快照</span><br></pre></td></tr></table></figure><p>持久化出错是否停止，默认yes：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop-writes-on-bgsave-error yes</span><br></pre></td></tr></table></figure><p>是否压缩快照(会消耗CPU资源)，默认yes：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rdbcompression yes</span><br></pre></td></tr></table></figure><p>是否进行错误校验，默认yes：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rdbchecksum yes</span><br></pre></td></tr></table></figure><p>生成快照的名字，默认<code>dump.rdb</code>，数据库启动时会读取该文件：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dbfilename dump.rdb</span><br></pre></td></tr></table></figure><p>文件保存目录：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir ./</span><br></pre></td></tr></table></figure><h2 id="AOF-1"><a href="#AOF-1" class="headerlink" title="AOF"></a>AOF</h2><p>是否开启AOF，默认关闭：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">appendonly no</span><br></pre></td></tr></table></figure><p>AOF文件名：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">appendfilename "appendonly.aof"</span><br></pre></td></tr></table></figure><p>AOF同步方法，默认<code>everysec</code>：</p><ul><li><code>always</code>   每次更新都同步</li><li><code>everysec</code>  每秒同步一次(可能会在1秒内丢失数据)</li><li><code>no</code>  操作系统自己同步数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">appendfsync everysec</span><br></pre></td></tr></table></figure><p>日志是否进行重写，默认no：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">no-appendfsync-on-rewrite no</span><br></pre></td></tr></table></figure><p>文件最小达到多大就重写：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">auto-aof-rewrite-min-size 64MB</span><br></pre></td></tr></table></figure><p>每次重写后的增长百分比：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">auto-aof-rewrite-percentage 100</span><br></pre></td></tr></table></figure><h3 id="关于AOF文件"><a href="#关于AOF文件" class="headerlink" title="关于AOF文件"></a>关于AOF文件</h3><p>AOF文件实际上就是一个日志，记录了所有更新操作，而加载数据时，就将日志文件从头到尾运行一遍：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">*2</span><br><span class="line"><span class="meta">$</span><span class="bash">6</span></span><br><span class="line">SELECT</span><br><span class="line"><span class="meta">$</span><span class="bash">1</span></span><br><span class="line">0</span><br><span class="line">*3</span><br><span class="line"><span class="meta">$</span><span class="bash">3</span></span><br><span class="line">SET</span><br><span class="line"><span class="meta">$</span><span class="bash">22</span></span><br><span class="line">key:&#123;tag&#125;:__rand_int__</span><br><span class="line">...</span><br><span class="line">VXK</span><br><span class="line">*3</span><br><span class="line"><span class="meta">$</span><span class="bash">3</span></span><br><span class="line">SET</span><br><span class="line"><span class="meta">$</span><span class="bash">22</span></span><br><span class="line">key:&#123;tag&#125;:__rand_int__</span><br><span class="line"><span class="meta">$</span><span class="bash">3</span></span><br><span class="line">VXK</span><br></pre></td></tr></table></figure><h4 id="重写"><a href="#重写" class="headerlink" title="重写"></a>重写</h4><p>Redis服务器可以创建一个新的AOF文件来替代现有的AOF文件，新旧两个文件所保存的数据库状态是相同的，但是新的AOF文件不会包含任何浪费空间的冗余命令，通常体积会较旧AOF文件小很多。</p><p>而所谓重写最小大小和重写百分比的意思是，每次重写之后，随着新数据的加入，日志会不断增长，直到比之前更大。我们第一次达到64MB就重写，若将百分比设为200%，则第二次达到128MB就重写，第三次达到256MB就重写，以此类推，保证日志可以容纳数据。</p><h4 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h4><p>假设日志文件出错，数据库启动时会拒绝加载这个文件。</p><p>我们可以通过<code>redis-check-aof --fix appendonly.aof</code>修复aof文件。</p><h1 id="发布订阅"><a href="#发布订阅" class="headerlink" title="发布订阅"></a>发布订阅</h1><p>Redis 发布订阅(pub / sub)是一种消息通信模式：发送者(pub)发送消息，订阅者(sub)接收消息。</p><p><code>subscribe channel [channel ...]</code>  订阅频道，例：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; subscribe koorye</span><br><span class="line">Reading messages... (press Ctrl-C to quit)</span><br><span class="line">1) "subscribe"</span><br><span class="line">2) "koorye"</span><br><span class="line">3) (integer) 1</span><br></pre></td></tr></table></figure><p>开启后会阻塞接收信息。</p><p>再开启一个终端：<br><code>publish channel message</code>  发布信息，例：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; publish koorye "hello world"</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure><p>此时另一个终端接收到：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1) "message"</span><br><span class="line">2) "koorye"</span><br><span class="line">3) "hello world"</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> Redis </tag>
+            
+            <tag> Linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>【Redis自学笔记四】Jedis和Spring Boot整合Redis</title>
       <link href="/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Jedis%E5%92%8CSpring%20Boot%E6%95%B4%E5%90%88Redis/"/>
       <url>/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Jedis%E5%92%8CSpring%20Boot%E6%95%B4%E5%90%88Redis/</url>
@@ -22,9 +64,9 @@
             
             <tag> Java </tag>
             
-            <tag> Redis </tag>
-            
             <tag> Spring Boot </tag>
+            
+            <tag> Redis </tag>
             
         </tags>
       
@@ -603,13 +645,13 @@
             
             <tag> 前端 </tag>
             
-            <tag> Vue </tag>
-            
             <tag> Web </tag>
             
             <tag> JavaScript </tag>
             
             <tag> jQuery </tag>
+            
+            <tag> Vue </tag>
             
         </tags>
       
@@ -760,9 +802,9 @@
             
             <tag> Java </tag>
             
-            <tag> MyBatis </tag>
-            
             <tag> Maven </tag>
+            
+            <tag> MyBatis </tag>
             
             <tag> Spring </tag>
             
