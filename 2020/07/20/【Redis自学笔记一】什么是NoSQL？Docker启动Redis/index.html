@@ -20,17 +20,21 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="什么都想学一点">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:url" content="http://koorye.github.io/tags/%E7%88%AC%E8%99%AB/index.html">
+  <meta name="description" content="Redis（Remote Dictionary Server )，即远程字典服务，是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。从2013年5月开始，Redis的开发由Pivotal赞助。 ——  摘自百度百科">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Redis自学笔记一】什么是NoSQL？Docker启动Redis">
+<meta property="og:url" content="http://koorye.github.io/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E4%BB%80%E4%B9%88%E6%98%AFNoSQL%EF%BC%9FDocker%E5%90%AF%E5%8A%A8Redis/index.html">
 <meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:description" content="什么都想学一点">
+<meta property="og:description" content="Redis（Remote Dictionary Server )，即远程字典服务，是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。从2013年5月开始，Redis的开发由Pivotal赞助。 ——  摘自百度百科">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-19T18:47:30.000Z">
+<meta property="article:modified_time" content="2020-07-19T19:16:55.366Z">
 <meta property="article:author" content="Koorye">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://koorye.github.io/tags/%E7%88%AC%E8%99%AB/">
+<link rel="canonical" href="http://koorye.github.io/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E4%BB%80%E4%B9%88%E6%98%AFNoSQL%EF%BC%9FDocker%E5%90%AF%E5%8A%A8Redis/">
 
 
 <script id="page-configurations">
@@ -38,12 +42,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: 爬虫 | 不会真有人以为Koorye会写代码吧</title>
+  <title>【Redis自学笔记一】什么是NoSQL？Docker启动Redis | 不会真有人以为Koorye会写代码吧</title>
   
 
 
@@ -185,51 +189,186 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">爬虫
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E4%BB%80%E4%B9%88%E6%98%AFNoSQL%EF%BC%9FDocker%E5%90%AF%E5%8A%A8Redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="什么都想学一点">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Redis自学笔记一】什么是NoSQL？Docker启动Redis
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-20 02:47:30 / 修改时间：03:16:55" itemprop="dateCreated datePublished" datetime="2020-07-20T02:47:30+08:00">2020-07-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E4%BB%80%E4%B9%88%E6%98%AFNoSQL%EF%BC%9FDocker%E5%90%AF%E5%8A%A8Redis/" class="post-meta-item leancloud_visitors" data-flag-title="【Redis自学笔记一】什么是NoSQL？Docker启动Redis" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+        <blockquote>
+<p>Redis（Remote Dictionary Server )，即远程字典服务，是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。从2013年5月开始，Redis的开发由Pivotal赞助。</p>
+<p>——  摘自百度百科</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="什么是NoSQL"><a href="#什么是NoSQL" class="headerlink" title="什么是NoSQL"></a>什么是NoSQL</h1><p>NoSQL，泛指非关系型的数据库。</p>
+<p>NoSQL = Not Only SQL，即“不仅仅是SQL”。区别于关系型数据库，这种新型数据库的出现是一场数据库的革命运动。</p>
+<p>NoSQL不再用传统的表形式存储数据，数据之间的关系不再那么密切，这使得NoSQL具有非常强的灵活性和可扩展性。</p>
+<p>NoSQL具有以下优点：</p>
+<ul>
+<li><strong>易扩展</strong>  数据之间的无关系在架构层面带来了可扩展的能力</li>
+<li><strong>高性能</strong>  得益于无关系性，NoSQL数据库都具有非常高的读写性能</li>
+<li><strong>灵活的数据模式</strong>  NoSQL无须事先进行表设计、建立字段，随时可以存储自定义的数据格式、自由的进行CRUD操作</li>
+<li><strong>高可用</strong>  NoSQL在不太影响性能的情况下，就可以实现高可用的架构</li>
+</ul>
+<h2 id="NoSQL的类型"><a href="#NoSQL的类型" class="headerlink" title="NoSQL的类型"></a>NoSQL的类型</h2><hr>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>举例</th>
+<th>应用场景</th>
+<th>数据模型</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>键值对</td>
+<td>Redis, Oracle BDB</td>
+<td>缓存、高访问负载</td>
+<td>Key-Value键值对</td>
+<td>速度快</td>
+<td>数据无结构化</td>
+</tr>
+<tr>
+<td>列存储</td>
+<td>Cassandra, HBase</td>
+<td>分布式文件系统</td>
+<td>列簇</td>
+<td>速度快，可扩展性强</td>
+<td>功能相对局限</td>
+</tr>
+<tr>
+<td>文档</td>
+<td>CouchDB, MongoDB</td>
+<td>Web应用</td>
+<td>Key-Value键值对，Value是结构化的</td>
+<td>数据结构要求不严格，结构可变</td>
+<td>性能不高，却反统一的查询语法</td>
+</tr>
+<tr>
+<td>图形</td>
+<td>Neo4j, InfoGrid</td>
+<td>社交网络、推荐系统</td>
+<td>图</td>
+<td>可以使用图结构相关算法</td>
+<td>很多时候需要对整个图做计算才能得出需要的信息，不容易做分布式的集群</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="Ubuntu安装Redis"><a href="#Ubuntu安装Redis" class="headerlink" title="Ubuntu安装Redis"></a>Ubuntu安装Redis</h1><p>Ubuntu的安装非常简单：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install redis  # apt安装redis</span><br><span class="line">sudo service redis-server start  # 启动服务端</span><br><span class="line">redis-cli  # 进入客户端</span><br></pre></td></tr></table></figure>
+<h1 id="Docker安装Redis"><a href="#Docker安装Redis" class="headerlink" title="Docker安装Redis"></a>Docker安装Redis</h1><p>Docker安装也很简单，不过需要注意一个细节，镜像本身并不会自带配置文件。</p>
+<p>因此我们先到官网下载配置文件：<a href="http://download.redis.io/redis-stable/redis.conf" target="_blank" rel="noopener">http://download.redis.io/redis-stable/redis.conf</a></p>
+<p>下载完之后，放到本地的目录里。这里笔者在家目录下创建docker/redis目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd  # 默认切换到家目录</span><br><span class="line">mkdir docker</span><br><span class="line">cd docker</span><br><span class="line">mkdir redis</span><br></pre></td></tr></table></figure>
+<p>之后放入配置文件。</p>
+<p>创建容器时采用卷挂载的方式，将配置文件同步到容器中(注意此处用户名是笔者个人的用户名)：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d \</span><br><span class="line">--name redis \</span><br><span class="line">-p 6379:6379 \</span><br><span class="line">-v /home/koorye/docker/redis/redis.conf:/etc/redis/redis.conf \  <span class="comment"># 挂载配置文件</span></span><br><span class="line">-v /home/koorye/docker/redis/data:/data \  <span class="comment"># 挂载数据</span></span><br><span class="line">redis \</span><br><span class="line">redis-server /etc/redis/redis.conf --appendonly yes  <span class="comment"># 启用AOF模式</span></span><br></pre></td></tr></table></figure>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-04-28T00:01:37+08:00"
-              content="2020-04-28">
-          04-28
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Redis/" rel="tag"># Redis</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/04/28/%E3%80%90%E5%85%A5%E9%97%A8%E7%BA%A7%E6%95%99%E7%A8%8B%E3%80%91python%E4%BD%BF%E7%94%A8scrapy%E5%BA%93%E5%AE%9E%E7%8E%B0%E7%88%AC%E8%99%AB/" itemprop="url">
-            <span itemprop="name">python使用scrapy实现爬虫</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Docker%E6%90%AD%E5%BB%BARabbitMQ%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/" rel="prev" title="【RabbitMQ自学笔记四】Docker搭建RabbitMQ集群架构">
+      <i class="fa fa-chevron-left"></i> 【RabbitMQ自学笔记四】Docker搭建RabbitMQ集群架构
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91Redis%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%92%8C%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" rel="next" title="【Redis自学笔记二】Redis的基本命令和数据类型">
+      【Redis自学笔记二】Redis的基本命令和数据类型 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
@@ -282,6 +421,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是NoSQL"><span class="nav-number">1.</span> <span class="nav-text">什么是NoSQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NoSQL的类型"><span class="nav-number">1.1.</span> <span class="nav-text">NoSQL的类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ubuntu安装Redis"><span class="nav-number">2.</span> <span class="nav-text">Ubuntu安装Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker安装Redis"><span class="nav-number">3.</span> <span class="nav-text">Docker安装Redis</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
