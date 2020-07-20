@@ -20,29 +20,22 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="最近美丽善良好学的周姐姐问我怎么搭建博客，在此记录一下。 前置准备：配置好Node.js和Git，并注册一个GitHub账号。">
+  <meta name="description" content="Geospatial即地理类型，我们可以通过geoadd key longtitude latitude member声明一个地理类型，有效经度从-180到180，有效纬度从-85.05112878到85.05112878，例： 12127.0.0.1:6379&gt; geoadd city 116.40 39.90 Beijing(integer) 1 基本命令geopos key membe">
 <meta property="og:type" content="article">
-<meta property="og:title" content="利用GitHub + Hexo搭建博客">
-<meta property="og:url" content="http://koorye.github.io/2020/07/11/%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/index.html">
+<meta property="og:title" content="【Redis自学笔记三】Redis的特殊数据类型、事务和乐观锁">
+<meta property="og:url" content="http://koorye.github.io/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Redis%E7%9A%84%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E4%BA%8B%E5%8A%A1%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81/index.html">
 <meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:description" content="最近美丽善良好学的周姐姐问我怎么搭建博客，在此记录一下。 前置准备：配置好Node.js和Git，并注册一个GitHub账号。">
+<meta property="og:description" content="Geospatial即地理类型，我们可以通过geoadd key longtitude latitude member声明一个地理类型，有效经度从-180到180，有效纬度从-85.05112878到85.05112878，例： 12127.0.0.1:6379&gt; geoadd city 116.40 39.90 Beijing(integer) 1 基本命令geopos key membe">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711135050422.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711135548370.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711141212369.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711141614922.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711140423506.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711142627934.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711143334721.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711143729640.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711144333378.png">
-<meta property="article:published_time" content="2020-07-11T05:18:35.000Z">
-<meta property="article:modified_time" content="2020-07-13T15:20:41.372Z">
+<meta property="article:published_time" content="2020-07-20T02:39:06.000Z">
+<meta property="article:modified_time" content="2020-07-20T14:45:16.864Z">
 <meta property="article:author" content="Koorye">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Redis">
+<meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711135050422.png">
 
-<link rel="canonical" href="http://koorye.github.io/2020/07/11/%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
+<link rel="canonical" href="http://koorye.github.io/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Redis%E7%9A%84%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E4%BA%8B%E5%8A%A1%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81/">
 
 
 <script id="page-configurations">
@@ -55,7 +48,7 @@
   };
 </script>
 
-  <title>利用GitHub + Hexo搭建博客 | 不会真有人以为Koorye会写代码吧</title>
+  <title>【Redis自学笔记三】Redis的特殊数据类型、事务和乐观锁 | 不会真有人以为Koorye会写代码吧</title>
   
 
 
@@ -204,7 +197,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/11/%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Redis%E7%9A%84%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E4%BA%8B%E5%8A%A1%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -217,7 +210,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          利用GitHub + Hexo搭建博客
+          【Redis自学笔记三】Redis的特殊数据类型、事务和乐观锁
         </h1>
 
         <div class="post-meta">
@@ -226,28 +219,22 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-07-11 13:18:35" itemprop="dateCreated datePublished" datetime="2020-07-11T13:18:35+08:00">2020-07-11</time>
+              <time title="创建时间：2020-07-20 10:39:06 / 修改时间：22:45:16" itemprop="dateCreated datePublished" datetime="2020-07-20T10:39:06+08:00">2020-07-20</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-13 23:20:41" itemprop="dateModified" datetime="2020-07-13T23:20:41+08:00">2020-07-13</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
             </span>
 
           
-            <span id="/2020/07/11/%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/" class="post-meta-item leancloud_visitors" data-flag-title="利用GitHub + Hexo搭建博客" title="阅读次数">
+            <span id="/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Redis%E7%9A%84%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E4%BA%8B%E5%8A%A1%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81/" class="post-meta-item leancloud_visitors" data-flag-title="【Redis自学笔记三】Redis的特殊数据类型、事务和乐观锁" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -259,14 +246,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.7k</span>
+              <span>3.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -278,64 +265,55 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>最近美丽善良好学的周姐姐问我怎么搭建博客，在此记录一下。</p>
-<p>前置准备：配置好Node.js和Git，并注册一个GitHub账号。</p>
-<a id="more"></a>
-<h1 id="创建本地文件"><a href="#创建本地文件" class="headerlink" title="创建本地文件"></a>创建本地文件</h1><p>使用npm包管理器全局安装Hexo：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo -g</span><br></pre></td></tr></table></figure>
-<p>找到一个合适的目录，创建一个空文件夹，接着在这个文件夹内创建博客文件：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd D:\Koorye.github.io</span><br><span class="line">hexo init</span><br></pre></td></tr></table></figure>
-<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711135050422.png" alt="image-20200711135050422"></p>
-<p>接下来，将markdown文件放在source/_posts目录中，就会显示到博客上。</p>
-<h1 id="部署到GitHub"><a href="#部署到GitHub" class="headerlink" title="部署到GitHub"></a>部署到GitHub</h1><h2 id="新建仓库"><a href="#新建仓库" class="headerlink" title="新建仓库"></a>新建仓库</h2><p>新建一个公共仓库，名称必须为xxx.github.io，这将是你博客的域名。</p>
-<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711135548370.png" alt="image-20200711135548370"></p>
-<h2 id="配置本地文件"><a href="#配置本地文件" class="headerlink" title="配置本地文件"></a>配置本地文件</h2><p>接下来对本地博客文件的<code>_config.yml</code>进行配置，将仓库路径写到repository上：</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repository:</span> <span class="string">git@github.com:Koorye/Koorye.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-<h2 id="配置Git"><a href="#配置Git" class="headerlink" title="配置Git"></a>配置Git</h2><h3 id="创建账号"><a href="#创建账号" class="headerlink" title="创建账号"></a>创建账号</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name "username"  // username替换成你的用户名</span><br><span class="line">git config --global user.email "email"  // email替换成你的邮箱</span><br></pre></td></tr></table></figure>
-<h3 id="创建SSH密钥"><a href="#创建SSH密钥" class="headerlink" title="创建SSH密钥"></a>创建SSH密钥</h3><p>检查<code>C:\Users\你的用户名</code>文件夹中是否有.ssh文件夹，没有则用如下命令新建一个密钥：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C "你的邮箱地址"</span><br></pre></td></tr></table></figure>
-<p>之后会生成如下文件：</p>
-<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711141212369.png" alt="image-20200711141212369"></p>
-<h3 id="连接到GitHub"><a href="#连接到GitHub" class="headerlink" title="连接到GitHub"></a>连接到GitHub</h3><p>点击GitHub右上角的个人头像，找到Settings，然后点击左侧栏的SSH and GPG keys.</p>
-<p>点击New SSH key，将生成的id_rsa.pub中内容复制到Key中，Title随意：</p>
-<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711141614922.png" alt="image-20200711141608696"></p>
-<p>创建好的SSH Key：</p>
-<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711140423506.png" alt="image-20200711140423506"></p>
-<h3 id="测试连接"><a href="#测试连接" class="headerlink" title="测试连接"></a>测试连接</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh git@github.com</span><br></pre></td></tr></table></figure>
-<p>返回如下提示即配置成功：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\a1311&gt; ssh git@github.com</span><br><span class="line">PTY allocation request failed on channel 0</span><br><span class="line">Hi Koorye! You've successfully authenticated, but GitHub does not provide shell access.</span><br><span class="line">Connection to github.com closed.</span><br></pre></td></tr></table></figure>
-<h3 id="hexo上传"><a href="#hexo上传" class="headerlink" title="hexo上传"></a>hexo上传</h3><p>首先了解一下hexo的命令行：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hexo init  // 初始化一个博客</span><br><span class="line">hexo clean  // 清理静态文件</span><br><span class="line">hexo new xxx  // 新建一个文章，也可以直接复制markdown文件到source/_post目录中</span><br><span class="line">hexo new page xxx  // 新建一个分类页面</span><br><span class="line">hexo g  // 或hexo generate 编译生成静态文件</span><br><span class="line">hexo s  // 或hexo server 部署到本地服务器，通过localhost://4000访问</span><br><span class="line">hexo d  // 或hexo deploy 部署到远程服务器，这里我们配置到GitHub仓库</span><br></pre></td></tr></table></figure>
-<p>了解一下命令后，我们通常使用clean(清理缓存)+generate(生成文件)+deploy(部署)上传博客：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-<p>返回如下，博客就部署完成：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">PS D:\Koorye.github.io&gt; hexo d</span><br><span class="line">INFO  Deploying: git</span><br><span class="line">INFO  Clearing .deploy_git folder...</span><br><span class="line">INFO  Copying files from public folder...</span><br><span class="line">INFO  Copying files from extend dirs...</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">warning: LF will be replaced by CRLF in tags/神经网络/index.html.</span><br><span class="line">The file will have its original line endings in your working directory</span><br><span class="line">On branch master</span><br><span class="line">Everything up-to-date</span><br><span class="line">Branch 'master' set up to track remote branch 'master' from 'git@github.com:Koorye/Koorye.github.io.git'.</span><br></pre></td></tr></table></figure></p>
-<p>检查一下github仓库，可以看到文件已经上传：</p>
-<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711142627934.png" alt="image-20200711142627934"></p>
-<p>此时，我们便可以通过访问<a href="https://Koorye.github.io">https://Koorye.github.io</a>看到自己的博客啦，部署略有延迟，请等待几分钟再查看。</p>
-<h1 id="使用Next主题"><a href="#使用Next主题" class="headerlink" title="使用Next主题"></a>使用Next主题</h1><h2 id="下载主题"><a href="#下载主题" class="headerlink" title="下载主题"></a>下载主题</h2><p>原版的主题比较简单，而且缺少很多功能，相比之下，next主题是很好的选择。</p>
-<p>使用git clone下载主题：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
-<p>下载之后，博客文件themes目录中就会有next目录。</p>
-<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711143334721.png" alt="image-20200711143334721"></p>
-<p>修改配置文件<code>_config.yml</code>的theme为next：</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="comment">## Plugins: https://hexo.io/plugins/</span></span><br><span class="line"><span class="comment">## Themes: https://hexo.io/themes/</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br></pre></td></tr></table></figure>
-<p>之后，重新编译打开网页，next就改变啦：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-<p>访问<a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a>，这里笔者已经修改了很多配置才有这样的效果：</p>
-<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711143729640.png" alt="image-20200711143729640"></p>
-<p>关于next主题的各种配置，本文不再赘述。</p>
-<h1 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h1><p>这里举例安装live2d插件，其他插件的安装大同小异：</p>
-<p><a href="https://huaji8.top/post/live2d-plugin-2.0/" target="_blank" rel="noopener">插件官网，可浏览模型样式</a></p>
-<p><a href="https://github.com/EYHN/hexo-helper-live2d" target="_blank" rel="noopener">插件GitHub地址</a></p>
-<p>这里我们安装这只叫hijiki的黑猫：</p>
-<p><img src="https://raw.githubusercontent.com/Koorye/my-img/master/img/image-20200711144333378.png" alt="image-20200711144333378"></p>
-<p>按照官网的步骤，先安装插件：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-helper-live2d</span><br></pre></td></tr></table></figure>
-<p>然后配置<code>_config.yml</code>，加入以下内容，自行设定width和height：</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">live2d:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">scriptFrom:</span> <span class="string">local</span></span><br><span class="line">  <span class="attr">model:</span></span><br><span class="line">    <span class="attr">use:</span> <span class="string">live2d-widget-model-hijiki</span></span><br><span class="line">  <span class="attr">display:</span></span><br><span class="line">    <span class="attr">position:</span> <span class="string">right</span></span><br><span class="line">    <span class="attr">width:</span> <span class="number">200</span></span><br><span class="line">    <span class="attr">height:</span> <span class="number">400</span></span><br><span class="line">  <span class="attr">mobile:</span></span><br><span class="line">    <span class="attr">show:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p>再次编译打开网页，hijiki就会在屏幕的右下角啦。</p>
-<h1 id="关于markdown书写格式"><a href="#关于markdown书写格式" class="headerlink" title="关于markdown书写格式"></a>关于markdown书写格式</h1><p>hexo的markdown开头需要写明一些配置，例子如下，这样文章才能正确显示标题、日期等信息：</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 对比jQuery与Vue+axios的Ajax</span><br><span class="line">date: 2020-5-7 13:23:01</span><br><span class="line">categories: 前端</span><br><span class="line">tags: </span><br><span class="line"><span class="bullet">- </span>前端</span><br><span class="line"><span class="bullet">- </span>Web</span><br><span class="line"><span class="bullet">- </span>JavaScript</span><br><span class="line"><span class="bullet">- </span>jQuery</span><br><span class="line"><span class="bullet">- </span>Vue</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+        <h1 id="Geospatial"><a href="#Geospatial" class="headerlink" title="Geospatial"></a>Geospatial</h1><p>即地理类型，我们可以通过<code>geoadd key longtitude latitude member</code>声明一个地理类型，有效经度从-180到180，有效纬度从-85.05112878到85.05112878，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; geoadd city 116.40 39.90 Beijing</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
+<h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><p><code>geopos key member</code>  获取位置，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; geopos city Beijing</span><br><span class="line">1) 1) "116.39999896287918091"</span><br><span class="line">   2) "39.90000009167092543"</span><br></pre></td></tr></table></figure>
+<p><code>geodist key member1 member2 [m|km|ft|mi]</code>  获取距离，可选参数指定单位(默认m)，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; geoadd city 116.40 39.90 Beijing</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; geoadd city 121.47 31.23 Shanghai</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; geodist city Beijing Shanghai</span><br><span class="line">"1067378.7564"</span><br></pre></td></tr></table></figure>
+<p><code>georadius key longtitude latitude radius m|km|mt|mi [withcoord] [withdist] [withhash]</code>  获取半径内的位置，withcoord返回经纬度，withdist返回距离，withhash返回哈希，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; georadius city 120 30 500 km withcoord</span><br><span class="line">1) 1) "Shanghai"</span><br><span class="line">   2) 1) "121.47000163793563843"</span><br><span class="line">      2) "31.22999903975783553"</span><br><span class="line">127.0.0.1:6379&gt; georadius city 120 30 500 km withdist</span><br><span class="line">1) 1) "Shanghai"</span><br><span class="line">   2) "196.2512"</span><br><span class="line">127.0.0.1:6379&gt; georadius city 120 30 500 km withhash</span><br><span class="line">1) 1) "Shanghai"</span><br><span class="line">   2) (integer) 4054803462927619</span><br></pre></td></tr></table></figure>
+<p><code>georadiusbymember key member radius m|km|mt|mi [withcoord] [withdist] [withhash]</code>  获得城市半径内的位置，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; georadiusbymember city Beijing 10000 km</span><br><span class="line">1) "Shanghai"</span><br><span class="line">2) "Beijing"</span><br></pre></td></tr></table></figure>
+<h1 id="Hyperloglog"><a href="#Hyperloglog" class="headerlink" title="Hyperloglog"></a>Hyperloglog</h1><p>是一种基数统计算法，它占用的内存是固定的，$2^{64}$数量级的不同元素只需要12KB的内存。基数统计有0.81%的错误率。可以通过<code>pfadd key element [element ...]</code>声明基数，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; pfadd mykey a b c d e f g h i j</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
+<h2 id="基本命令-1"><a href="#基本命令-1" class="headerlink" title="基本命令"></a>基本命令</h2><p><code>pfcount key</code>   统计个数，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; pfcount mykey</span><br><span class="line">(integer) 10</span><br></pre></td></tr></table></figure>
+<p><code>pfmerge destkey sourcekey</code>  合并基数，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; pfadd mykey a b c d e f g h i j</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; pfadd mykey2 h i j k l m</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; pfmerge mykey mykey2</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; pfcount mykey</span><br><span class="line">(integer) 13</span><br></pre></td></tr></table></figure>
+<h1 id="Bitmaps"><a href="#Bitmaps" class="headerlink" title="Bitmaps"></a>Bitmaps</h1><p>位图类型，只有0和1两个状态。可以通过<code>setbit key offset value</code>声明一个位，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; setbit sign 0 1</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; setbit sign 1 0</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; setbit sign 2 0</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; setbit sign 3 0</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; setbit sign 4 1</span><br><span class="line">(integer) 0</span><br></pre></td></tr></table></figure>
+<h2 id="基本命令-2"><a href="#基本命令-2" class="headerlink" title="基本命令"></a>基本命令</h2><p><code>getbit key offset</code>  获取对应的值，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; getbit sign 1</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; getbit sign 4</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
+<p><code>bitcount key</code>  统计元素个数，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; bitcount sign</span><br><span class="line">(integer) 2</span><br></pre></td></tr></table></figure>
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>Redis的单条命令保证原子性，而<strong>事务并不保证原子性</strong>！</p>
+<p>Redis的事务具有一次性、顺序性、排他性，没有隔离级别的概念。</p>
+<p><code>mulit</code>开启事务，<code>exec</code>执行事务，<code>discard</code>取消事务，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set k1 v1</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; set k2 v2</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; set k3 v3</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">1) OK</span><br><span class="line">2) OK</span><br><span class="line">3) OK</span><br></pre></td></tr></table></figure>
+<p>Redis的事务异常有两种：</p>
+<ul>
+<li>如果事务中的一条命令本身有问题，所有命令都不会执行</li>
+<li>如果命令没问题，而在执行中报错，其余命令仍会执行</li>
+</ul>
+<p>例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 情况一</span></span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set k1 v1</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; set k2 v2</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; aaa  # 不存在的命令</span><br><span class="line">(error) ERR unknown command `aaa`, with args beginning with:</span><br><span class="line">127.0.0.1:6379&gt; set k3 v3</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">(error) EXECABORT Transaction discarded because of previous errors.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 情况二</span></span><br><span class="line">127.0.0.1:6379&gt; set int 1</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set str hello</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; incr int</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; incr str  # 错误，字符串不能自增</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; incr int</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">1) (integer) 2</span><br><span class="line">2) (error) ERR value is not an integer or out of range</span><br><span class="line">3) (integer) 3</span><br></pre></td></tr></table></figure>
+<h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><blockquote>
+<p>乐观锁（ Optimistic Locking ） 相对悲观锁而言，乐观锁机制采取了更加宽松的加锁机制。悲观锁大多数情况下依靠数据库的锁机制实现，以保证操作最大程度的独占性。但随之而来的就是数据库性能的大量开销，特别是对长事务而言，这样的开销往往无法承受。而乐观锁机制在一定程度上解决了这个问题。乐观锁，大多是基于数据版本（ Version ）记录机制实现。何谓数据版本？即为数据增加一个版本标识，在基于数据库表的版本解决方案中，一般是通过为数据库表增加一个 “version” 字段来实现。读取出数据时，将此版本号一同读出，之后更新时，对此版本号加一。此时，将提交数据的版本数据与数据库表对应记录的当前版本信息进行比对，如果提交的数据版本号等于数据库表当前版本号，则予以更新，否则认为是过期数据。</p>
+<p>——  摘自百度百科</p>
+</blockquote>
+<p>使用<code>watch key</code>监视数据在事务执行期间是否发生变动，例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; watch money</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set money 100</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; decrby money 20</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">1) (integer) 80</span><br></pre></td></tr></table></figure>
+<p>如果在事务执行期间另外一个线程修改了数据：</p>
+<p>线程1先输入命令，并不执行事务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; watch money</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set money 100</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; decrby money 20</span><br><span class="line">QUEUED</span><br></pre></td></tr></table></figure>
+<p>紧接着线程2修改了数据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; decrby money 50</span><br><span class="line">(integer) 50</span><br></pre></td></tr></table></figure>
+<p>此时线程1再执行事务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">(nil)</span><br></pre></td></tr></table></figure>
+<p>事务提交失败。</p>
+<p>使用<code>unwatch</code>解除所有监视。<strong>事务提交失败会自动解除监视</strong>。</p>
+
     </div>
 
     
@@ -343,6 +321,11 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Redis/" rel="tag"># Redis</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
 
         
 
@@ -350,12 +333,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/06/16/%E6%B5%85%E8%B0%88%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C(CNN)%E2%80%94%E2%80%94%E5%8D%B7%E7%A7%AF%E3%80%81%E6%89%B9%E6%A0%87%E5%87%86%E5%8C%96%E3%80%81%E6%B1%A0%E5%8C%96%E3%80%81%E5%A4%B1%E6%B4%BB/" rel="prev" title="浅谈卷积神经网络(CNN)——卷积、批标准化、池化、失活">
-      <i class="fa fa-chevron-left"></i> 浅谈卷积神经网络(CNN)——卷积、批标准化、池化、失活
+    <a href="/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91Redis%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%92%8C%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" rel="prev" title="【Redis自学笔记二】Redis的基本命令和数据类型">
+      <i class="fa fa-chevron-left"></i> 【Redis自学笔记二】Redis的基本命令和数据类型
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/07/13/%E5%8D%87%E7%BA%A7WSL2%E5%B9%B6%E5%AE%89%E8%A3%85Docker/" rel="next" title="WSL不支持Docker？不存在的，升级WSL2并安装Docker">
-      WSL不支持Docker？不存在的，升级WSL2并安装Docker <i class="fa fa-chevron-right"></i>
+    <a href="/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Jedis%E5%92%8CSpring%20Boot%E6%95%B4%E5%90%88Redis/" rel="next" title="【Redis自学笔记四】Jedis和Spring Boot整合Redis">
+      【Redis自学笔记四】Jedis和Spring Boot整合Redis <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -415,7 +398,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建本地文件"><span class="nav-number">1.</span> <span class="nav-text">创建本地文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署到GitHub"><span class="nav-number">2.</span> <span class="nav-text">部署到GitHub</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#新建仓库"><span class="nav-number">2.1.</span> <span class="nav-text">新建仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置本地文件"><span class="nav-number">2.2.</span> <span class="nav-text">配置本地文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Git"><span class="nav-number">2.3.</span> <span class="nav-text">配置Git</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建账号"><span class="nav-number">2.3.1.</span> <span class="nav-text">创建账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建SSH密钥"><span class="nav-number">2.3.2.</span> <span class="nav-text">创建SSH密钥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连接到GitHub"><span class="nav-number">2.3.3.</span> <span class="nav-text">连接到GitHub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试连接"><span class="nav-number">2.3.4.</span> <span class="nav-text">测试连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo上传"><span class="nav-number">2.3.5.</span> <span class="nav-text">hexo上传</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用Next主题"><span class="nav-number">3.</span> <span class="nav-text">使用Next主题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载主题"><span class="nav-number">3.1.</span> <span class="nav-text">下载主题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装插件"><span class="nav-number">4.</span> <span class="nav-text">安装插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于markdown书写格式"><span class="nav-number">5.</span> <span class="nav-text">关于markdown书写格式</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Geospatial"><span class="nav-number">1.</span> <span class="nav-text">Geospatial</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本命令"><span class="nav-number">1.1.</span> <span class="nav-text">基本命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hyperloglog"><span class="nav-number">2.</span> <span class="nav-text">Hyperloglog</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本命令-1"><span class="nav-number">2.1.</span> <span class="nav-text">基本命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bitmaps"><span class="nav-number">3.</span> <span class="nav-text">Bitmaps</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本命令-2"><span class="nav-number">3.1.</span> <span class="nav-text">基本命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务"><span class="nav-number">4.</span> <span class="nav-text">事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#乐观锁"><span class="nav-number">4.1.</span> <span class="nav-text">乐观锁</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
