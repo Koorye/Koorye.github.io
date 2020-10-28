@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="什么都想学一点">
+  <meta name="description" content="决策树(Decision Tree）是在已知各种情况发生概率的基础上，通过构成决策树来求取净现值的期望值大于等于零的概率，评价项目风险，判断其可行性的决策分析方法，是直观运用概率分析的一种图解法。由于这种决策分支画成图形很像一棵树的枝干，故称决策树。在机器学习中，决策树是一个预测模型，他代表的是对象属性与对象值之间的一种映射关系。Entropy &#x3D; 系统的凌乱程度，使用算法ID3, C4.5和C">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【机器学习自学笔记2】决策树">
 <meta property="og:url" content="http://koorye.github.io/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B02%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91/index.html">
 <meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:description" content="什么都想学一点">
+<meta property="og:description" content="决策树(Decision Tree）是在已知各种情况发生概率的基础上，通过构成决策树来求取净现值的期望值大于等于零的概率，评价项目风险，判断其可行性的决策分析方法，是直观运用概率分析的一种图解法。由于这种决策分支画成图形很像一棵树的枝干，故称决策树。在机器学习中，决策树是一个预测模型，他代表的是对象属性与对象值之间的一种映射关系。Entropy &#x3D; 系统的凌乱程度，使用算法ID3, C4.5和C">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-10-28T07:28:02.000Z">
-<meta property="article:modified_time" content="2020-10-28T07:28:26.972Z">
+<meta property="article:modified_time" content="2020-10-28T09:44:27.420Z">
 <meta property="article:author" content="Koorye">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="信息论">
@@ -220,7 +220,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-10-28 15:28:02 / 修改时间：15:28:26" itemprop="dateCreated datePublished" datetime="2020-10-28T15:28:02+08:00">2020-10-28</time>
+              <time title="创建时间：2020-10-28 15:28:02 / 修改时间：17:44:27" itemprop="dateCreated datePublished" datetime="2020-10-28T15:28:02+08:00">2020-10-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -245,14 +245,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
+              <span>5.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>5 分钟</span>
             </span>
 
         </div>
@@ -264,7 +264,706 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <blockquote>
+<p>决策树(Decision Tree）是在已知各种情况发生概率的基础上，通过构成决策树来求取净现值的期望值大于等于零的概率，评价项目风险，判断其可行性的决策分析方法，是直观运用概率分析的一种图解法。由于这种决策分支画成图形很像一棵树的枝干，故称决策树。在机器学习中，决策树是一个预测模型，他代表的是对象属性与对象值之间的一种映射关系。Entropy = 系统的凌乱程度，使用算法ID3, C4.5和C5.0生成树算法使用熵。这一度量是基于信息学理论中熵的概念。</p>
+</blockquote>
+<a id="more"></a>
+<p>如果我们有一套数据集：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>响声</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>根据数据集，可以生成一套决策树：</p>
+<pre class="mermaid">graph TD
+color[颜色]
+sound[响声]
+sweet[甜度]
+
+color --青绿--> sound
+color --深绿--> 是好瓜 
+sound --清脆--> 是好瓜.
+sound --浑浊--> sweet
+sweet --甜--> 是好瓜..
+sweet --不甜--> 不是好瓜</pre>
+
+<p>然而，上面随便编的决策树是否合理？</p>
+<p>关于如何生成决策树，需要涉及一些问题：</p>
+<ul>
+<li>如何挑选根结点</li>
+<li>如果挑选分枝结点</li>
+<li>如何判断是继续向下分枝还是停止</li>
+<li>…</li>
+</ul>
+<p>这就是我们接下来要解决的问题。</p>
+<h1 id="ID3"><a href="#ID3" class="headerlink" title="ID3"></a>ID3</h1><p>ID3 算法是一种基于信息熵理论的决策树算法。</p>
+<p>ID3 算法的思想：</p>
+<ul>
+<li>先计算数据集的信息熵</li>
+<li>再逐个计算每一个条件确定之后的条件熵</li>
+<li>通过信息熵 - 条件熵得到每个条件的信息增益系数</li>
+<li>挑选增益最大的条件作为根结点</li>
+<li>对每个分枝的数据集开始新一轮计算</li>
+<li>对于每一个数据集，如果结果唯一或数据集个数小于某一阈值，就不再继续分枝</li>
+</ul>
+<h2 id="计算信息熵"><a href="#计算信息熵" class="headerlink" title="计算信息熵"></a>计算信息熵</h2><p>根据数据集：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>响声</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="math/tex; mode=display">
+P(是好瓜)=\frac{6}{9},P(不是好瓜)=\frac{3}{9}</script><p>计算信息熵：</p>
+<script type="math/tex; mode=display">
+Ent(X) = -\frac{6}{9}\log_2\frac{6}{9}-\frac{3}{9}\log_2\frac{3}{9} = 0.9183</script><h2 id="计算条件熵"><a href="#计算条件熵" class="headerlink" title="计算条件熵"></a>计算条件熵</h2><h3 id="确定颜色的情况"><a href="#确定颜色的情况" class="headerlink" title="确定颜色的情况"></a>确定颜色的情况</h3><p>颜色 = 青绿：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>响声</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="math/tex; mode=display">
+Ent(X|颜色=青绿) = -\frac{1}{4}\log_2\frac{1}{4}-\frac{3}{4}\log_2\frac{3}{4} = 0.8113</script><p>颜色 = 深绿：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>响声</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>浑浊</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>浑浊</td>
+<td>不甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="math/tex; mode=display">
+Ent(X|颜色=深绿) = -\frac{5}{5}\log_2\frac{5}{5} = 0</script><p>故</p>
+<script type="math/tex; mode=display">
+Ent(X|颜色) = \frac{4}{9}Ent(X|颜色=青绿)+\frac{5}{9}Ent(X|颜色=深绿) = 0.3606</script><h3 id="确定响声的情况"><a href="#确定响声的情况" class="headerlink" title="确定响声的情况"></a>确定响声的情况</h3><p>响声 = 清脆：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>青绿</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="math/tex; mode=display">
+Ent(X|响声=清脆)=-\frac{4}{4}\log_2\frac{4}{4} = 0</script><p>响声 = 浑浊：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>青绿</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>不甜</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="math/tex; mode=display">
+Ent(X|响声=浑浊) = -\frac{2}{5}\log_2\frac{2}{5}-\frac{3}{5}\log_2\frac{3}{5} = 0.9710</script><p>故</p>
+<script type="math/tex; mode=display">
+Ent(X|响声) = \frac{4}{9}Ent(X|响声=清脆)+\frac{5}{9}Ent(X|响声=浑浊) = 0.4316</script><h3 id="确定甜度的情况"><a href="#确定甜度的情况" class="headerlink" title="确定甜度的情况"></a>确定甜度的情况</h3><p>甜度 = 甜：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>响声</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>青绿</td>
+<td>清脆</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="math/tex; mode=display">
+Ent(X|甜度=甜) = -\frac{5}{5}\log_2\frac{5}{5}=0</script><p>甜度=不甜：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>响声</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="math/tex; mode=display">
+Ent(X|甜度=不甜) = -\frac{4}{4}\log_2\frac{4}{4} = 0.8113</script><p>故</p>
+<script type="math/tex; mode=display">
+Ent(X|甜度) = \frac{5}{9}Ent(X|甜度=甜)+\frac{4}{9}Ent(X|甜度=不甜)=0.3606</script><h2 id="计算增益系数"><a href="#计算增益系数" class="headerlink" title="计算增益系数"></a>计算增益系数</h2><script type="math/tex; mode=display">
+Gain(颜色) = Ent(X) - Ent(X|颜色) = 0.5577</script><script type="math/tex; mode=display">
+Gain(响声) = Ent(X) - Ent(X|响声) = 0.4867</script><script type="math/tex; mode=display">
+Gain(甜度) = Ent(X) - Ent(X|甜度) = 0.5577</script><h2 id="挑选根结点"><a href="#挑选根结点" class="headerlink" title="挑选根结点"></a>挑选根结点</h2><p>注意到颜色、甜度的增益系数最大，我们可以任选其一，比如将颜色作为根节点。</p>
+<h3 id="第二次分类：颜色-青绿"><a href="#第二次分类：颜色-青绿" class="headerlink" title="第二次分类：颜色=青绿"></a>第二次分类：颜色=青绿</h3><p>数据集为：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>响声</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>按照同样的方法计算出此时的信息熵：</p>
+<script type="math/tex; mode=display">
+Ent(X) = -\frac{1}{4}\log_2\frac{1}{4}-\frac{3}{4}\log_2\frac{3}{4}=0.8113</script><p>计算条件熵：</p>
+<script type="math/tex; mode=display">
+Ent(X|响声=浑浊) = 0, Ent(X|响声=清脆) = 0</script><p>故</p>
+<script type="math/tex; mode=display">
+Ent(X|响声)=0</script><script type="math/tex; mode=display">
+Ent(X|甜度=甜) = 0,Ent(X|甜度=不甜) = 0</script><p>故</p>
+<script type="math/tex; mode=display">
+Ent(X|甜度) = 0</script><p>计算增益系数：</p>
+<script type="math/tex; mode=display">
+Gain(响声) = 0.8113</script><script type="math/tex; mode=display">
+Gain(甜度) = 0.8113</script><p>一样大，任选其一，若选择响声，注意到分类后的结果集中：</p>
+<ul>
+<li>响声=清脆 一定是好瓜</li>
+<li>响声=浑浊 一定不是好瓜</li>
+</ul>
+<p>故不用继续分枝。</p>
+<h3 id="第二次分类：颜色-深绿"><a href="#第二次分类：颜色-深绿" class="headerlink" title="第二次分类：颜色=深绿"></a>第二次分类：颜色=深绿</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>响声</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>浑浊</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>浑浊</td>
+<td>不甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>注意到结果集只有好瓜，故不用继续分枝。</p>
+<h2 id="生成决策树"><a href="#生成决策树" class="headerlink" title="生成决策树"></a>生成决策树</h2><pre class="mermaid">graph TD
+color[颜色]
+sound[响声]
+color --深绿--> 是好瓜
+color --青绿--> sound
+sound --清脆--> 是好瓜.
+sound --浑浊--> 不是好瓜</pre>
+
+
+
+<h1 id="CART"><a href="#CART" class="headerlink" title="CART"></a>CART</h1><p>CART 算法基于基尼系数，它的运算比 ID3 更简单，其特点是只能生成二叉树。</p>
+<p>CART 算法的思想：</p>
+<ul>
+<li>计算数据集的基尼系数</li>
+<li>计算数据集每个条件下的基尼系数</li>
+<li>选择最小的基尼系数作为最优切分点</li>
+<li>对切分出的新数据集开始新一轮计算</li>
+<li>对于每一个数据集，如果其基尼系数小于某一阈值或数据个数小于某一阈值，就不再继续分枝</li>
+</ul>
+<p>为了体现基尼系数的一些特性，下面模拟一套新的数据集：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>响声</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>80</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>75</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>80</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>90</td>
+<td>是</td>
+</tr>
+<tr>
+<td>乌黑</td>
+<td>清脆</td>
+<td>85</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>乌黑</td>
+<td>清脆</td>
+<td>95</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="计算颜色的基尼系数"><a href="#计算颜色的基尼系数" class="headerlink" title="计算颜色的基尼系数"></a>计算颜色的基尼系数</h2><p>当样本超过 2 类时，我们需要将样本切分成两类，逐个计算基尼系数后，再找到最佳的切分方法。</p>
+<h3 id="青绿为一类，深绿或乌黑为一类"><a href="#青绿为一类，深绿或乌黑为一类" class="headerlink" title="青绿为一类，深绿或乌黑为一类"></a>青绿为一类，深绿或乌黑为一类</h3><script type="math/tex; mode=display">
+Gini(颜色=青绿) = 1-(\frac{2}{2})^2=0</script><script type="math/tex; mode=display">
+Gini(颜色=深绿或乌黑) = 1-(\frac{3}{4})^2-(\frac{1}{4})^2 = 0.3750</script><p>故</p>
+<script type="math/tex; mode=display">
+Gini(颜色) = \frac{2}{6}Gini(颜色=青绿)+\frac{4}{6}Gini(颜色=深绿或乌黑) = 0.2500</script><h3 id="深绿为一类，青绿或乌黑为一类"><a href="#深绿为一类，青绿或乌黑为一类" class="headerlink" title="深绿为一类，青绿或乌黑为一类"></a>深绿为一类，青绿或乌黑为一类</h3><script type="math/tex; mode=display">
+Gini(颜色=深绿) = 1-(\frac{2}{2})^2 = 0</script><script type="math/tex; mode=display">
+Gini(颜色=青绿或乌黑) = 1-(\frac{3}{4})^2-(\frac{1}{4})^2 = 0.3750</script><p>故</p>
+<script type="math/tex; mode=display">
+Gini(颜色) = \frac{2}{6}Gini(颜色=深绿)+\frac{4}{6}Gini(颜色=青绿或乌黑) = 0.2500</script><h3 id="乌黑为一类，青绿或深绿为一类"><a href="#乌黑为一类，青绿或深绿为一类" class="headerlink" title="乌黑为一类，青绿或深绿为一类"></a>乌黑为一类，青绿或深绿为一类</h3><script type="math/tex; mode=display">
+Gini(颜色=乌黑) = 1-(\frac{1}{2})^2-(\frac{1}{2})^2=0.5000</script><script type="math/tex; mode=display">
+Gini(颜色=青绿或深绿) = 1-(\frac{2}{4})^2-(\frac{2}{4})^2 = 0.5000</script><p>故</p>
+<script type="math/tex; mode=display">
+Gini(颜色) = \frac{2}{6}Gini(颜色=乌黑)+\frac{4}{6}Gini(颜色=青绿或深绿) = 0.5000</script><p>综上，最小的基尼系数为：青绿为一类，深绿或乌黑为一类；或深绿为一类，青绿或乌黑为一类，最小值为：</p>
+<script type="math/tex; mode=display">
+Gini(颜色)_{min} = 0.2500</script><h2 id="计算响声的基尼系数"><a href="#计算响声的基尼系数" class="headerlink" title="计算响声的基尼系数"></a>计算响声的基尼系数</h2><p>由于响声只有两种类型，故不需要多次切分：</p>
+<script type="math/tex; mode=display">
+Gini(响声=浑浊) = 1-(\frac{2}{3})^2-(\frac{1}{3})^2 = 0.4444</script><script type="math/tex; mode=display">
+Gini(响声=清脆) = 1-(\frac{2}{3})^2-(\frac{1}{3})^2=0.4444</script><p>故</p>
+<script type="math/tex; mode=display">
+Gini(响声) = \frac{3}{6}Gini(响声=浑浊)+\frac{3}{6}Gini(响声=清脆) = 0.4444</script><h2 id="计算甜度的基尼系数"><a href="#计算甜度的基尼系数" class="headerlink" title="计算甜度的基尼系数"></a>计算甜度的基尼系数</h2><p>注意到甜度是一组连续的变量，要求解连续变量的最优切分点，我们需要对分界位置进行逐个切分。</p>
+<p>X = {75, 80, 85, 90, 95}</p>
+<h3 id="75-为一类，-80-85-90-95-为一类"><a href="#75-为一类，-80-85-90-95-为一类" class="headerlink" title="{75} 为一类，{80,85,90,95} 为一类"></a>{75} 为一类，{80,85,90,95} 为一类</h3><script type="math/tex; mode=display">
+Gini(甜度\in\{75\}) = 1-(\frac{1}{1})^2 = 0</script><script type="math/tex; mode=display">
+Gini(甜度\in\{80,85,90,95\}) = 1-(\frac{3}{5})^2-(\frac{2}{5})^2 = 0.4800</script><p>故</p>
+<script type="math/tex; mode=display">
+Gini(甜度) = \frac{1}{6}Gini(甜度\in\{75\})+\frac{5}{6}Gini(甜度\in\{80,85,90,95\}) = 0.4000</script><h3 id="75-80-为一类，-85-90-95-为一类"><a href="#75-80-为一类，-85-90-95-为一类" class="headerlink" title="{75,80}为一类，{85,90,95}为一类"></a>{75,80}为一类，{85,90,95}为一类</h3><script type="math/tex; mode=display">
+Gini(甜度\in\{75,80\}) = 1-(\frac{2}{3})^2-(\frac{1}{3})^2 = 0.4444</script><script type="math/tex; mode=display">
+Gini(甜度\in\{85,90,95\}) = 1-(\frac{2}{3})^2-(\frac{1}{3})^2=0.4444</script><p>故</p>
+<script type="math/tex; mode=display">
+Gini(甜度) = \frac{3}{6}Gini(甜度\in\{75,80\})+\frac{3}{6}Gini(甜度\in\{85,90,95\})=0.4444</script><h3 id="75-80-85-为一类，-90-95-为一类"><a href="#75-80-85-为一类，-90-95-为一类" class="headerlink" title="{75,80,85}为一类，{90,95}为一类"></a>{75,80,85}为一类，{90,95}为一类</h3><script type="math/tex; mode=display">
+Gini(甜度\in\{75,80,85\}) = 1-(\frac{3}{4})^2-(\frac{1}{4})^2 = 0.3750</script><script type="math/tex; mode=display">
+Gini(甜度\in\{90,95\}) = 1-(\frac{2}{2})^2 = 0</script><p>故</p>
+<script type="math/tex; mode=display">
+Gini(甜度) = \frac{4}{6}Gini(甜度\in\{75,80,85\})+\frac{2}{6}Gini(甜度\in\{90,95\}) = 0.2500</script><h3 id="75-80-85-90-为一类，-95-为一类"><a href="#75-80-85-90-为一类，-95-为一类" class="headerlink" title="{75,80,85,90}为一类，{95}为一类"></a>{75,80,85,90}为一类，{95}为一类</h3><script type="math/tex; mode=display">
+Gini(甜度\in\{75,80,85,90\}) = 1-(\frac{3}{5})^2-(\frac{2}{5})^2 = 0.4800</script><script type="math/tex; mode=display">
+Gini(甜度\in\{95\}) = 1-(\frac{1}{1})^2 = 0</script><p>故</p>
+<script type="math/tex; mode=display">
+Gini(甜度) = \frac{5}{6}Gini(甜度\in\{75,80,85,90\})+\frac{1}{6}Gini(甜度\in\{95\}) = 0.4000</script><p>综上，当{75,80,85}为一类，{90,95}为一类时：</p>
+<script type="math/tex; mode=display">
+Gini(甜度)_{min} = 0.2500</script><h2 id="确定最优切分点"><a href="#确定最优切分点" class="headerlink" title="确定最优切分点"></a>确定最优切分点</h2><script type="math/tex; mode=display">
+Gini(颜色)_{min} = Gini(甜度)_{min}</script><p>故任选其一，如选择甜度，则确定切分点为{75,80,85,90} 和 {95}.</p>
+<h2 id="第二次切分：甜度属于-75-80-85-90"><a href="#第二次切分：甜度属于-75-80-85-90" class="headerlink" title="第二次切分：甜度属于 {75,80,85,90}"></a>第二次切分：甜度属于 {75,80,85,90}</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>响声</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>是</td>
+</tr>
+<tr>
+<td>乌黑</td>
+<td>清脆</td>
+<td>不是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="根据颜色切分"><a href="#根据颜色切分" class="headerlink" title="根据颜色切分"></a>根据颜色切分</h3><script type="math/tex; mode=display">
+Gini(颜色=青绿) = 1-(\frac{2}{2})^2 = 0</script><script type="math/tex; mode=display">
+Gini(颜色=深绿) = 1-(\frac{2}{2})^2=0</script><script type="math/tex; mode=display">
+Gini(颜色=乌黑) = 1-(\frac{1}{1}) = 0</script><script type="math/tex; mode=display">
+Gini(颜色=青绿或深绿) = 1-(\frac{2}{4})^2-(\frac{2}{4})^2=0.5000</script><script type="math/tex; mode=display">
+Gini(颜色=青绿或乌黑) = 1-(\frac{3}{3})^2 = 0</script><script type="math/tex; mode=display">
+Gini(颜色=深绿或乌黑) = 1-(\frac{2}{3})^2-(\frac{1}{3})^2 = 0.4444</script><p>故深绿为一类，青绿或乌黑为一类时：</p>
+<script type="math/tex; mode=display">
+Gini(颜色)_{min} = \frac{2}{5}Gini(颜色=深绿) + \frac{3}{5}Gini(颜色=青绿或乌黑) = 0</script><h3 id="根据响声切分"><a href="#根据响声切分" class="headerlink" title="根据响声切分"></a>根据响声切分</h3><script type="math/tex; mode=display">
+Gini(响声=浑浊) = 1-(\frac{2}{3})^2-(\frac{1}{3})^2 = 0.4444</script><script type="math/tex; mode=display">
+Gini(响声=清脆) = 1-(\frac{1}{2})^2-(\frac{1}{2}) = 0.5000</script><p>故</p>
+<script type="math/tex; mode=display">
+Gini(响声) = \frac{3}{5}Gini(响声=浑浊)+\frac{2}{5}Gini(响声=清脆) = 0.4666</script><p>综上，选择颜色进行切分，最优切分点为 颜色=深绿 和 颜色=青绿或乌黑。由于切分后结果唯一，故不需要再次切分。</p>
+<h2 id="第二次切分：甜度属于-95"><a href="#第二次切分：甜度属于-95" class="headerlink" title="第二次切分：甜度属于 {95}"></a>第二次切分：甜度属于 {95}</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>响声</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>乌黑</td>
+<td>清脆</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>只有一种结果，故无需继续切分。</p>
+<h2 id="生成决策树-1"><a href="#生成决策树-1" class="headerlink" title="生成决策树"></a>生成决策树</h2><pre class="mermaid">graph TD
+sweet[甜度]
+color[颜色]
+
+sweet--小于等于90-->color
+sweet--大于90-->是好瓜
+color--深绿-->是好瓜.
+color--青绿或乌黑-->不是好瓜</pre>
+
+
     </div>
 
     
@@ -345,6 +1044,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ID3"><span class="nav-number">1.</span> <span class="nav-text">ID3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算信息熵"><span class="nav-number">1.1.</span> <span class="nav-text">计算信息熵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算条件熵"><span class="nav-number">1.2.</span> <span class="nav-text">计算条件熵</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#确定颜色的情况"><span class="nav-number">1.2.1.</span> <span class="nav-text">确定颜色的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#确定响声的情况"><span class="nav-number">1.2.2.</span> <span class="nav-text">确定响声的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#确定甜度的情况"><span class="nav-number">1.2.3.</span> <span class="nav-text">确定甜度的情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算增益系数"><span class="nav-number">1.3.</span> <span class="nav-text">计算增益系数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#挑选根结点"><span class="nav-number">1.4.</span> <span class="nav-text">挑选根结点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第二次分类：颜色-青绿"><span class="nav-number">1.4.1.</span> <span class="nav-text">第二次分类：颜色&#x3D;青绿</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二次分类：颜色-深绿"><span class="nav-number">1.4.2.</span> <span class="nav-text">第二次分类：颜色&#x3D;深绿</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成决策树"><span class="nav-number">1.5.</span> <span class="nav-text">生成决策树</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CART"><span class="nav-number">2.</span> <span class="nav-text">CART</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算颜色的基尼系数"><span class="nav-number">2.1.</span> <span class="nav-text">计算颜色的基尼系数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#青绿为一类，深绿或乌黑为一类"><span class="nav-number">2.1.1.</span> <span class="nav-text">青绿为一类，深绿或乌黑为一类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深绿为一类，青绿或乌黑为一类"><span class="nav-number">2.1.2.</span> <span class="nav-text">深绿为一类，青绿或乌黑为一类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乌黑为一类，青绿或深绿为一类"><span class="nav-number">2.1.3.</span> <span class="nav-text">乌黑为一类，青绿或深绿为一类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算响声的基尼系数"><span class="nav-number">2.2.</span> <span class="nav-text">计算响声的基尼系数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算甜度的基尼系数"><span class="nav-number">2.3.</span> <span class="nav-text">计算甜度的基尼系数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#75-为一类，-80-85-90-95-为一类"><span class="nav-number">2.3.1.</span> <span class="nav-text">{75} 为一类，{80,85,90,95} 为一类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#75-80-为一类，-85-90-95-为一类"><span class="nav-number">2.3.2.</span> <span class="nav-text">{75,80}为一类，{85,90,95}为一类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#75-80-85-为一类，-90-95-为一类"><span class="nav-number">2.3.3.</span> <span class="nav-text">{75,80,85}为一类，{90,95}为一类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#75-80-85-90-为一类，-95-为一类"><span class="nav-number">2.3.4.</span> <span class="nav-text">{75,80,85,90}为一类，{95}为一类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#确定最优切分点"><span class="nav-number">2.4.</span> <span class="nav-text">确定最优切分点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二次切分：甜度属于-75-80-85-90"><span class="nav-number">2.5.</span> <span class="nav-text">第二次切分：甜度属于 {75,80,85,90}</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#根据颜色切分"><span class="nav-number">2.5.1.</span> <span class="nav-text">根据颜色切分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据响声切分"><span class="nav-number">2.5.2.</span> <span class="nav-text">根据响声切分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二次切分：甜度属于-95"><span class="nav-number">2.6.</span> <span class="nav-text">第二次切分：甜度属于 {95}</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成决策树-1"><span class="nav-number">2.7.</span> <span class="nav-text">生成决策树</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -429,12 +1129,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">281k</span>
+    <span title="站点总字数">286k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:16</span>
+    <span title="站点阅读时长">4:20</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
