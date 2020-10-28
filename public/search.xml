@@ -4,6 +4,60 @@
   
     
     <entry>
+      <title>【机器学习自学笔记2】决策树</title>
+      <link href="/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B02%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91/"/>
+      <url>/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B02%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 机器学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 机器学习 </tag>
+            
+            <tag> 信息论 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【机器学习自学笔记1】信息熵</title>
+      <link href="/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B01%E3%80%91%E4%BF%A1%E6%81%AF%E7%86%B5/"/>
+      <url>/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B01%E3%80%91%E4%BF%A1%E6%81%AF%E7%86%B5/</url>
+      
+        <content type="html"><![CDATA[<p>一直想记录一下机器学习的笔记，奈何水平不足，不过还是想挑战一下自己。话不多说，下面开始。</p><a id="more"></a><h1 id="熵"><a href="#熵" class="headerlink" title="熵"></a>熵</h1><blockquote><p><strong>熵 </strong>(entropy) 泛指某些物质系统状态的一种量度，某些物质系统状态可能出现的程度。亦被社会科学用以借喻人类社会某些状态的程度。</p></blockquote><h2 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h2><h3 id="信息熵的由来"><a href="#信息熵的由来" class="headerlink" title="信息熵的由来"></a>信息熵的由来</h3><blockquote><p>信息熵这个词是C.E.Shannon（香农）从热力学中借用过来的。热力学中的热熵是表示分子状态混乱程度的物理量。香农用信息熵的概念来描述信源的不确定度。</p></blockquote><p>信息熵是一种衡量信息不确定性的物理量，信息熵越大，信息越难以确定。</p><p>一个例子：抛一枚硬币，其为正的概率为 1/2，为负的概率为 1/2.</p><p>则此时抛硬币的结果有 2 种情况。</p><p>若抛 2 枚硬币，则有 (正, 正), (正, 负), (负, 正), (负, 负) 4 种情况。</p><p>…</p><p>若抛 n 枚硬币，则有 $2^n $种情况。</p><p>注意到硬币的个数 (n) 与情况数 (m) 的关系:</p><script type="math/tex; mode=display">n = \log_2m</script><p>这就是信息熵的计算公式。</p><p>对于事件 X，其拥有 m 个等概率的不确定情况，其信息熵为(单位：bit):</p><script type="math/tex; mode=display">Ent(X) = \log_2m</script><p>即</p><script type="math/tex; mode=display">Ent(X) = -\log_2 \frac{1}{m} = -\log_2 p(x)</script><p>其中 p(x) 即表示对于每一种情况，其发生的概率。</p><h3 id="概率不相等情况的信息熵"><a href="#概率不相等情况的信息熵" class="headerlink" title="概率不相等情况的信息熵"></a>概率不相等情况的信息熵</h3><p>以上是等概率条件下的信息熵，但如果概率不相等，要怎么计算呢？</p><p>举一个例子：</p><div class="table-container"><table><thead><tr><th>情况</th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>p</td><td>1/2</td><td>1/3</td><td>1/6</td></tr></tbody></table></div><p>我们可以分别计算出每种情况的信息熵：</p><script type="math/tex; mode=display">Ent(X|A) = -\log_2 \frac{1}{2} = 1</script><script type="math/tex; mode=display">Ent(X|B) = -log_2\frac{1}{3} = \log_2 3</script><script type="math/tex; mode=display">Ent(X|C) = -log_2\frac{1}{6} = \log_2 6</script><p>再根据每种情况的权重进行累加，得到总体的信息熵：</p><script type="math/tex; mode=display">Ent(X) = P(A)Ent(X|A) + P(B)Ent(X|B) + P(C)Ent(X|C) = \frac{1}{2}+\frac{1}{3}\log_2 3+\frac{1}{6}\log_2 6 = 1.4591</script><p>于是我们有信息熵的计算公式。</p><p>对于事件 X，情况数为 N ，其每一种情况 xi 的概率为 p(xi)，其信息熵为：</p><script type="math/tex; mode=display">Ent(X) = \sum_{i=1}^{N} p(x_i)Ent(X|x_i) = -\sum_{i=1}^{N}p(x_i)\log_2 p(x_i)</script><p><em>注：一般我们用 2 作为信息熵的底数，而在 sklearn 中，其底数则默认为 e.</em></p><p>信息熵可以衡量事件的不确定性，熵越大，事件就越不确定，如抛硬币：</p><p>如果其为正、负的概率各为1/2，此时要猜中正负显然是困难的，其信息熵为：</p><script type="math/tex; mode=display">Ent = - \frac{1}{2}log_2 \frac{1}{2} - \frac{1}{2}log_2 \frac{1}{2} = 1</script><p>但如果为正、负的概率分别为 9/10, 1/10 呢？</p><p>此时猜中正负显然简单许多，其信息熵为：</p><script type="math/tex; mode=display">Ent = - \frac{9}{10}\log_2\frac{9}{10} - \frac{1}{10}\log_2\frac{1}{10} = 0.4690</script><p>第二种情况的熵小于第一种情况，第二种情况的结果显然更容易确定。</p><h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2><blockquote><p>交叉熵（Cross Entropy）是Shannon信息论中一个重要概念，主要用于度量两个概率分布间的差异性信息。</p></blockquote><p>交叉熵是一种衡量两个概率分布间差异的度量，它在机器学习领域有着广泛的应用，比如对于真实结果 Y 与训练集得出的结果 $\hat{Y}$，二者之间的交叉熵：</p><script type="math/tex; mode=display">Ent(Y-\hat{Y})</script><p>是一种衡量训练准确程度的标志。</p><p>对于 P,Q 两种概率分布，交叉熵的计算公式为：</p><script type="math/tex; mode=display">Ent(P,Q) = - \sum_i p(i)\log_2 q(i)</script><p>举一个例子，如果有一个训练集的真实结果 P = {1/4, 1/4, 1/4, 1/4}</p><p>而训练得到的预测结果 Q = {1/4, 1/8, 1/8, 1/2}</p><p>则其交叉熵为：</p><script type="math/tex; mode=display">Ent(P,Q) = -\frac{1}{4}\log_2\frac{1}{4}-\frac{1}{4}\log_2\frac{1}{8}-\frac{1}{4}\log_2\frac{1}{8}-\frac{1}{4}\log_2\frac{1}{2} = 2.25</script><p>如果预测结果与真实结果完全相符呢？</p><p>即 Q = P = {1/4, 1/4, 1/4, 1/4}</p><script type="math/tex; mode=display">Ent(P,Q) = -\frac{1}{4}\log_2\frac{1}{4}-\frac{1}{4}\log_2\frac{1}{4}-\frac{1}{4}\log_2\frac{1}{4}-\frac{1}{4}\log_2\frac{1}{4} = 2</script><p>注意到当两个概率分布相同时，交叉熵 = 信息熵。</p><p>同时得出另一个结论，交叉熵越小，两个概率分布就越相似。</p><h2 id="相对熵"><a href="#相对熵" class="headerlink" title="相对熵"></a>相对熵</h2><p>既然交叉熵可以衡量两个概率分布的相似程度，其最小值又等于信息熵，那为什么不令一个值 = 交叉熵 - 信息熵，其为 0 则表示两个概率分布完全相同呢？</p><p>这就是相对熵，又称 KL(Kullback-Leibler) 散度。</p><p>相对熵的计算公式为：</p><script type="math/tex; mode=display">KL(P||Q) = \sum_i p(i)\log_2\frac{p(i)}{q(i)}</script><p>以上面的例子，P = {1/4, 1/4, 1/4, 1/4}, Q = {1/4, 1/8, 1/8, 1/2}，其相对熵为：</p><script type="math/tex; mode=display">KL(P||Q) = \frac{1}{4}\log_2\frac{1/4}{1/4}+\frac{1}{4}\log_2\frac{1/4}{1/8}+\frac{1}{4}\log_2\frac{1/4}{1/8}+\frac{1}{4}\log_2\frac{1/4}{1/2} = 0.25</script><p>注意到这个结果即为交叉熵 Ent(P,Q) - 信息熵 Ent(P) 的值。</p><p>若 P = Q = {1/4, 1/4, 1/4, 1/4}</p><script type="math/tex; mode=display">KL(P||Q) = \frac{1}{4}\log_2\frac{1/4}{1/4}+\frac{1}{4}\log_2\frac{1/4}{1/4}+\frac{1}{4}\log_2\frac{1/4}{1/4}+\frac{1}{4}\log_2\frac{1/4}{1/4} = 0</script><p>当两个概率分布完全相同时，其条件熵 KL(P||Q) = 0.</p><h2 id="条件熵"><a href="#条件熵" class="headerlink" title="条件熵"></a>条件熵</h2><p>条件熵，即在给定条件下的不确定性，衡量一个概率分布对另一个概率分布的期望。</p><script type="math/tex; mode=display">Ent(Y|X) = \sum_x p(x)Ent(Y|X=x)</script><script type="math/tex; mode=display">= - \sum_xp(x)\sum_yp(y|x)\log_2p(y|x)</script><script type="math/tex; mode=display">= - \sum_x\sum_yp(x,y)\log_2p(y|x)</script><p>举一个例子：</p><div class="table-container"><table><thead><tr><th>颜色</th><th>是不是好瓜</th></tr></thead><tbody><tr><td>青绿</td><td>是</td></tr><tr><td>青绿</td><td>否</td></tr><tr><td>青绿</td><td>是</td></tr><tr><td>深绿</td><td>是</td></tr><tr><td>深绿</td><td>否</td></tr></tbody></table></div><p>若要求是不是好瓜 Y 关于颜色 X 的条件熵：</p><p>首先青绿有 3 个瓜，深绿有 2 个瓜，则 P{X=青绿} = 3/5, P{X=深绿} = 2/5.</p><p>则在 X=青绿 中，有 2 个是好瓜，1 个不是好瓜：</p><script type="math/tex; mode=display">Ent(Y|X=青绿) = -\frac{2}{3}\log_2\frac{2}{3}-\frac{1}{3}\log_2\frac{1}{3} = 0.9183</script><p>在 X=深绿 中，有 1 个是好瓜，1 个不是好瓜：</p><script type="math/tex; mode=display">Ent(Y|X=深绿) = -\frac{1}{2}\log_2\frac{1}{2}-\frac{1}{2}\log_2\frac{1}{2} = 1</script><p>得：</p><script type="math/tex; mode=display">Ent(Y|X) = p(X=青绿)Ent(Y|X=青绿)+p(X=深绿)Ent(Y|X=深绿)</script><script type="math/tex; mode=display"> = \frac{3}{5}\cdot 0.9183 + \frac{2}{5}\cdot 1 = 0.9510</script><h1 id="增益系数"><a href="#增益系数" class="headerlink" title="增益系数"></a>增益系数</h1><p>所谓信息增益系数，即在获取信息前后熵的差值。</p><p>举一个例子：</p><p>做一道单项选择题，有ABCD四个选项。</p><p>此时由于什么都不知道，其每个选项的概率为1/4：</p><script type="math/tex; mode=display">Ent = -\frac{1}{4}\log_2\frac{1}{4} -\frac{1}{4}\log_2\frac{1}{4} -\frac{1}{4}\log_2\frac{1}{4} -\frac{1}{4}\log_2\frac{1}{4} = 2</script><p>如果得知一条信息：选 C 的概率是 2/3：</p><p>此时 ABCD 的概率分别为 1/9, 1/9, 2/3, 1/9:</p><script type="math/tex; mode=display">Ent = -\frac{1}{9}\log_2\frac{1}{9}-\frac{1}{9}\log_2\frac{1}{9}-\frac{2}{3}\log_2\frac{2}{3}-\frac{1}{9}\log_2\frac{1}{9} = 1.4466</script><p>则这条信息的增益系数为：</p><script type="math/tex; mode=display">Gain = 2 - 1.4466 = 0.5534</script><h1 id="基尼系数"><a href="#基尼系数" class="headerlink" title="基尼系数"></a>基尼系数</h1><p>基尼系数是衡量集合纯度的量，基尼系数越低，集合越纯(不确定性越低)；基尼系数越高，集合越不纯(不确定性越高)。</p><p>基尼系数的计算公式：</p><script type="math/tex; mode=display">Gini = 1 - \sum_i p(i)^2</script><p>比较信息熵的计算公式：</p><script type="math/tex; mode=display">Ent = -\sum_i p(i) \log_2 p(i)</script><p>就会发现两者其实区别不大，只不过是把 log 去掉了而已。</p><p>对于上面抛硬币的例子：</p><p>如果正反的概率各为 1/2：</p><script type="math/tex; mode=display">Gini = 1 - (\frac{1}{2})^2 - (\frac{1}{2})^2 = \frac{1}{2}</script><p>如果正反的概率分别为 9/10, 1/10：</p><script type="math/tex; mode=display">Gini = 1 - (\frac{9}{10})^2 - (\frac{1}{10})^2 = 0.18</script><p>后者小于前者，说明后者的纯度更高，不确定性更低。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 机器学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 机器学习 </tag>
+            
+            <tag> 信息论 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>【Shiro 自学笔记八】Spring Boot 环境下 Shiro 整合 JWT</title>
       <link href="/2020/07/25/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%85%AB%E3%80%91Spring%20Boot%20%E7%8E%AF%E5%A2%83%E4%B8%8B%20Shiro%20%E6%95%B4%E5%90%88%20JWT/"/>
       <url>/2020/07/25/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%85%AB%E3%80%91Spring%20Boot%20%E7%8E%AF%E5%A2%83%E4%B8%8B%20Shiro%20%E6%95%B4%E5%90%88%20JWT/</url>
@@ -22,11 +76,11 @@
             
             <tag> Java </tag>
             
+            <tag> Spring Boot </tag>
+            
             <tag> Shiro </tag>
             
             <tag> JWT </tag>
-            
-            <tag> Spring Boot </tag>
             
         </tags>
       
@@ -82,11 +136,11 @@
             
             <tag> Java </tag>
             
+            <tag> Spring Boot </tag>
+            
             <tag> Redis </tag>
             
             <tag> Shiro </tag>
-            
-            <tag> Spring Boot </tag>
             
         </tags>
       
@@ -113,9 +167,9 @@
             
             <tag> Java </tag>
             
-            <tag> Shiro </tag>
-            
             <tag> Spring Boot </tag>
+            
+            <tag> Shiro </tag>
             
             <tag> Spring Data JPA </tag>
             
@@ -144,9 +198,9 @@
             
             <tag> Java </tag>
             
-            <tag> Shiro </tag>
-            
             <tag> Spring Boot </tag>
+            
+            <tag> Shiro </tag>
             
         </tags>
       
@@ -312,9 +366,9 @@
             
             <tag> Java </tag>
             
-            <tag> Redis </tag>
-            
             <tag> Spring Boot </tag>
+            
+            <tag> Redis </tag>
             
         </tags>
       
