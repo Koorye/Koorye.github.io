@@ -20,17 +20,21 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="什么都想学一点">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:url" content="http://koorye.github.io/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">
+  <meta name="description" content="贝叶斯分类是一类分类算法的总称，这类算法均以贝叶斯定理为基础，故统称为贝叶斯分类。而朴素贝叶斯分类是贝叶斯分类中最简单，也是常见的一种分类方法。  贝叶斯公式 P(B|A) &#x3D; \frac{P(AB)}{P(A)} &#x3D; \frac{P(A|B)P(B)}{P(A)}根据贝叶斯公式，如果已知一个实例的特征，要求该实例属于哪个类别的概率最大，只需要知道该特征在每个类别种的概率即可！ 即根据先验概率求">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【机器学习自学笔记4】贝叶斯分类器">
+<meta property="og:url" content="http://koorye.github.io/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B04%E3%80%91%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/index.html">
 <meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:description" content="什么都想学一点">
+<meta property="og:description" content="贝叶斯分类是一类分类算法的总称，这类算法均以贝叶斯定理为基础，故统称为贝叶斯分类。而朴素贝叶斯分类是贝叶斯分类中最简单，也是常见的一种分类方法。  贝叶斯公式 P(B|A) &#x3D; \frac{P(AB)}{P(A)} &#x3D; \frac{P(A|B)P(B)}{P(A)}根据贝叶斯公式，如果已知一个实例的特征，要求该实例属于哪个类别的概率最大，只需要知道该特征在每个类别种的概率即可！ 即根据先验概率求">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-29T10:34:29.000Z">
+<meta property="article:modified_time" content="2020-10-29T11:10:36.201Z">
 <meta property="article:author" content="Koorye">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="概率论">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://koorye.github.io/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/">
+<link rel="canonical" href="http://koorye.github.io/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B04%E3%80%91%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/">
 
 
 <script id="page-configurations">
@@ -38,12 +42,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: 信息论 | 不会真有人以为Koorye会写代码吧</title>
+  <title>【机器学习自学笔记4】贝叶斯分类器 | 不会真有人以为Koorye会写代码吧</title>
   
 
 
@@ -185,91 +189,301 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">信息论
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B04%E3%80%91%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="什么都想学一点">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【机器学习自学笔记4】贝叶斯分类器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-10-29 18:34:29 / 修改时间：19:10:36" itemprop="dateCreated datePublished" datetime="2020-10-29T18:34:29+08:00">2020-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B04%E3%80%91%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/" class="post-meta-item leancloud_visitors" data-flag-title="【机器学习自学笔记4】贝叶斯分类器" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+        <blockquote>
+<p>贝叶斯分类是一类分类算法的总称，这类算法均以贝叶斯定理为基础，故统称为贝叶斯分类。而朴素贝叶斯分类是贝叶斯分类中最简单，也是常见的一种分类方法。</p>
+</blockquote>
+<h1 id="贝叶斯公式"><a href="#贝叶斯公式" class="headerlink" title="贝叶斯公式"></a>贝叶斯公式</h1><script type="math/tex; mode=display">
+P(B|A) = \frac{P(AB)}{P(A)} = \frac{P(A|B)P(B)}{P(A)}</script><p>根据贝叶斯公式，如果已知一个实例的特征，要求该实例属于哪个类别的概率最大，只需要知道该特征在每个类别种的概率即可！</p>
+<p>即根据先验概率求解后验概率。</p>
+<script type="math/tex; mode=display">
+P(类别|特征)=\frac{P(特征|类型)P(类别)}{P(特征)}</script><p>这就是贝叶斯分类的核心思想</p>
+<h1 id="朴素贝叶斯分类"><a href="#朴素贝叶斯分类" class="headerlink" title="朴素贝叶斯分类"></a>朴素贝叶斯分类</h1><p>已知数据集</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>响声</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>给出问题，如果已知有一个瓜的特征 = {深绿，清脆，不甜}，这个瓜是不是好瓜？</p>
+<p>这是典型的后验概率问题，可以通过贝叶斯公式转换为对先验概率的求解问题：</p>
+<script type="math/tex; mode=display">
+P(好瓜|颜色=深绿，响声=清脆，甜度=不甜) = \frac{P(颜色=深绿，响声=清脆，甜度=不甜|好瓜)P(好瓜)}{P(颜色=深绿，响声=清脆，甜度=不甜)}</script><p>如果数据集的几个特征相互独立，则上述公式可以变换为：</p>
+<script type="math/tex; mode=display">
+P(好瓜|颜色=深绿，响声=清脆，甜度=不甜)</script><script type="math/tex; mode=display">
+= \frac{P(颜色=深绿|好瓜)P(响声=清脆|好瓜)P(甜度=不甜|好瓜)P(好瓜)}{P(颜色=深绿)P(响声=清脆)P(甜度=不甜)}</script><p>这样一来，问题就变得非常容易求解。</p>
+<p>根据数据集求出各个概率：</p>
+<script type="math/tex; mode=display">
+P(颜色=深绿|好瓜) = \frac{5}{6} = 0.8333</script><script type="math/tex; mode=display">
+P(响声=清脆|好瓜)=\frac{4}{6}=0.6667</script><script type="math/tex; mode=display">
+P(甜度=不甜|好瓜) = \frac{1}{6} = 0.1667</script><script type="math/tex; mode=display">
+P(好瓜) = \frac{6}{9} = 0.6667</script><script type="math/tex; mode=display">
+P(颜色=深绿) = \frac{5}{9} = 0.5556</script><script type="math/tex; mode=display">
+P(响声=清脆) = \frac{4}{9} = 0.4444</script><script type="math/tex; mode=display">
+P(甜度=甜) = \frac{5}{9} = 0.5556</script><p>故</p>
+<script type="math/tex; mode=display">
+P(好瓜|颜色=深绿，响声=清脆，甜度=不甜)</script><script type="math/tex; mode=display">
+= \frac{0.8333\cdot0.6667\cdot0.1667\cdot0.6667}{0.5556\cdot0.4444\cdot0.5556} = 0.4501</script><p>同理</p>
+<script type="math/tex; mode=display">
+P(不是好瓜|颜色=深绿，响声=清脆，甜度=不甜) = 0.5499</script><p>因此，深绿、清脆、不甜的瓜不是好瓜的概率更大。</p>
+<h2 id="朴素贝叶斯分类为什么朴素"><a href="#朴素贝叶斯分类为什么朴素" class="headerlink" title="朴素贝叶斯分类为什么朴素"></a>朴素贝叶斯分类为什么朴素</h2><p>那么，何为朴素贝叶斯分类中的<strong>朴素</strong>？</p>
+<p>注意到，我们上面的计算基于各特征间<strong>相互独立</strong>的假设，这是一个较强的假设。</p>
+<p>朴素一词对应英文中的 naive，即天真，意思是这种想当然的假设是非常天真的，在现实生活中，这种特征相互独立的情况几乎不存在。</p>
+<p>之所以要假设特征间相互独立，有两个原因：</p>
+<ul>
+<li>减少计算量</li>
+<li>同时满足各个特征的样本难以寻找甚至不存在，无法保证充足的样本</li>
+</ul>
+<h1 id="拉普拉斯修正"><a href="#拉普拉斯修正" class="headerlink" title="拉普拉斯修正"></a>拉普拉斯修正</h1><p>朴素贝叶斯分类有一个问题：如果计算中有一个概率出现 0，会导致什么？</p>
+<p><strong>答：结果为 0 或无法计算。</strong></p>
+<p>这显然不是我们想要的结果！</p>
+<p>为了解决这个问题，可以引入拉普拉斯修正对概率进行平滑化处理：</p>
+<ul>
+<li>|D|表示数据集的样本个数</li>
+<li>N 表示数据集结果拥有的类别数</li>
+<li>$N_i$ 表示该特征拥有的类别数</li>
+</ul>
+<script type="math/tex; mode=display">
+\hat{P}(c) = \frac{|D_c|+1}{|D|+N}</script><script type="math/tex; mode=display">
+\hat{P}(x_i|c) = \frac{|D_{c,x_i}|+1}{|D_c|+N_i}</script><p>已知数据集</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>响声</th>
+<th>甜度</th>
+<th>好瓜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>青绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>不是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>浑浊</td>
+<td>不甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+<tr>
+<td>深绿</td>
+<td>清脆</td>
+<td>甜</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>此时</p>
+<script type="math/tex; mode=display">
+P(颜色=深绿|不是好瓜) = \frac{0}{3} = 0</script><p>这将导致分类计算结果为 0. 进行拉普拉斯修正</p>
+<script type="math/tex; mode=display">
+\hat{P}(颜色=深绿|不是好瓜) = \frac{0 + 1}{3+3} = \frac{1}{6}</script><p>这种平滑化处理就避免了分类结果为 0 的情况。</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-10-29T16:16:28+08:00"
-              content="2020-10-29">
-          10-29
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag"># 概率论</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B03%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91%E5%89%AA%E6%9E%9D/" itemprop="url">
-            <span itemprop="name">【机器学习自学笔记3】决策树剪枝</span>
-          </a>
-      </div>
+        
 
-    </header>
-  </article>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-10-28T15:28:02+08:00"
-              content="2020-10-28">
-          10-28
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B02%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91/" itemprop="url">
-            <span itemprop="name">【机器学习自学笔记2】决策树</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-10-28T13:34:26+08:00"
-              content="2020-10-28">
-          10-28
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B01%E3%80%91%E4%BF%A1%E6%81%AF%E7%86%B5/" itemprop="url">
-            <span itemprop="name">【机器学习自学笔记1】信息熵</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B03%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91%E5%89%AA%E6%9E%9D/" rel="prev" title="【机器学习自学笔记3】决策树剪枝">
+      <i class="fa fa-chevron-left"></i> 【机器学习自学笔记3】决策树剪枝
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-  </div>
+      </footer>
+    
+  </article>
   
   
-  
-
   
 
 
@@ -322,6 +536,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#贝叶斯公式"><span class="nav-number">1.</span> <span class="nav-text">贝叶斯公式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#朴素贝叶斯分类"><span class="nav-number">2.</span> <span class="nav-text">朴素贝叶斯分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#朴素贝叶斯分类为什么朴素"><span class="nav-number">2.1.</span> <span class="nav-text">朴素贝叶斯分类为什么朴素</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拉普拉斯修正"><span class="nav-number">3.</span> <span class="nav-text">拉普拉斯修正</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
