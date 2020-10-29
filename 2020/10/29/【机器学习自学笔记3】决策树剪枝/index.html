@@ -20,17 +20,21 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="什么都想学一点">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:url" content="http://koorye.github.io/archives/2020/index.html">
+  <meta name="description" content="决策树如果任其自由生长，很容易产生过拟合。因此，我们有必要对决策树进行剪枝。 CART 剪枝算法从”完全生长”的决策树的底端剪去一些子树，使决策树变小(模型变简单)，从而能够对未知数据有更准确的预测。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【机器学习自学笔记3】决策树剪枝">
+<meta property="og:url" content="http://koorye.github.io/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B03%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91%E5%89%AA%E6%9E%9D/index.html">
 <meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:description" content="什么都想学一点">
+<meta property="og:description" content="决策树如果任其自由生长，很容易产生过拟合。因此，我们有必要对决策树进行剪枝。 CART 剪枝算法从”完全生长”的决策树的底端剪去一些子树，使决策树变小(模型变简单)，从而能够对未知数据有更准确的预测。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-29T08:16:28.000Z">
+<meta property="article:modified_time" content="2020-10-29T10:10:29.437Z">
 <meta property="article:author" content="Koorye">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="信息论">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://koorye.github.io/archives/2020/">
+<link rel="canonical" href="http://koorye.github.io/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B03%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91%E5%89%AA%E6%9E%9D/">
 
 
 <script id="page-configurations">
@@ -38,12 +42,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>归档 | 不会真有人以为Koorye会写代码吧</title>
+  <title>【机器学习自学笔记3】决策树剪枝 | 不会真有人以为Koorye会写代码吧</title>
   
 
 
@@ -185,235 +189,241 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        
-        <span class="collection-header">不错! 目前共计 53 篇日志。 继续努力。</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B03%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91%E5%89%AA%E6%9E%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="什么都想学一点">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【机器学习自学笔记3】决策树剪枝
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-10-29 16:16:28 / 修改时间：18:10:29" itemprop="dateCreated datePublished" datetime="2020-10-29T16:16:28+08:00">2020-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B03%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91%E5%89%AA%E6%9E%9D/" class="post-meta-item leancloud_visitors" data-flag-title="【机器学习自学笔记3】决策树剪枝" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
-    </div>
+        <p>决策树如果任其自由生长，很容易产生过拟合。因此，我们有必要对决策树进行剪枝。</p>
+<p>CART 剪枝算法从”完全生长”的决策树的底端剪去一些子树，使决策树变小(模型变简单)，从而能够对未知数据有更准确的预测。</p>
+<a id="more"></a>
+<h1 id="CART-剪枝"><a href="#CART-剪枝" class="headerlink" title="CART 剪枝"></a>CART 剪枝</h1><p>CART 剪枝的思想：</p>
+<ul>
+<li>从完全生长的整体树 $T_0$ 的最底端开始不断剪枝</li>
+<li>直至剪到 $T_0$ 的根结点为止，形成子树序列 {$T_0, T_1, … , T_n$}</li>
+<li>通过交叉验证法在独立的验证集上对子树序列进行测试，选出最优子树</li>
+</ul>
+<p>观察上面的思想，我们很容易想到一些问题：</p>
+<ul>
+<li>如何挑选剪枝的结点？</li>
+<li>每个结点是否需要剪枝？</li>
+</ul>
+<h2 id="剪枝的损失函数"><a href="#剪枝的损失函数" class="headerlink" title="剪枝的损失函数"></a>剪枝的损失函数</h2><p>为了控制剪枝的位置和顺序，引入一个损失函数的概念：</p>
+<script type="math/tex; mode=display">
+C_\alpha(T) = C(T) + \alpha |T|</script><ul>
+<li><p>T 代表某一子树</p>
+</li>
+<li><p>C(T) 代表训练数据的预测误差 (如基尼系数)</p>
+</li>
+<li>|T|代表子树的结点数</li>
+<li>$\alpha$ 是一个参数，随着 $\alpha$ 的改变，得到的最优子树的复杂度和拟合度也不同</li>
+</ul>
+<p>可以想象：</p>
+<ul>
+<li>当 $\alpha$ 较大时，|T| 的权重更大，此时为使 $C_\alpha(T)$ 较小，最优子树结点数越少(简单，拟合度低)</li>
+<li>当 $\alpha$ 较小时，C(T) 的权重更大，此时为使 $C_\alpha(T)$ 较小，训练误差也越小，拟合度越高(复杂，拟合度高)</li>
+<li>当 $a = 0$ 时，最优子树为树本身 $T_0$</li>
+<li>当 $\alpha \rightarrow +\infty$ 时，最优子树为单独的根节点组成的树</li>
+</ul>
+<h2 id="剪枝的判断"><a href="#剪枝的判断" class="headerlink" title="剪枝的判断"></a>剪枝的判断</h2><p>通过损失函数，我们可以判断一个结点是否应该被剪枝，步骤如下：</p>
+<p>对于某一个结点 t，计算以单独的结点 t 组成的树的损失函数：</p>
+<script type="math/tex; mode=display">
+C_\alpha(t) = C(t)+\alpha \cdot 1</script><p>对于该结点 t，计算以 t 为根结点的子树 $T_t$ 的损失函数：</p>
+<script type="math/tex; mode=display">
+C_\alpha(T_t) = C(T_t) + \alpha|T_t|</script><p>当 $\alpha = 0$ 或充分小时，有不等式</p>
+<script type="math/tex; mode=display">
+C_\alpha(T_t) \lt C_\alpha(t)</script><p>随着 $\alpha$ 的增大，必有 $\alpha$ 使得</p>
+<script type="math/tex; mode=display">
+C_\alpha(T_t) = C_\alpha(t)</script><p>此时</p>
+<script type="math/tex; mode=display">
+\alpha = \frac{C(t)-C(T_t)}{|T_t|-1}</script><p>(单结点树 t 的结点数 |t| = 1)</p>
+<p>此时就可以对结点 t 进行剪枝，去掉 t 的子结点。</p>
+<p>而</p>
+<script type="math/tex; mode=display">
+g(t) = \frac{C(t)-C(T_t)}{|T_t|-1}</script><p>即为判断剪枝的临界值。</p>
+<p>举例 (以基尼系数作为损失函数的情况)：</p>
+<pre class="mermaid">graph TD
+A[A,样本数=10,Gini=0.50]
+B[B,样本数=7,Gini=0.25]
+C[C,样本数=3,Gini=0.10]
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+A-->B
+A-->C</pre>
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-10-29T16:16:28+08:00"
-              content="2020-10-29">
-          10-29
-        </time>
-      </div>
+<p>先计算 A 组成的单结点树的损失函数</p>
+<script type="math/tex; mode=display">
+C(A) = 10 \cdot Gini(A) = 5</script><p>再计算 A 为根节点的树 $T_A$ 的损失函数，其中 t 表示树的所有<strong>叶结点</strong>，N(t)表示各个叶结点的样本数(权重)</p>
+<script type="math/tex; mode=display">
+C(T_A) = \sum_{t=1}^{|T|} N(t)Gini(t) = 7\cdot0.25 + 3\cdot0.10 = 2.05</script><p>则</p>
+<script type="math/tex; mode=display">
+g(A) = \frac{C(A)-C(T_A)}{|T_A|-1} = \frac{5-2.05}{3-1} = 1.475</script><p>因此，随着 $\alpha$ 增大到 1.475 时，结点 A 应被剪枝。</p>
+<h2 id="剪枝的过程"><a href="#剪枝的过程" class="headerlink" title="剪枝的过程"></a>剪枝的过程</h2><ul>
+<li>对于完整树 $T_0$，计算每一个非叶结点的 g(t) 值</li>
+<li>对得到的所有 g(t) 进行从小到大排序</li>
+<li>g(t) 从小到大，分别对应第 1, 2, …, n 个被剪枝的结点</li>
+<li>对于 $T_0$ 根据第 1 个结点进行剪枝得到 $T_1$</li>
+<li>对于 $T_1$ 根据第 2 个结点进行剪枝得到 $T_2$</li>
+<li>如此往复循环，对于 $T_0$，可以生成子树序列 $\{T_0,T_1,…,T_{n}\}$</li>
+</ul>
+<h2 id="最优子树的挑选"><a href="#最优子树的挑选" class="headerlink" title="最优子树的挑选"></a>最优子树的挑选</h2><p>挑选最优子树需要使用独立的验证集，而不是之前的训练集。通过验证集计算出序列中每一个子树的损失函数 (如MSE、Gini) 等指标，选择损失最小的子树作为最优子树，这便可以得到最优决策树。</p>
+<h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><pre class="mermaid">graph TD
+A[A,样本数=10,Gini=0.50]
+B[B,样本数=7,Gini=0.25]
+C[C,样本数=3,Gini=0.10]
+D[D,样本数=4,Gini=0.20]
+E[E,样本数=3,Gini=0.10]
+F[F,样本数=3,Gini=0.05]
+G[G,样本数=1,Gini=0.08]
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B03%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91%E5%89%AA%E6%9E%9D/" itemprop="url">
-            <span itemprop="name">【机器学习自学笔记3】决策树剪枝</span>
-          </a>
-      </div>
+A-->B
+A-->C
+B-->D
+B-->E
+D-->F
+D-->G</pre>
 
-    </header>
-  </article>
+<h3 id="计算所有非叶结点的-g-t"><a href="#计算所有非叶结点的-g-t" class="headerlink" title="计算所有非叶结点的 g(t)"></a>计算所有非叶结点的 g(t)</h3><p>所有非叶结点：ABD</p>
+<p>计算每个结点对应单结点树的损失：</p>
+<script type="math/tex; mode=display">
+C(A) = 10 * 0.5 = 5</script><script type="math/tex; mode=display">
+C(B) = 7 * 0.25 = 1.75</script><script type="math/tex; mode=display">
+C(D) = 4 * 0.2 = 0.8</script><p>计算每个结点作为根结点对应子树的损失：</p>
+<script type="math/tex; mode=display">
+C(T_A) = 3*0.1+3*0.1+1*0.08+3*0.05 = 0.83</script><script type="math/tex; mode=display">
+C(T_B) = 3*0.1+1*0.08+3*0.05 = 0.53</script><script type="math/tex; mode=display">
+C(T_D) = 1*0.08+3*0.05 = 0.23</script><p>计算每个结点的 g(t):</p>
+<script type="math/tex; mode=display">
+g(A) = \frac{C(A)-C(T_A)}{|T_A|-1} = \frac{5-0.83}{7-1} = 0.6950</script><script type="math/tex; mode=display">
+g(B) = \frac{C(B)-C(T_B)}{|T_B|-1} = 0.3050</script><script type="math/tex; mode=display">
+g(D) = \frac{C(D)-C(T_D)}{|T_D|-1} = 0.2850</script><h3 id="对-g-t-进行排序"><a href="#对-g-t-进行排序" class="headerlink" title="对 g(t) 进行排序"></a>对 g(t) 进行排序</h3><p>得到的 g(t) 序列：</p>
+<script type="math/tex; mode=display">
+g(D): 0.2850 < g(B): 0.3050 < g(A): 0.6950</script><h3 id="按照-g-t-顺序逐个剪枝生成子树"><a href="#按照-g-t-顺序逐个剪枝生成子树" class="headerlink" title="按照 g(t) 顺序逐个剪枝生成子树"></a>按照 g(t) 顺序逐个剪枝生成子树</h3><p>T1：</p>
+<pre class="mermaid">graph TD
+A[A,样本数=10,Gini=0.50]
+B[B,样本数=7,Gini=0.25]
+C[C,样本数=3,Gini=0.10]
+D[D,样本数=4,Gini=0.20]
+E[E,样本数=3,Gini=0.10]
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+A-->B
+A-->C
+B-->D
+B-->E</pre>
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-10-28T15:28:02+08:00"
-              content="2020-10-28">
-          10-28
-        </time>
-      </div>
+<p>T2:</p>
+<pre class="mermaid">graph TD
+A[A,样本数=10,Gini=0.50]
+B[B,样本数=7,Gini=0.25]
+C[C,样本数=3,Gini=0.10]
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B02%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91/" itemprop="url">
-            <span itemprop="name">【机器学习自学笔记2】决策树</span>
-          </a>
-      </div>
+A-->B
+A-->C</pre>
 
-    </header>
-  </article>
+<p>T3:</p>
+<pre class="mermaid">graph TD
+A[A,样本数=10,Gini=0.50]</pre>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-10-28T13:34:26+08:00"
-              content="2020-10-28">
-          10-28
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B01%E3%80%91%E4%BF%A1%E6%81%AF%E7%86%B5/" itemprop="url">
-            <span itemprop="name">【机器学习自学笔记1】信息熵</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-25T15:37:36+08:00"
-              content="2020-07-25">
-          07-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/25/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%85%AB%E3%80%91Spring%20Boot%20%E7%8E%AF%E5%A2%83%E4%B8%8B%20Shiro%20%E6%95%B4%E5%90%88%20JWT/" itemprop="url">
-            <span itemprop="name">【Shiro 自学笔记八】Spring Boot 环境下 Shiro 整合 JWT</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-25T14:41:51+08:00"
-              content="2020-07-25">
-          07-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/25/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%83%E3%80%91%20%E4%BB%80%E4%B9%88%E6%98%AF%20JWT%EF%BC%9FShiro%20%E6%95%B4%E5%90%88JWT/" itemprop="url">
-            <span itemprop="name">【Shiro 自学笔记七】 什么是 JWT？使用 JWT 实现认证</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-24T17:26:21+08:00"
-              content="2020-07-24">
-          07-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%85%AD%E3%80%91Shiro%20%E7%9A%84%E9%BB%98%E8%AE%A4%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E5%92%8C%20Redis%20%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98/" itemprop="url">
-            <span itemprop="name">【Shiro 自学笔记六】Shiro 的默认缓存机制和 Redis 实现缓存</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-24T02:02:28+08:00"
-              content="2020-07-24">
-          07-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro%20+%20Spring%20Data%20JPA%20%E5%8A%A0%E5%AF%86%E4%B8%8E%E9%AA%8C%E8%AF%81/" itemprop="url">
-            <span itemprop="name">【Shiro 自学笔记五】Spring Boot 整合 Shiro + Spring Data JPA 加密与验证</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-24T00:39:44+08:00"
-              content="2020-07-24">
-          07-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro/" itemprop="url">
-            <span itemprop="name">【Shiro 自学笔记四】Spring Boot 整合 Shiro</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-23T23:22:05+08:00"
-              content="2020-07-23">
-          07-23
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/23/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Shiro%20%E7%9A%84%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6/" itemprop="url">
-            <span itemprop="name">【Shiro 自学笔记三】Shiro 的授权机制</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-23T17:01:06+08:00"
-              content="2020-07-23">
-          07-23
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/23/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91%E8%87%AA%E5%AE%9A%E4%B9%89%20Realm%20%E5%AE%9E%E7%8E%B0%20MD5%20%E5%8A%A0%E5%AF%86%E3%80%81%E5%8A%A0%E7%9B%90%E4%B8%8E%E5%86%8D%E6%95%A3%E5%88%97/" itemprop="url">
-            <span itemprop="name">【Shiro 自学笔记二】自定义 Realm 实现 MD5 加密、加盐与再散列</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+<p>最后，只需要用测试集对每一个子树进行交叉验证，就可以挑选出最优子树作为决策树。</p>
 
     </div>
-  </div>
-  
-  
-  
 
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" rel="tag"># 信息论</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B02%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91/" rel="prev" title="【机器学习自学笔记2】决策树">
+      <i class="fa fa-chevron-left"></i> 【机器学习自学笔记2】决策树
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
   
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2020/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2020/page/6/">6</a><a class="extend next" rel="next" href="/archives/2020/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
+  
+  
 
 
 
@@ -465,6 +475,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CART-剪枝"><span class="nav-number">1.</span> <span class="nav-text">CART 剪枝</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#剪枝的损失函数"><span class="nav-number">1.1.</span> <span class="nav-text">剪枝的损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#剪枝的判断"><span class="nav-number">1.2.</span> <span class="nav-text">剪枝的判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#剪枝的过程"><span class="nav-number">1.3.</span> <span class="nav-text">剪枝的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最优子树的挑选"><span class="nav-number">1.4.</span> <span class="nav-text">最优子树的挑选</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#举例"><span class="nav-number">1.5.</span> <span class="nav-text">举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#计算所有非叶结点的-g-t"><span class="nav-number">1.5.1.</span> <span class="nav-text">计算所有非叶结点的 g(t)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对-g-t-进行排序"><span class="nav-number">1.5.2.</span> <span class="nav-text">对 g(t) 进行排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按照-g-t-顺序逐个剪枝生成子树"><span class="nav-number">1.5.3.</span> <span class="nav-text">按照 g(t) 顺序逐个剪枝生成子树</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

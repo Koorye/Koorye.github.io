@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>【机器学习自学笔记3】决策树剪枝</title>
+      <link href="/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B03%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91%E5%89%AA%E6%9E%9D/"/>
+      <url>/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B03%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91%E5%89%AA%E6%9E%9D/</url>
+      
+        <content type="html"><![CDATA[<p>决策树如果任其自由生长，很容易产生过拟合。因此，我们有必要对决策树进行剪枝。</p><p>CART 剪枝算法从”完全生长”的决策树的底端剪去一些子树，使决策树变小(模型变简单)，从而能够对未知数据有更准确的预测。</p><a id="more"></a><h1 id="CART-剪枝"><a href="#CART-剪枝" class="headerlink" title="CART 剪枝"></a>CART 剪枝</h1><p>CART 剪枝的思想：</p><ul><li>从完全生长的整体树 $T_0$ 的最底端开始不断剪枝</li><li>直至剪到 $T_0$ 的根结点为止，形成子树序列 {$T_0, T_1, … , T_n$}</li><li>通过交叉验证法在独立的验证集上对子树序列进行测试，选出最优子树</li></ul><p>观察上面的思想，我们很容易想到一些问题：</p><ul><li>如何挑选剪枝的结点？</li><li>每个结点是否需要剪枝？</li></ul><h2 id="剪枝的损失函数"><a href="#剪枝的损失函数" class="headerlink" title="剪枝的损失函数"></a>剪枝的损失函数</h2><p>为了控制剪枝的位置和顺序，引入一个损失函数的概念：</p><script type="math/tex; mode=display">C_\alpha(T) = C(T) + \alpha |T|</script><ul><li><p>T 代表某一子树</p></li><li><p>C(T) 代表训练数据的预测误差 (如基尼系数)</p></li><li>|T|代表子树的结点数</li><li>$\alpha$ 是一个参数，随着 $\alpha$ 的改变，得到的最优子树的复杂度和拟合度也不同</li></ul><p>可以想象：</p><ul><li>当 $\alpha$ 较大时，|T| 的权重更大，此时为使 $C_\alpha(T)$ 较小，最优子树结点数越少(简单，拟合度低)</li><li>当 $\alpha$ 较小时，C(T) 的权重更大，此时为使 $C_\alpha(T)$ 较小，训练误差也越小，拟合度越高(复杂，拟合度高)</li><li>当 $a = 0$ 时，最优子树为树本身 $T_0$</li><li>当 $\alpha \rightarrow +\infty$ 时，最优子树为单独的根节点组成的树</li></ul><h2 id="剪枝的判断"><a href="#剪枝的判断" class="headerlink" title="剪枝的判断"></a>剪枝的判断</h2><p>通过损失函数，我们可以判断一个结点是否应该被剪枝，步骤如下：</p><p>对于某一个结点 t，计算以单独的结点 t 组成的树的损失函数：</p><script type="math/tex; mode=display">C_\alpha(t) = C(t)+\alpha \cdot 1</script><p>对于该结点 t，计算以 t 为根结点的子树 $T_t$ 的损失函数：</p><script type="math/tex; mode=display">C_\alpha(T_t) = C(T_t) + \alpha|T_t|</script><p>当 $\alpha = 0$ 或充分小时，有不等式</p><script type="math/tex; mode=display">C_\alpha(T_t) \lt C_\alpha(t)</script><p>随着 $\alpha$ 的增大，必有 $\alpha$ 使得</p><script type="math/tex; mode=display">C_\alpha(T_t) = C_\alpha(t)</script><p>此时</p><script type="math/tex; mode=display">\alpha = \frac{C(t)-C(T_t)}{|T_t|-1}</script><p>(单结点树 t 的结点数 |t| = 1)</p><p>此时就可以对结点 t 进行剪枝，去掉 t 的子结点。</p><p>而</p><script type="math/tex; mode=display">g(t) = \frac{C(t)-C(T_t)}{|T_t|-1}</script><p>即为判断剪枝的临界值。</p><p>举例 (以基尼系数作为损失函数的情况)：</p><pre class="mermaid">graph TDA[A,样本数=10,Gini=0.50]B[B,样本数=7,Gini=0.25]C[C,样本数=3,Gini=0.10]A-->BA-->C</pre><p>先计算 A 组成的单结点树的损失函数</p><script type="math/tex; mode=display">C(A) = 10 \cdot Gini(A) = 5</script><p>再计算 A 为根节点的树 $T_A$ 的损失函数，其中 t 表示树的所有<strong>叶结点</strong>，N(t)表示各个叶结点的样本数(权重)</p><script type="math/tex; mode=display">C(T_A) = \sum_{t=1}^{|T|} N(t)Gini(t) = 7\cdot0.25 + 3\cdot0.10 = 2.05</script><p>则</p><script type="math/tex; mode=display">g(A) = \frac{C(A)-C(T_A)}{|T_A|-1} = \frac{5-2.05}{3-1} = 1.475</script><p>因此，随着 $\alpha$ 增大到 1.475 时，结点 A 应被剪枝。</p><h2 id="剪枝的过程"><a href="#剪枝的过程" class="headerlink" title="剪枝的过程"></a>剪枝的过程</h2><ul><li>对于完整树 $T_0$，计算每一个非叶结点的 g(t) 值</li><li>对得到的所有 g(t) 进行从小到大排序</li><li>g(t) 从小到大，分别对应第 1, 2, …, n 个被剪枝的结点</li><li>对于 $T_0$ 根据第 1 个结点进行剪枝得到 $T_1$</li><li>对于 $T_1$ 根据第 2 个结点进行剪枝得到 $T_2$</li><li>如此往复循环，对于 $T_0$，可以生成子树序列 $\{T_0,T_1,…,T_{n}\}$</li></ul><h2 id="最优子树的挑选"><a href="#最优子树的挑选" class="headerlink" title="最优子树的挑选"></a>最优子树的挑选</h2><p>挑选最优子树需要使用独立的验证集，而不是之前的训练集。通过验证集计算出序列中每一个子树的损失函数 (如MSE、Gini) 等指标，选择损失最小的子树作为最优子树，这便可以得到最优决策树。</p><h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><pre class="mermaid">graph TDA[A,样本数=10,Gini=0.50]B[B,样本数=7,Gini=0.25]C[C,样本数=3,Gini=0.10]D[D,样本数=4,Gini=0.20]E[E,样本数=3,Gini=0.10]F[F,样本数=3,Gini=0.05]G[G,样本数=1,Gini=0.08]A-->BA-->CB-->DB-->ED-->FD-->G</pre><h3 id="计算所有非叶结点的-g-t"><a href="#计算所有非叶结点的-g-t" class="headerlink" title="计算所有非叶结点的 g(t)"></a>计算所有非叶结点的 g(t)</h3><p>所有非叶结点：ABD</p><p>计算每个结点对应单结点树的损失：</p><script type="math/tex; mode=display">C(A) = 10 * 0.5 = 5</script><script type="math/tex; mode=display">C(B) = 7 * 0.25 = 1.75</script><script type="math/tex; mode=display">C(D) = 4 * 0.2 = 0.8</script><p>计算每个结点作为根结点对应子树的损失：</p><script type="math/tex; mode=display">C(T_A) = 3*0.1+3*0.1+1*0.08+3*0.05 = 0.83</script><script type="math/tex; mode=display">C(T_B) = 3*0.1+1*0.08+3*0.05 = 0.53</script><script type="math/tex; mode=display">C(T_D) = 1*0.08+3*0.05 = 0.23</script><p>计算每个结点的 g(t):</p><script type="math/tex; mode=display">g(A) = \frac{C(A)-C(T_A)}{|T_A|-1} = \frac{5-0.83}{7-1} = 0.6950</script><script type="math/tex; mode=display">g(B) = \frac{C(B)-C(T_B)}{|T_B|-1} = 0.3050</script><script type="math/tex; mode=display">g(D) = \frac{C(D)-C(T_D)}{|T_D|-1} = 0.2850</script><h3 id="对-g-t-进行排序"><a href="#对-g-t-进行排序" class="headerlink" title="对 g(t) 进行排序"></a>对 g(t) 进行排序</h3><p>得到的 g(t) 序列：</p><script type="math/tex; mode=display">g(D): 0.2850 < g(B): 0.3050 < g(A): 0.6950</script><h3 id="按照-g-t-顺序逐个剪枝生成子树"><a href="#按照-g-t-顺序逐个剪枝生成子树" class="headerlink" title="按照 g(t) 顺序逐个剪枝生成子树"></a>按照 g(t) 顺序逐个剪枝生成子树</h3><p>T1：</p><pre class="mermaid">graph TDA[A,样本数=10,Gini=0.50]B[B,样本数=7,Gini=0.25]C[C,样本数=3,Gini=0.10]D[D,样本数=4,Gini=0.20]E[E,样本数=3,Gini=0.10]A-->BA-->CB-->DB-->E</pre><p>T2:</p><pre class="mermaid">graph TDA[A,样本数=10,Gini=0.50]B[B,样本数=7,Gini=0.25]C[C,样本数=3,Gini=0.10]A-->BA-->C</pre><p>T3:</p><pre class="mermaid">graph TDA[A,样本数=10,Gini=0.50]</pre><p>最后，只需要用测试集对每一个子树进行交叉验证，就可以挑选出最优子树作为决策树。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 机器学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 机器学习 </tag>
+            
+            <tag> 信息论 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>【机器学习自学笔记2】决策树</title>
       <link href="/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B02%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91/"/>
       <url>/2020/10/28/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B02%E3%80%91%E5%86%B3%E7%AD%96%E6%A0%91/</url>
