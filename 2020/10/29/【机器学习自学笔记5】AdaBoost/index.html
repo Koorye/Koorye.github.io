@@ -20,17 +20,21 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="什么都想学一点">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:url" content="http://koorye.github.io/tags/Spring-Boot/index.html">
+  <meta name="description" content="AdaBoost 是一种典型的集成学习算法，通过对多个弱学习器的集合，构成一个强学习器。 graph LR weak1[弱学习器] weak2[弱学习器] weak...[...] weak3[弱学习器] strong[强学习器] weak1 --&gt; strong weak2 --&gt; strong weak... --&gt; strong weak3 --&gt; strong">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【机器学习自学笔记5】AdaBoost">
+<meta property="og:url" content="http://koorye.github.io/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B05%E3%80%91AdaBoost/index.html">
 <meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:description" content="什么都想学一点">
+<meta property="og:description" content="AdaBoost 是一种典型的集成学习算法，通过对多个弱学习器的集合，构成一个强学习器。 graph LR weak1[弱学习器] weak2[弱学习器] weak...[...] weak3[弱学习器] strong[强学习器] weak1 --&gt; strong weak2 --&gt; strong weak... --&gt; strong weak3 --&gt; strong">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-29T11:18:55.000Z">
+<meta property="article:modified_time" content="2020-10-30T11:17:57.007Z">
 <meta property="article:author" content="Koorye">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="集成学习">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://koorye.github.io/tags/Spring-Boot/">
+<link rel="canonical" href="http://koorye.github.io/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B05%E3%80%91AdaBoost/">
 
 
 <script id="page-configurations">
@@ -38,12 +42,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: Spring Boot | 不会真有人以为Koorye会写代码吧</title>
+  <title>【机器学习自学笔记5】AdaBoost | 不会真有人以为Koorye会写代码吧</title>
   
 
 
@@ -185,231 +189,613 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">Spring Boot
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B05%E3%80%91AdaBoost/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="什么都想学一点">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【机器学习自学笔记5】AdaBoost
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-29 19:18:55" itemprop="dateCreated datePublished" datetime="2020-10-29T19:18:55+08:00">2020-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-30 19:17:57" itemprop="dateModified" datetime="2020-10-30T19:17:57+08:00">2020-10-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B05%E3%80%91AdaBoost/" class="post-meta-item leancloud_visitors" data-flag-title="【机器学习自学笔记5】AdaBoost" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+        <p>AdaBoost 是一种典型的集成学习算法，通过对多个弱学习器的集合，构成一个强学习器。</p>
+<pre class="mermaid">graph LR
+weak1[弱学习器]
+weak2[弱学习器]
+weak...[...]
+weak3[弱学习器]
+strong[强学习器]
+weak1 --> strong
+weak2 --> strong
+weak... --> strong
+weak3 --> strong</pre>
+
+<a id="more"></a>
+<blockquote>
+<p>Boosting，也称为增强学习或提升法，是一种重要的集成学习技术，能够将预测精度仅比随机猜度略高的弱学习器增强为预测精度高的强学习器。</p>
+</blockquote>
+<h1 id="AdaBoost"><a href="#AdaBoost" class="headerlink" title="AdaBoost"></a>AdaBoost</h1><script type="math/tex; mode=display">
+G(x) = sign[f(x)] = sign[\alpha_1G_1(x)+\alpha_2G_2(x)+...+\alpha_nG_n(x)]</script><ul>
+<li>G(x) 表示训练出的集成学习器 (强学习器)</li>
+<li>$G_i(x)$ 表示每一个个体学习器 (弱学习器)</li>
+</ul>
+<p>对于数据集</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>如何找到一个拟合函数？这就可以使用 AdaBoost 求解。</p>
+<p>AdaBoost 的思想：</p>
+<ul>
+<li>训练第 1 个个体学习器，找到最佳分界点</li>
+<li>计算分类误差，将其作为该学习器的权重</li>
+<li>增加数据集中分类误差的权重，使其更可能被训练正确</li>
+<li>对修改数据集权重后的数据集训练第 2 个个体学习器，如此往复</li>
+<li>将训练得到的所有学习器 * 学习器的权重得到结果</li>
+</ul>
+<p>AdaBoost 的步骤：</p>
+<ul>
+<li>创建第 1 个个体学习器 $G_1(x)$，该学习器拥有自己对于每一个 $x_i$ 的权重 $w_i$</li>
+<li>计算各个分界线 $x = n_i$，$x &lt; n_i$ 时 y = 1，$x &gt; n_i$ 时 y = -1，再计算，$x &lt; n_i$ 时 y = -1，$x &gt; n_i$ 时 y = 1，记录每次的误差 (对于该题来说)</li>
+<li>找到最优的分界线，分界标准：每个错误的样本 * 权重之和最小</li>
+<li>记录分类错误的比例得到该学习器的权重</li>
+<li>根据学习器的分类结果修改权重；对于分类错误的结果，对应权重增加；对于分类正确的结果，对应权重减少 (通过修改权重使得下一次学习时错误结果更加被重视，使其更可能被分对)</li>
+<li>创建第 2, 3,4 … 个个体学习器 $G_2(x)$，同样按照上面的步骤训练</li>
+<li>对于训练得到的所有学习器，通过每个学习器 * 学习器的权重之和得到最后的拟合函数</li>
+</ul>
+<p>需要解决的问题：</p>
+<ul>
+<li>如何更新数据集的权重</li>
+<li>如何计算学习器的权重</li>
+<li>训练多少次就停止</li>
+</ul>
+<h1 id="学习器的权重计算"><a href="#学习器的权重计算" class="headerlink" title="学习器的权重计算"></a>学习器的权重计算</h1><p>对于学习器，显然其误差越小，准确度就越高，就应该拥有更大的权重。</p>
+<p>于是给出学习器权重的计算公式：</p>
+<script type="math/tex; mode=display">
+\alpha_i = \frac{1}{2}\log\frac{1-e_i}{e_i}</script><p>其中 $e_i$ 表示第 i 个学习器的误差</p>
+<h1 id="数据集的权重更新"><a href="#数据集的权重更新" class="headerlink" title="数据集的权重更新"></a>数据集的权重更新</h1><p>对于数据集的权重，由于误差 = 所有被分错的 x 对应的权重之和，显然数据集中某一个 x 的权重越大，为使误差减小，该 x 越不能被分错。</p>
+<p>因为，x 的权重 w 代表其重要程度，越重要就越不能被分错。</p>
+<p>那么如何更新 w 呢？计算公式如下</p>
+<script type="math/tex; mode=display">
+w_{m+1,i} = \frac{w_{m,i}}{Z_m}e^{-\alpha_my_iG_m(x_i)}</script><script type="math/tex; mode=display">
+其中 Z_m = \sum_{i=1}^Nw_{m,i}e^{-\alpha_my_iG_m(x_i)}</script><ul>
+<li>$w_{m,i}$ 代表第 m 次学习器对应训练集的第 i 个 x 的权重</li>
+<li>$\alpha_m$ 代表第 m 次学习器的权重</li>
+<li>$G_m(x_i)$ 则是第 m 个学习器的拟合函数</li>
+<li>$Z_m$ 的存在是为了进行归一化，确保 $\sum w_{m,i} = 1$</li>
+</ul>
+<h1 id="第一个学习器"><a href="#第一个学习器" class="headerlink" title="第一个学习器"></a>第一个学习器</h1><p>对于数据集</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>给予初始权重</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>w</th>
+<th>0.1</th>
+<th>0.1</th>
+<th>0.1</th>
+<th>0.1</th>
+<th>0.1</th>
+<th>0.1</th>
+<th>0.1</th>
+<th>0.1</th>
+<th>0.1</th>
+<th>0.1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>寻找最优分界点</p>
+<script type="math/tex; mode=display">
+v=0.5,即f(x) = \left\{
+\begin{aligned}
+1  & ,x \lt 0.5 \\
+-1 & ,x \ge 0.5 \\
+\end{aligned}
+\right.</script><p>此时 x = 1, 2, 6, 7, 8 被分错</p>
+<p>计算误差</p>
+<script type="math/tex; mode=display">
+e_{1,v=0.5} = w_1 + w_2 + w_6 + w_7 +w_8 = 0.5</script><script type="math/tex; mode=display">
+v=1.5,即f(x) = \left\{
+\begin{aligned}
+1  & ,x \lt 1.5 \\
+-1 & ,x \ge 1.5 \\
+\end{aligned}
+\right.</script><p>此时 x = 2, 6, 7, 8 被分错</p>
+<p>计算误差</p>
+<script type="math/tex; mode=display">
+e_{1,v=1.5} = w_2 + w_6 + w_7 +w_8 = 0.4</script><p>综上，遍历所有分界点，最终找到最小的误差为</p>
+<script type="math/tex; mode=display">
+e_1 = e_{1,v=2.5} = w_6 + w_7 +w_8 = 0.3</script><p>第一个学习器的拟合函数 $G_1$</p>
+<script type="math/tex; mode=display">
+G_1 = \left\{
+\begin{aligned}
+1  & ,x \le 2.5 \\
+-1 & ,x \gt 2.5
+\end{aligned}
+\right.</script><p>计算得到第一个学习器的权重 $\alpha_1$</p>
+<script type="math/tex; mode=display">
+\alpha_1 = \frac{1}{2}\log\frac{1-e_1}{e_1} = 0.4236</script><p>计算得到训练集的更新权重</p>
+<script type="math/tex; mode=display">
+Z_1 = \sum_{i=1}^{10}w_{1,i}e^{-0.4236y_iG_1(x_i)}</script><script type="math/tex; mode=display">
+= 7\cdot0.1e^{-0.4236}+3\cdot0.1e^{0.4236} = 0.917</script><script type="math/tex; mode=display">
+w_{2,1} = \frac{w_{1,1}}{Z_1}e^{-0.4236y_1G_1(x_1)} = \frac{0.1}{0.917}e^{-0.4236} = 0.0714</script><p>同理</p>
+<script type="math/tex; mode=display">
+w_{2,2} = w_{2,3} = w_{2,4} = w_{2,5} = w_{2,6} = w_{2,10} = w_{2,1} = 0.0714</script><script type="math/tex; mode=display">
+w_{2,7} = w_{2,8} = w_{2,9} = 0.1667</script><p>更新后的数据集</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>w</th>
+<th>0.0714</th>
+<th>0.0714</th>
+<th>0.0714</th>
+<th>0.0714</th>
+<th>0.0714</th>
+<th>0.0714</th>
+<th>0.1667</th>
+<th>0.1667</th>
+<th>0.1667</th>
+<th>0.0714</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="第二个学习器"><a href="#第二个学习器" class="headerlink" title="第二个学习器"></a>第二个学习器</h1><p>寻找最优分界点并计算误差</p>
+<script type="math/tex; mode=display">
+e_2 = e_{2_{v=8.5}} = w_3+w_4+w_5 = 0.0714+0.0714+0.0714 = 0.2142</script><p>拟合函数</p>
+<script type="math/tex; mode=display">
+G_2=\left\{
+\begin{aligned}
+1  & ,x \le 8.5 \\
+-1 & ,x \gt 8.5
+\end{aligned}
+\right.</script><p>第二个学习器的权重</p>
+<script type="math/tex; mode=display">
+\alpha_2 = \frac{1}{2}\log\frac{1-0.2143}{0.2143} = 0.6496</script><p>更新后的数据集权重</p>
+<script type="math/tex; mode=display">
+Z_2 = \sum_{i=1}^{10}w_{2,i}e^{-0.6496y_iG_2(x_i)}</script><script type="math/tex; mode=display">
+= 0.0714e^{-0.6496}+0.0714e^{-0.6496}+0.0714e^{-0.6496}+0.0714e^{0.6496}+0.0714e^{0.6496}</script><script type="math/tex; mode=display">
++0.0714e^{0.6496}+0.1667e^{-0.6496}+0.1667e^{-0.6496}+0.1667e^{-0.6496}+0.0714e^{-0.6496}</script><script type="math/tex; mode=display">
+=0.8205</script><script type="math/tex; mode=display">
+w_{3,1} = \frac{w_{2,1}}{Z_2}e^{-0.6496} = 0.0455</script><p>同理更新所有权重</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>w</th>
+<th>0.0455</th>
+<th>0.0455</th>
+<th>0.0455</th>
+<th>0.1667</th>
+<th>0.1667</th>
+<th>0.1667</th>
+<th>0.1060</th>
+<th>0.1060</th>
+<th>0.1060</th>
+<th>0.0455</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="第三个学习器"><a href="#第三个学习器" class="headerlink" title="第三个学习器"></a>第三个学习器</h1><p>同样按照上面的步骤计算</p>
+<script type="math/tex; mode=display">
+G_3=\left\{
+\begin{aligned}
+-1 & ,x \le 5.5 \\
+1  & ,x \gt 5.5
+\end{aligned}
+\right.</script><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>w</th>
+<th>0.125</th>
+<th>0.125</th>
+<th>0.125</th>
+<th>0.102</th>
+<th>0.102</th>
+<th>0.102</th>
+<th>0.065</th>
+<th>0.065</th>
+<th>0.065</th>
+<th>0.125</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="生成拟合函数"><a href="#生成拟合函数" class="headerlink" title="生成拟合函数"></a>生成拟合函数</h1><p>经过 3 次训练后，得到每个弱学习器的拟合函数</p>
+<script type="math/tex; mode=display">
+G_1 = \left\{
+\begin{aligned}
+1  & ,x \le 2.5 \\
+-1 & ,x \gt 2.5
+\end{aligned}
+\right.</script><script type="math/tex; mode=display">
+G_2=\left\{
+\begin{aligned}
+1  & ,x \le 8.5 \\
+-1 & ,x \gt 8.5
+\end{aligned}
+\right.</script><script type="math/tex; mode=display">
+G_3=\left\{
+\begin{aligned}
+-1 & ,x \le 5.5 \\
+1  & ,x \gt 5.5
+\end{aligned}
+\right.</script><p>合成强学习器的拟合函数</p>
+<script type="math/tex; mode=display">
+f_3(x) = \alpha_1G_1(x)+\alpha_2G_2(x)+\alpha_3G_3(x)</script><script type="math/tex; mode=display">
+=\left\{
+\begin{aligned}
+0.3218  & ,x \le 2.5 \\
+-0.5214 & ,2.5 \lt x \le 5.5 \\
+0.9774  & ,5.5 \lt x \le 8.5 \\
+-0.3218 & ,8.5 \le x \\
+\end{aligned}
+\right.</script><p>归一化处理后</p>
+<script type="math/tex; mode=display">
+f_3(x) = \alpha_1G_1(x)+\alpha_2G_2(x)+\alpha_3G_3(x)</script><script type="math/tex; mode=display">
+=\left\{
+\begin{aligned}
+1  & ,x \le 2.5 \\
+-1 & ,2.5 \lt x \le 5.5 \\
+1  & ,5.5 \lt x \le 8.5 \\
+-1 & ,8.5 \le x \\
+\end{aligned}
+\right.</script><p>对比数据集，所有数据都被分类正确！</p>
+<h1 id="什么时候停止训练"><a href="#什么时候停止训练" class="headerlink" title="什么时候停止训练"></a>什么时候停止训练</h1><p>第一种方案：设定训练次数，训练次数到达后就停止</p>
+<p>第二种方案：训练无法再提高准确率时就停止</p>
+<p>接下来介绍一下方案二。</p>
+<p>根据上面的学习器，如果只训练一次：</p>
+<script type="math/tex; mode=display">
+f_1(x) = \alpha_1G_1(x)</script><script type="math/tex; mode=display">
+=\left\{
+\begin{aligned}
+0.4236  & ,x \le 2.5 \\
+-0.4236 & ,x \gt 2.5 \\
+\end{aligned}
+\right.</script><p>归一化后</p>
+<script type="math/tex; mode=display">
+f_1(x)=\left\{
+\begin{aligned}
+1  & ,x \le 2.5 \\
+-1 & ,x \gt 2.5 \\
+\end{aligned}
+\right.</script><p>此时有 3 个点被分错。</p>
+<p>如果训练两次：</p>
+<script type="math/tex; mode=display">
+f_2(x) = \alpha_1G_1(x)+\alpha_2G_2(x)</script><script type="math/tex; mode=display">
+=\left\{
+\begin{aligned}
+1.0732  & ,x \le 2.5 \\
+0.226   & ,2.5 \lt x \le 8.5 \\
+-0.6496 & ,8.5 \lt x \\
+\end{aligned}
+\right.</script><p>归一化后</p>
+<script type="math/tex; mode=display">
+f_3(x)=\left\{
+\begin{aligned}
+1  &, x \le 8.5 \\
+-1 & ,8.5 \lt x \\
+\end{aligned}
+\right.</script><p>此时仍有 3 个点被分错。</p>
+<p>而第 3 次训练后</p>
+<script type="math/tex; mode=display">
+f_3(x) = \alpha_1G_1(x)+\alpha_2G_2(x)+\alpha_3G_3(x)</script><script type="math/tex; mode=display">
+=\left\{
+\begin{aligned}
+1  & ,x \le 2.5 \\
+-1 & ,2.5 \lt x \le 5.5 \\
+1  & ,5.5 \lt x \le 8.5 \\
+-1 & ,8.5 \le x \\
+\end{aligned}
+\right.</script><p>没有点被分错，故此时就可以停止训练。</p>
+<p>若多次训练后准确率没有得到有效提升，训练同样应该停止。</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-25T15:37:36+08:00"
-              content="2020-07-25">
-          07-25
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/" rel="tag"># 集成学习</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/25/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%85%AB%E3%80%91Spring%20Boot%20%E7%8E%AF%E5%A2%83%E4%B8%8B%20Shiro%20%E6%95%B4%E5%90%88%20JWT/" itemprop="url">
-            <span itemprop="name">【Shiro 自学笔记八】Spring Boot 环境下 Shiro 整合 JWT</span>
-          </a>
-      </div>
+        
 
-    </header>
-  </article>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-24T17:26:21+08:00"
-              content="2020-07-24">
-          07-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%85%AD%E3%80%91Shiro%20%E7%9A%84%E9%BB%98%E8%AE%A4%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E5%92%8C%20Redis%20%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98/" itemprop="url">
-            <span itemprop="name">【Shiro 自学笔记六】Shiro 的默认缓存机制和 Redis 实现缓存</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-24T02:02:28+08:00"
-              content="2020-07-24">
-          07-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro%20+%20Spring%20Data%20JPA%20%E5%8A%A0%E5%AF%86%E4%B8%8E%E9%AA%8C%E8%AF%81/" itemprop="url">
-            <span itemprop="name">【Shiro 自学笔记五】Spring Boot 整合 Shiro + Spring Data JPA 加密与验证</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-24T00:39:44+08:00"
-              content="2020-07-24">
-          07-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro/" itemprop="url">
-            <span itemprop="name">【Shiro 自学笔记四】Spring Boot 整合 Shiro</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-20T11:59:41+08:00"
-              content="2020-07-20">
-          07-20
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Jedis%E5%92%8CSpring%20Boot%E6%95%B4%E5%90%88Redis/" itemprop="url">
-            <span itemprop="name">【Redis自学笔记四】Jedis和Spring Boot整合Redis</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-19T15:29:48+08:00"
-              content="2020-07-19">
-          07-19
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Spring%20Boot%E6%95%B4%E5%90%88RabbitMQ/" itemprop="url">
-            <span itemprop="name">【RabbitMQ自学笔记三】Spring Boot整合RabbitMQ</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-06T18:51:15+08:00"
-              content="2020-05-06">
-          05-06
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/06/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91%E6%95%B4%E5%90%88MyBatis+Druid+%E4%BD%BF%E7%94%A8MyBatis%20Generator+%E5%8A%A8%E6%80%81%E6%89%AB%E6%8F%8F%E5%BC%80%E5%8F%91/" itemprop="url">
-            <span itemprop="name">【Spring Boot自学笔记四】整合MyBatis+Druid+MyBatis Generator逆向工程动态扫描开发</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-06T12:30:43+08:00"
-              content="2020-05-06">
-          05-06
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/06/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91%E7%99%BB%E5%BD%95%E4%B8%8E%E6%8B%A6%E6%88%AA%E5%99%A8/" itemprop="url">
-            <span itemprop="name">【Spring Boot自学笔记三】登录与拦截器</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-05T15:19:26+08:00"
-              content="2020-05-05">
-          05-05
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/05/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91%E5%9B%BD%E9%99%85%E5%8C%96/" itemprop="url">
-            <span itemprop="name">【Spring Boot自学笔记二】国际化</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-05T00:11:29+08:00"
-              content="2020-05-05">
-          05-05
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/05/%E3%80%90Spring%20Boot%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA+Hello%20World+%E4%B8%BB%E9%A1%B5%E9%85%8D%E7%BD%AE/" itemprop="url">
-            <span itemprop="name">【Spring Boot自学笔记一】项目搭建+Hello World+主页配置</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B04%E3%80%91%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/" rel="prev" title="【机器学习自学笔记4】朴素贝叶斯分类器">
+      <i class="fa fa-chevron-left"></i> 【机器学习自学笔记4】朴素贝叶斯分类器
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-  </div>
+      </footer>
+    
+  </article>
   
   
-  
-
   
 
 
@@ -462,6 +848,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AdaBoost"><span class="nav-number">1.</span> <span class="nav-text">AdaBoost</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#学习器的权重计算"><span class="nav-number">2.</span> <span class="nav-text">学习器的权重计算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据集的权重更新"><span class="nav-number">3.</span> <span class="nav-text">数据集的权重更新</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第一个学习器"><span class="nav-number">4.</span> <span class="nav-text">第一个学习器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二个学习器"><span class="nav-number">5.</span> <span class="nav-text">第二个学习器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三个学习器"><span class="nav-number">6.</span> <span class="nav-text">第三个学习器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成拟合函数"><span class="nav-number">7.</span> <span class="nav-text">生成拟合函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么时候停止训练"><span class="nav-number">8.</span> <span class="nav-text">什么时候停止训练</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
