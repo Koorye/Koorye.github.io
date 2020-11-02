@@ -20,17 +20,25 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="什么都想学一点">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:url" content="http://koorye.github.io/tags/Linux/index.html">
+  <meta name="description" content="我们知道生活中的很多现象，比如身高体重的分布，都满足高斯分布 (正态分布)。而高斯混合模型，则是通过多个高斯分布的叠加，实现对数据集的拟合。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【机器学习自学笔记6】高斯混合模型 (GMM)">
+<meta property="og:url" content="http://koorye.github.io/2020/10/31/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B06%E3%80%91%E9%AB%98%E6%96%AF%E6%B7%B7%E5%90%88%E6%A8%A1%E5%9E%8B(GMM)/index.html">
 <meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
-<meta property="og:description" content="什么都想学一点">
+<meta property="og:description" content="我们知道生活中的很多现象，比如身高体重的分布，都满足高斯分布 (正态分布)。而高斯混合模型，则是通过多个高斯分布的叠加，实现对数据集的拟合。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-97aafd95dc5a25ca78dfb5ee8205ba47_1440w.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-5cc4a35306b5b1f3176188e04d786c86_1440w.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/11/02/bOXAlZc463HC2F5.png">
+<meta property="article:published_time" content="2020-10-31T09:08:32.000Z">
+<meta property="article:modified_time" content="2020-11-02T12:41:12.763Z">
 <meta property="article:author" content="Koorye">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="概率论">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic4.zhimg.com/80/v2-97aafd95dc5a25ca78dfb5ee8205ba47_1440w.jpg">
 
-<link rel="canonical" href="http://koorye.github.io/tags/Linux/">
+<link rel="canonical" href="http://koorye.github.io/2020/10/31/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B06%E3%80%91%E9%AB%98%E6%96%AF%E6%B7%B7%E5%90%88%E6%A8%A1%E5%9E%8B(GMM)/">
 
 
 <script id="page-configurations">
@@ -38,12 +46,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: Linux | 不会真有人以为Koorye会写代码吧</title>
+  <title>【机器学习自学笔记6】高斯混合模型 (GMM) | 不会真有人以为Koorye会写代码吧</title>
   
 
 
@@ -185,191 +193,271 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">Linux
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/10/31/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B06%E3%80%91%E9%AB%98%E6%96%AF%E6%B7%B7%E5%90%88%E6%A8%A1%E5%9E%8B(GMM)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="什么都想学一点">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【机器学习自学笔记6】高斯混合模型 (GMM)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-31 17:08:32" itemprop="dateCreated datePublished" datetime="2020-10-31T17:08:32+08:00">2020-10-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-02 20:41:12" itemprop="dateModified" datetime="2020-11-02T20:41:12+08:00">2020-11-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/10/31/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B06%E3%80%91%E9%AB%98%E6%96%AF%E6%B7%B7%E5%90%88%E6%A8%A1%E5%9E%8B(GMM)/" class="post-meta-item leancloud_visitors" data-flag-title="【机器学习自学笔记6】高斯混合模型 (GMM)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-21T03:14:50+08:00"
-              content="2020-07-21">
-          07-21
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/21/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%85%AD%E3%80%91Docker%E6%90%AD%E5%BB%BARedis%E9%9B%86%E7%BE%A4%EF%BC%8C%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/" itemprop="url">
-            <span itemprop="name">【Redis自学笔记六】Docker搭建Redis集群，主从复制和哨兵模式</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-21T00:25:31+08:00"
-              content="2020-07-21">
-          07-21
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/21/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E3%80%81%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85/" itemprop="url">
-            <span itemprop="name">【Redis自学笔记五】配置文件、持久化与发布订阅</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-20T10:39:06+08:00"
-              content="2020-07-20">
-          07-20
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%89%E3%80%91Redis%E7%9A%84%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E4%BA%8B%E5%8A%A1%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81/" itemprop="url">
-            <span itemprop="name">【Redis自学笔记三】Redis的特殊数据类型、事务和乐观锁</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-20T03:18:25+08:00"
-              content="2020-07-20">
-          07-20
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91Redis%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%92%8C%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" itemprop="url">
-            <span itemprop="name">【Redis自学笔记二】Redis的基本命令和数据类型</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-20T02:47:30+08:00"
-              content="2020-07-20">
-          07-20
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E4%BB%80%E4%B9%88%E6%98%AFNoSQL%EF%BC%9FDocker%E5%90%AF%E5%8A%A8Redis/" itemprop="url">
-            <span itemprop="name">【Redis自学笔记一】什么是NoSQL？Docker启动Redis</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-19T16:38:11+08:00"
-              content="2020-07-19">
-          07-19
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Docker%E6%90%AD%E5%BB%BARabbitMQ%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/" itemprop="url">
-            <span itemprop="name">【RabbitMQ自学笔记四】Docker搭建RabbitMQ集群架构</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-07-13T13:35:24+08:00"
-              content="2020-07-13">
-          07-13
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/07/13/%E5%8D%87%E7%BA%A7WSL2%E5%B9%B6%E5%AE%89%E8%A3%85Docker/" itemprop="url">
-            <span itemprop="name">WSL不支持Docker？不存在的，升级WSL2并安装Docker</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-06-10T11:21:35+08:00"
-              content="2020-06-10">
-          06-10
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/06/10/%E8%BF%98%E5%9C%A8%E7%94%A8%E5%8F%8C%E7%B3%BB%E7%BB%9F%EF%BC%9F%E8%AF%95%E8%AF%95WSL%E5%90%A7%E2%80%94%E2%80%94%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AEWSL%E3%80%81%E9%85%8D%E7%BD%AEvim%E3%80%81%E5%AE%89%E8%A3%85%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2/" itemprop="url">
-            <span itemprop="name">还在用双系统？试试WSL吧——安装与配置WSL、配置vim、安装图形界面</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
+        <p>我们知道生活中的很多现象，比如身高体重的分布，都满足高斯分布 (正态分布)。而高斯混合模型，则是通过多个高斯分布的叠加，实现对数据集的拟合。</p>
+<a id="more"></a>
+<h1 id="高斯分布"><a href="#高斯分布" class="headerlink" title="高斯分布"></a>高斯分布</h1><p>如果学过概率论，我们知道高斯分布的公式如下：</p>
+<script type="math/tex; mode=display">
+X \sim N(\mu,\sigma^2)</script><p>生活中的很多现象，比如身高，都近似一种高斯分布：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-97aafd95dc5a25ca78dfb5ee8205ba47_1440w.jpg" alt=""></p>
+<p>考虑一个问题，如果有一组数据，其中包括男性和女性的身高，比起使用一个高斯分布，使用两个高斯分布拟合的效果是不是更好呢？</p>
+<p><img src="https://pic3.zhimg.com/80/v2-5cc4a35306b5b1f3176188e04d786c86_1440w.jpg" alt=""></p>
+<p>然而，我们只知道数据集，并不知道分布的参数，高斯混合要做的，就是把每个高斯分布的参数求出来。</p>
+<h2 id="多元高斯分布"><a href="#多元高斯分布" class="headerlink" title="多元高斯分布"></a>多元高斯分布</h2><p>多元高斯分布的公式如下：</p>
+<script type="math/tex; mode=display">
+p(x) = \frac{1}{(2\pi)^{\frac{n}{2}}|\Sigma|^{\frac{1}{2}}}e^{-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)}</script><ul>
+<li>$\mu$ 是 n 维均值向量</li>
+<li>$\Sigma$ 是 $n\times n$ 的协方差矩阵</li>
+</ul>
+<h1 id="高斯混合模型-GMM"><a href="#高斯混合模型-GMM" class="headerlink" title="高斯混合模型 (GMM)"></a>高斯混合模型 (GMM)</h1><p>考虑数据集</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>密度</th>
+<th>含糖率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0.697</td>
+<td>0.460</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0.774</td>
+<td>0.376</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0.634</td>
+<td>0.264</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0.608</td>
+<td>0.318</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0.556</td>
+<td>0.215</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0.403</td>
+<td>0.237</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0.481</td>
+<td>0.149</td>
+</tr>
+<tr>
+<td>8</td>
+<td>0.437</td>
+<td>0.211</td>
+</tr>
+<tr>
+<td>9</td>
+<td>0.666</td>
+<td>0.091</td>
+</tr>
+<tr>
+<td>10</td>
+<td>0.243</td>
+<td>0.267</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>首先考虑将数据集分成几类，比如分 3 类。</p>
+<p>接下来就需要初始化 3 个类，也就是三个高斯分布的参数：</p>
+<p>初始化三个高斯分布的权重各为 1/3</p>
+<script type="math/tex; mode=display">
+\alpha_1=\alpha_2=\alpha_3=0.3333</script><p>初始化三个高斯分布的协方差矩阵，由于样本集有 2 个维度，故高斯分布也满足二维</p>
+<script type="math/tex; mode=display">
+\Sigma_1=\Sigma_2=\Sigma_3=\begin{pmatrix}
+0.1 & 0 \\
+0 & 0.1
+\end{pmatrix}</script><p><strong>随机</strong>选择 3 个样本作为 3 个高斯分布的初始参数</p>
+<script type="math/tex; mode=display">
+\mu_1=x_2=(0.774,0.376)</script><script type="math/tex; mode=display">
+\mu_2=x_5=(0.556,0.215)</script><script type="math/tex; mode=display">
+\mu_3=x_8=(0.437,0.211)</script><h2 id="求出每个样本对于每个高斯分布的概率密度"><a href="#求出每个样本对于每个高斯分布的概率密度" class="headerlink" title="求出每个样本对于每个高斯分布的概率密度"></a>求出每个样本对于每个高斯分布的概率密度</h2><script type="math/tex; mode=display">
+p_1(x_1) = \frac{1}{2\pi|\Sigma_1|^{\frac{1}{2}}}e^{-\frac{1}{2}(x_1-\mu_1)^T\Sigma_1^{-1}(x_1-\mu_1)}</script><p>其中</p>
+<script type="math/tex; mode=display">
+|\Sigma_1|=0.01</script><script type="math/tex; mode=display">
+x_1-\mu_1=\begin{pmatrix}
+-0.077 & 0.084
+\end{pmatrix}</script><p> 计算得到</p>
+<script type="math/tex; mode=display">
+p_1(x_1) = 1.4915</script><p>同理</p>
+<script type="math/tex; mode=display">
+p_2(x_1) = \frac{1}{2\pi|\Sigma_2|^{\frac{1}{2}}}e^{-\frac{1}{2}(x_1-\mu_2)^T\Sigma_1^{-1}(x_1-\mu_2)}</script><p>计算得到</p>
+<script type="math/tex; mode=display">
+p_2(x_1)=1.0673</script><script type="math/tex; mode=display">
+p_3(x_1) = \frac{1}{2\pi|\Sigma_3|^{\frac{1}{2}}}e^{-\frac{1}{2}(x_1-\mu_3)^T\Sigma_1^{-1}(x_1-\mu_3)}</script><script type="math/tex; mode=display">
+=0.6998</script><p>经过对 10 个样本的计算，得到如下矩阵：</p>
+<ul>
+<li>每一行代表一个样本</li>
+<li>每一列代表样本在该类的概率密度</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">([[1.49150105, 1.06734902, 0.6998446 ],</span><br><span class="line">  [1.59154943, 1.10239273, 0.69713097],</span><br><span class="line">  [1.35525283, 1.5254402 , 1.22695811],</span><br><span class="line">  [1.36357241, 1.48905699, 1.19207803],</span><br><span class="line">  [1.10239273, 1.59154943, 1.45081146],</span><br><span class="line">  [0.72607499, 1.41233311, 1.5222782 ],</span><br><span class="line">  [0.80076963, 1.51407248, 1.57621756],</span><br><span class="line">  [0.69713097, 1.45081146, 1.59154943],</span><br><span class="line">  [1.00026306, 1.38725646, 1.20404055],</span><br><span class="line">  [0.36622698, 0.96208067, 1.22986945]])</span><br></pre></td></tr></table></figure>
+<h2 id="将概率密度乘以权重-alpha"><a href="#将概率密度乘以权重-alpha" class="headerlink" title="将概率密度乘以权重$\alpha$"></a>将概率密度乘以权重$\alpha$</h2><p> 即第 1 列的每个值 <em> $\alpha_1$，第 2 列的每个值 </em> $\alpha_2$，第 3 列的每个值 * $\alpha_3$</p>
+<p>对于第一个样本，得到：</p>
+<script type="math/tex; mode=display">
+\gamma_1(x_1) = \alpha_1 \cdot p_1(x_1)=0.4972</script><script type="math/tex; mode=display">
+\gamma_2(x_1) = \alpha_1 \cdot p_1(x_1)=0.3558</script><script type="math/tex; mode=display">
+\gamma_3(x_1) = \alpha_1 \cdot p_1(x_1)=0.2333</script><p>对于 10 个样本，得到如下矩阵：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">([[0.49716702, 0.35578301, 0.23328153],</span><br><span class="line">  [0.53051648, 0.36746424, 0.23237699],</span><br><span class="line">  [0.45175094, 0.50848007, 0.40898604],</span><br><span class="line">  [0.45452414, 0.49635233, 0.39735934],</span><br><span class="line">  [0.36746424, 0.53051648, 0.48360382],</span><br><span class="line">  [0.242025  , 0.4707777 , 0.50742607],</span><br><span class="line">  [0.26692321, 0.50469083, 0.52540585],</span><br><span class="line">  [0.23237699, 0.48360382, 0.53051648],</span><br><span class="line">  [0.33342102, 0.46241882, 0.40134685],</span><br><span class="line">  [0.12207566, 0.32069356, 0.40995648]])</span><br></pre></td></tr></table></figure>
+<h2 id="归一化得到-gamma"><a href="#归一化得到-gamma" class="headerlink" title="归一化得到 $\gamma$"></a>归一化得到 $\gamma$</h2><p>即对于每一个样本：</p>
+<script type="math/tex; mode=display">
+\gamma_j(x)=\frac{\gamma_j(x)}{\sum_i\gamma_i(x)}</script><p>对于第一个样本：</p>
+<script type="math/tex; mode=display">
+\gamma_1(x_1)=\frac{\gamma_1(x_1)}{\gamma_1(x_1)+\gamma_2(x_1)+\gamma_3(x_1)}=0.4577</script><script type="math/tex; mode=display">
+\gamma_2(x_1)=\frac{\gamma_2(x_1)}{\gamma_1(x_1)+\gamma_2(x_1)+\gamma_3(x_1)}=0.3275</script><script type="math/tex; mode=display">
+\gamma_3(x_1)=\frac{\gamma_3(x_1)}{\gamma_1(x_1)+\gamma_2(x_1)+\gamma_3(x_1)}=0.2148</script><p>对于每一个样本，得到如下矩阵：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">([[0.45769893, 0.32753883, 0.21476225],</span><br><span class="line">  [0.46933504, 0.32508669, 0.20557828],</span><br><span class="line">  [0.32993377, 0.37136557, 0.29870066],</span><br><span class="line">  [0.3371251 , 0.36814949, 0.2947254 ],</span><br><span class="line">  [0.26597304, 0.38399132, 0.35003563],</span><br><span class="line">  [0.19834395, 0.38581102, 0.41584503],</span><br><span class="line">  [0.20579731, 0.38911572, 0.40508697],</span><br><span class="line">  [0.18642398, 0.38797021, 0.4256058 ],</span><br><span class="line">  [0.27850378, 0.38625456, 0.33524166],</span><br><span class="line">  [0.14315935, 0.37608056, 0.48076009]])</span><br></pre></td></tr></table></figure>
+<h2 id="更新参数"><a href="#更新参数" class="headerlink" title="更新参数"></a>更新参数</h2><h3 id="更新-alpha"><a href="#更新-alpha" class="headerlink" title="更新 $\alpha$"></a>更新 $\alpha$</h3><p>$\alpha$ 相当于每个聚类概率的均值，更新公式如下：</p>
+<script type="math/tex; mode=display">
+\alpha_i = \frac{\gamma_i}{\sum_j\gamma_j}</script><p>更新后的 $\alpha$：</p>
+<script type="math/tex; mode=display">
+\alpha_1=0.28722943</script><script type="math/tex; mode=display">
+\alpha_2=0.3701364</script><script type="math/tex; mode=display">
+\alpha_3=0.34263418</script><h3 id="更新-mu"><a href="#更新-mu" class="headerlink" title="更新 $\mu$"></a>更新 $\mu$</h3><p>$\mu$ 即 x 的均值，更新公式如下：</p>
+<script type="math/tex; mode=display">
+\mu_{i,j}=\frac{\sum_i x_{i,j}\cdot\gamma_{i,j}}{\sum_i\gamma_{i,j}}</script><p>即对于每一个聚类：其 $\mu$ = 该聚类的 $\gamma$ * 对应的样本 / 该聚类的 $\gamma$ 之和</p>
+<p>对于第一个样本：</p>
+<script type="math/tex; mode=display">
+\sum_i\gamma_{i,1} = 2.8723</script><script type="math/tex; mode=display">
+\sum_i x_{i,1}\gamma_{i,1} = 1.7250</script><p>故</p>
+<script type="math/tex; mode=display">
+\mu_{1,1} = \frac{\sum_ix_{i,1}\gamma_{i,1}}{\sum_i\gamma_{i,1}}=0.6006</script><p>同理</p>
+<script type="math/tex; mode=display">
+\mu_{1,2} = \frac{\sum_ix_{i,2}\gamma_{i,1}}{\sum_i\gamma_{i,1}}=0.2811</script><p>对于每一个样本，求得矩阵：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">([[0.60055553, 0.28114106],</span><br><span class="line">  [0.54399246, 0.24676209],</span><br><span class="line">  [0.51381731, 0.23498059]])</span><br></pre></td></tr></table></figure>
+<h3 id="更新-Sigma"><a href="#更新-Sigma" class="headerlink" title="更新 $\Sigma$"></a>更新 $\Sigma$</h3><p>更新公式如下：</p>
+<script type="math/tex; mode=display">
+\Sigma_i=\frac{\sum_j(x_j-\mu_i)^T(x_j-\mu_i)\gamma_{i,j}}{\sum_j\gamma_{i,j}}</script><p>更新后的 $\Sigma_1$：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[0.01011193, 0.00593932],</span><br><span class="line"> [0.00593932, 0.01346392]]</span><br></pre></td></tr></table></figure>
+<p>更新后的 $\Sigma_2$：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[0.00311919, 0.0047306 ],</span><br><span class="line"> [0.0047306 , 0.02108242]]</span><br></pre></td></tr></table></figure>
+<p>更新后的 $\Sigma_3$：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[0.01032781, 0.00330684],</span><br><span class="line"> [0.00330684, 0.01090279]]</span><br></pre></td></tr></table></figure>
+<p>按照上面的顺序，进行多次迭代更新，最终根据概率密度可以得到分类结果：</p>
+<p><img src="https://i.loli.net/2020/11/02/bOXAlZc463HC2F5.png" alt="下载"></p>
 
     </div>
-  </div>
-  
-  
-  
 
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag"># 概率论</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/29/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B05%E3%80%91AdaBoost/" rel="prev" title="【机器学习自学笔记5】AdaBoost">
+      <i class="fa fa-chevron-left"></i> 【机器学习自学笔记5】AdaBoost
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
 
@@ -422,6 +510,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#高斯分布"><span class="nav-number">1.</span> <span class="nav-text">高斯分布</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#多元高斯分布"><span class="nav-number">1.1.</span> <span class="nav-text">多元高斯分布</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高斯混合模型-GMM"><span class="nav-number">2.</span> <span class="nav-text">高斯混合模型 (GMM)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-number">2.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求出每个样本对于每个高斯分布的概率密度"><span class="nav-number">2.2.</span> <span class="nav-text">求出每个样本对于每个高斯分布的概率密度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将概率密度乘以权重-alpha"><span class="nav-number">2.3.</span> <span class="nav-text">将概率密度乘以权重$\alpha$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#归一化得到-gamma"><span class="nav-number">2.4.</span> <span class="nav-text">归一化得到 $\gamma$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新参数"><span class="nav-number">2.5.</span> <span class="nav-text">更新参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#更新-alpha"><span class="nav-number">2.5.1.</span> <span class="nav-text">更新 $\alpha$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新-mu"><span class="nav-number">2.5.2.</span> <span class="nav-text">更新 $\mu$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新-Sigma"><span class="nav-number">2.5.3.</span> <span class="nav-text">更新 $\Sigma$</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
