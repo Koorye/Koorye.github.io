@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="PCA（Principal Component Analysis） 是一种常见的数据分析方式，常用于高维数据的降维，可用于提取数据的主要特征分量。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【机器学习自学笔记7】主成分分析(PCA)">
+<meta property="og:url" content="http://koorye.github.io/2020/11/05/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B07%E3%80%91%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90(PCA)/index.html">
+<meta property="og:site_name" content="不会真有人以为Koorye会写代码吧">
+<meta property="og:description" content="PCA（Principal Component Analysis） 是一种常见的数据分析方式，常用于高维数据的降维，可用于提取数据的主要特征分量。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/11/07/9yI4TtUD5Lbmfio.png">
+<meta property="article:published_time" content="2020-11-05T12:27:33.000Z">
+<meta property="article:modified_time" content="2020-11-07T11:15:46.665Z">
+<meta property="article:author" content="Koorye">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/11/07/9yI4TtUD5Lbmfio.png">
+
+<link rel="canonical" href="http://koorye.github.io/2020/11/05/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B07%E3%80%91%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90(PCA)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【机器学习自学笔记7】主成分分析(PCA) | 不会真有人以为Koorye会写代码吧</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不会真有人以为Koorye会写代码吧</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不会吧不会吧</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/11/05/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B07%E3%80%91%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90(PCA)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="什么都想学一点">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【机器学习自学笔记7】主成分分析(PCA)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-11-05 20:27:33" itemprop="dateCreated datePublished" datetime="2020-11-05T20:27:33+08:00">2020-11-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-07 19:15:46" itemprop="dateModified" datetime="2020-11-07T19:15:46+08:00">2020-11-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/11/05/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B07%E3%80%91%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90(PCA)/" class="post-meta-item leancloud_visitors" data-flag-title="【机器学习自学笔记7】主成分分析(PCA)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>PCA（Principal Component Analysis） 是一种常见的数据分析方式，常用于高维数据的降维，可用于提取数据的主要特征分量。</p>
+<a id="more"></a>
+<h1 id="维数灾难"><a href="#维数灾难" class="headerlink" title="维数灾难"></a>维数灾难</h1><blockquote>
+<p>维数灾难(Curse of Dimensionality)：通常是指在涉及到向量的计算的问题中，随着维数的增加，计算量呈指数倍增长的一种现象。</p>
+</blockquote>
+<p>在机器学习中，随着数据集维数的增加，数据的计算量将呈几何倍数增加，同时样本间的距离会远远增大，这将导致样本数据失去其意义。</p>
+<p>为了减少计算量、增加准确度，我们有必要按照一定的规则去除一些维度 (特征)，这便是降维算法。PCA 算法就是机器学习中的典型降维算法。</p>
+<h1 id="PCA"><a href="#PCA" class="headerlink" title="PCA"></a>PCA</h1><h2 id="基变换"><a href="#基变换" class="headerlink" title="基变换"></a>基变换</h2><h3 id="二维坐标系"><a href="#二维坐标系" class="headerlink" title="二维坐标系"></a>二维坐标系</h3><p>考虑二维坐标 (3, 2)，它有什么数学意义？</p>
+<p>如果仔细思考，二维坐标的两个值实际上是在 x 轴和 y 轴上的投影。</p>
+<p>这里的 x 轴单位方向 (1,0) 和 y 轴单位方向 (0,1) 就是所谓的一组基。</p>
+<h3 id="基变换矩阵"><a href="#基变换矩阵" class="headerlink" title="基变换矩阵"></a>基变换矩阵</h3><p>如果把上面的例子通过矩阵表示：</p>
+<script type="math/tex; mode=display">
+\begin{pmatrix}
+1 & 0 \\
+0 & 1 \\
+\end{pmatrix}
+\begin{pmatrix}
+3 \\
+2 \\
+\end{pmatrix}=
+\begin{pmatrix}
+3 \\
+2 \\
+\end{pmatrix}</script><p>那如果基不是坐标轴呢？</p>
+<p>比如一组基为：</p>
+<script type="math/tex; mode=display">
+(\frac{1}{\sqrt2},\frac{1}{\sqrt2}),(-\frac{1}{\sqrt2},\frac{1}{\sqrt2})</script><p>此时通过矩阵运算：</p>
+<script type="math/tex; mode=display">
+\begin{pmatrix}
+\frac{1}{\sqrt2}&\frac{1}{\sqrt2} \\
+-\frac{1}{\sqrt2}&\frac{1}{\sqrt2} \\
+\end{pmatrix}
+\begin{pmatrix}
+3 \\
+2 \\
+\end{pmatrix}=
+\begin{pmatrix}
+\frac{5}{\sqrt2} \\
+-\frac{1}{\sqrt2} \\
+\end{pmatrix}</script><p>便可以得到该组基下的坐标：</p>
+<script type="math/tex; mode=display">
+(\frac{5}{\sqrt2},-\frac{1}{\sqrt2})</script><p>把上面的矩阵写成一般形式：</p>
+<script type="math/tex; mode=display">
+\begin{pmatrix}
+p_{11}&p_{12}&\dots&p_{1n}\\
+p_{21}&p_{22}&\dots&p_{2n}\\
+\vdots&\vdots&\ddots&\vdots\\
+p_{r1}&p_{r2}&\dots&p_{rn}\\
+\end{pmatrix}
+\begin{pmatrix}
+a_{11}&a_{12}&\dots&a_{1m}\\
+a_{21}&a_{22}&\dots&a_{2m}\\
+\vdots&\vdots&\ddots&\vdots\\
+a_{n1}&a_{n2}&\dots&a_{nm}\\
+\end{pmatrix}</script><script type="math/tex; mode=display">
+=\begin{pmatrix}
+P_1\\
+P_2\\
+\vdots\\
+P_R\\
+\end{pmatrix}
+\begin{pmatrix}
+A_1&A_2&\dots&A_M
+\end{pmatrix}=
+\begin{pmatrix}
+P_1A_1&P_1A_2&\dots&P_1A_M\\
+P_2A_1&P_2A_2&\dots&P_2A_M\\
+\vdots&\vdots&\ddots&\vdots\\
+P_RA_1&P_RA_2&\dots&P_RA_M\\
+\end{pmatrix}</script><ul>
+<li>$P_i$ 是一组行向量，表示一个基</li>
+<li>$A_i$ 是一组列向量，表示一个坐标 (样本)</li>
+</ul>
+<h2 id="最大可分性"><a href="#最大可分性" class="headerlink" title="最大可分性"></a>最大可分性</h2><p>最大可分性是 PCA 算法的原则，即：</p>
+<ul>
+<li>样本尽可能分散</li>
+<li>样本之间尽可能不相关</li>
+</ul>
+<p>为此，可以考虑两个数学概念：</p>
+<ul>
+<li>方差，衡量数据的偏离程度。为使样本分散，方差应尽可能大。</li>
+</ul>
+<script type="math/tex; mode=display">
+Var(a)=\frac1m\sum_{i=1}^m(a_i-\mu)^2</script><ul>
+<li>协方差，衡量两组数据的相关性。为使样本之间不相关，协方差应尽可能小。</li>
+</ul>
+<script type="math/tex; mode=display">
+Cov(a,b)=\frac{1}{m}\sum_{i=1}^m(a_i-\mu_a)(b_i-\mu_b)</script><h3 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h3><p>为了简化计算，可以事先将均值作为坐标轴的中心。这样一来，均值都为 0，公式可简化为：</p>
+<script type="math/tex; mode=display">
+Var(a)=\frac1m\sum_{i=1}^ma_i^2</script><script type="math/tex; mode=display">
+Cov(a,b)=\frac{1}{m}\sum_{i=1}^ma_ib_i</script><h3 id="协方差矩阵"><a href="#协方差矩阵" class="headerlink" title="协方差矩阵"></a>协方差矩阵</h3><p>如果有 a 和 b 两组数据，排列成矩阵：</p>
+<script type="math/tex; mode=display">
+X=\begin{pmatrix}
+a_1&a_2&\dots&a_m\\
+b_1&b_2&\dots&b_m\\
+\end{pmatrix}</script><p>则有</p>
+<script type="math/tex; mode=display">
+\frac1mXX^T=\begin{pmatrix}
+\frac1m\sum_{i=1}^ma_i^2&\sum_{i=1}^ma_ib_i\\
+\frac1m\sum_{i=1}^mb_ia_i&\sum_{i=1}^mb_i^2\\
+\end{pmatrix}</script><script type="math/tex; mode=display">
+=\begin{pmatrix}
+Var(a)&Cov(a,b)\\
+Cov(b,a)&Var(b)\\
+\end{pmatrix}</script><p>这样两个变量的方差和协方差就被统一在矩阵里。</p>
+<p>如果有 n 组数据，同样可以得到一个 n 维的协方差矩阵，这个矩阵可以反映任意一组数据的分散程度和任意两组数据的相关性。</p>
+<h3 id="矩阵对角化"><a href="#矩阵对角化" class="headerlink" title="矩阵对角化"></a>矩阵对角化</h3><p>考虑最大可分性，我们的目标是找到一组基，使得原矩阵经过基变换后的协方差 (非对角线元素) = 0，而方差 (对角线上的元素) 从大到小排列 (左上最大)，因为基变换时如果要降维，越下方的基越不会被考虑到，其权重应尽量小。</p>
+<p>设原始数据矩阵 X 对应协方差矩阵为 $C=\frac1mXX^T$.</p>
+<p>设 Y = PX，其中 P 是一组基组成的矩阵，则 Y 是 X 在 P 上做基变换得到的矩阵。</p>
+<p>设 Y 的协方差矩阵为 $D=\frac1mYY^T$.</p>
+<p>要如何得到 P 呢？</p>
+<p>可以推导：</p>
+<script type="math/tex; mode=display">
+D=\frac1mYY^T=\frac1m(PX)(PX)^T=\frac1mPXX^TP^T</script><script type="math/tex; mode=display">
+=P\frac1mXX^TP^T=PCP^T</script><p>原问题就相当于寻找一个矩阵 P，满足 $PCP^T$ 是一个对角矩阵，并且对角元素从大到小排列。</p>
+<p>注意到协方差矩阵是实对称对称，而实对称矩阵具有优秀的性质：</p>
+<ul>
+<li>实对称矩阵不同特征值对应的特征向量必然正交</li>
+<li>实对称矩阵一定可以相似对角化</li>
+<li>若实对称矩阵具有 k 重特征值$λ_0$，必有 k 个线性无关的特征向量</li>
+</ul>
+<p>因此，一个 $n\times n$ 的实对称矩阵一定有 n 个单位正交的特征向量 $e_1,e_2,\dots,e_n$.</p>
+<p>若组成矩阵</p>
+<script type="math/tex; mode=display">
+E=\begin{pmatrix}
+e_1&e_2&\dots&e_n
+\end{pmatrix}</script><p>则有</p>
+<script type="math/tex; mode=display">
+E^TCE=\Lambda=\begin{pmatrix}
+\lambda_1&&&\\
+&\lambda_2&&\\
+&&\ddots&\\
+&&&\lambda_n\\
+\end{pmatrix}</script><p>则我们要求的 P，就是 $E^T$</p>
+<p>根据特征值从大到小，将特征向量从上到下排列。则 $P=E^T$ 的前 k 行与原始数据矩阵 X 进行基变换，就得到了降维后的矩阵 Y.</p>
+<h2 id="PCA-的步骤"><a href="#PCA-的步骤" class="headerlink" title="PCA 的步骤"></a>PCA 的步骤</h2><ul>
+<li>将原始数据按列组成 $n\times m $ 的矩阵 X</li>
+<li>对 X 去中心化，即去除均值</li>
+<li>求出协方差矩阵 $C=\frac1mXX^T$</li>
+<li>求出协方差矩阵的特征值和对应的特征向量 $e_1,e_2,\dots,e_n$</li>
+<li>将特征向量按对应特征值大小从上到下按行排成矩阵 E</li>
+<li>取 E 的前 k 行作为矩阵 P</li>
+<li>进行基变换 $Y=PX$ 实现降维</li>
+</ul>
+<h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>$X_1$</th>
+<th>$X_2$</th>
+<th>$X_3$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>-1.4</td>
+</tr>
+<tr>
+<td>2.2</td>
+<td>0.2</td>
+<td>-1.5</td>
+</tr>
+<tr>
+<td>2.4</td>
+<td>0.1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>1.9</td>
+<td>0</td>
+<td>-1.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>首先求出三个维度 (特征) 的均值：</p>
+<script type="math/tex; mode=display">
+Var(X_1)=2.125</script><script type="math/tex; mode=display">
+Var(X_2)=0.075</script><script type="math/tex; mode=display">
+Var(X_3)=-1.275</script><p>去中心化处理：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>$X_1$</th>
+<th>$X_2$</th>
+<th>$X_3$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-0.125</td>
+<td>-0.075</td>
+<td>-0.125</td>
+</tr>
+<tr>
+<td>0.075</td>
+<td>0.125</td>
+<td>-0.225</td>
+</tr>
+<tr>
+<td>0.275</td>
+<td>0.025</td>
+<td>0.275</td>
+</tr>
+<tr>
+<td>-0.225</td>
+<td>-0.075</td>
+<td>0.075</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>此时各维度的均值被化为 0.</p>
+<p>得到矩阵：</p>
+<script type="math/tex; mode=display">
+X=\begin{pmatrix}
+-0.125&-0.075&-0.125\\
+0.075&0.125&-0.225\\
+0.275&0.025&0.275\\
+-0.225&-0.075&0.075\\
+\end{pmatrix}</script><p>计算协方差矩阵：</p>
+<script type="math/tex; mode=display">
+C=\frac13X^TX</script><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C &#x3D;</span><br><span class="line"></span><br><span class="line"> 	0.0492    0.0142    0.0192</span><br><span class="line">    0.0142    0.0092   -0.0058</span><br><span class="line">    0.0192   -0.0058    0.0492</span><br></pre></td></tr></table></figure>
+<p>求出协方差矩阵的特征值和对应的特征向量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">V &#x3D;</span><br><span class="line"></span><br><span class="line">   -0.7300   -0.5747    0.3700</span><br><span class="line">   -0.1071   -0.4385   -0.8924</span><br><span class="line">   -0.6750    0.6910   -0.2585</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">D &#x3D;</span><br><span class="line"></span><br><span class="line">    0.0690         0         0</span><br><span class="line">         0    0.0369         0</span><br><span class="line">         0         0    0.0016</span><br></pre></td></tr></table></figure>
+<p>特征值从大到小：</p>
+<script type="math/tex; mode=display">
+\lambda_1=0.0690,\lambda_2=0.0369,\lambda_3=0.0016</script><p>分别对应特征向量：</p>
+<script type="math/tex; mode=display">
+e_1=\begin{pmatrix}
+-0.7300\\
+-0.1071\\
+-0.6750\\
+\end{pmatrix},
+e_2=\begin{pmatrix}
+-0.5747\\
+-0.4385\\
+ 0.6910\\
+\end{pmatrix},
+e_3=\begin{pmatrix}
+ 0.3700\\
+-0.8924\\
+-0.2585\\
+\end{pmatrix}</script><p>取前 k 个特征向量，假设 $k = 2$，则有基变换矩阵 P：</p>
+<script type="math/tex; mode=display">
+P=\begin{pmatrix}
+e_1^T\\
+e_2^T\\
+\end{pmatrix}
+=\begin{pmatrix}
+-0.7300&-0.1071&-0.6750\\
+-0.5747&-0.4385&0.6910\\
+\end{pmatrix}</script><p>进行基变换 $Y^T=PX^T$：</p>
+<script type="math/tex; mode=display">
+Y=\begin{pmatrix}
+0.1837&0.0184\\
+-0.2200&0.0576\\
+-0.3891&0.0210\\
+0.1217&0.2140\\
+\end{pmatrix}</script><p>降维前后效果 (降维前为蓝色，降维后为红色)：</p>
+<p><img src="https://i.loli.net/2020/11/07/9yI4TtUD5Lbmfio.png" alt="image-20201107191511468"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/31/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B06%E3%80%91%E9%AB%98%E6%96%AF%E6%B7%B7%E5%90%88%E6%A8%A1%E5%9E%8B(GMM)/" rel="prev" title="【机器学习自学笔记6】高斯混合模型 (GMM)">
+      <i class="fa fa-chevron-left"></i> 【机器学习自学笔记6】高斯混合模型 (GMM)
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#维数灾难"><span class="nav-number">1.</span> <span class="nav-text">维数灾难</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PCA"><span class="nav-number">2.</span> <span class="nav-text">PCA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基变换"><span class="nav-number">2.1.</span> <span class="nav-text">基变换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二维坐标系"><span class="nav-number">2.1.1.</span> <span class="nav-text">二维坐标系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基变换矩阵"><span class="nav-number">2.1.2.</span> <span class="nav-text">基变换矩阵</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最大可分性"><span class="nav-number">2.2.</span> <span class="nav-text">最大可分性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#去中心化"><span class="nav-number">2.2.1.</span> <span class="nav-text">去中心化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#协方差矩阵"><span class="nav-number">2.2.2.</span> <span class="nav-text">协方差矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#矩阵对角化"><span class="nav-number">2.2.3.</span> <span class="nav-text">矩阵对角化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA-的步骤"><span class="nav-number">2.3.</span> <span class="nav-text">PCA 的步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#举例"><span class="nav-number">2.4.</span> <span class="nav-text">举例</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Koorye"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Koorye</p>
+  <div class="site-description" itemprop="description">什么都想学一点</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Koorye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Koorye" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:a1311586225@gmail.com" title="E-Mail → mailto:a1311586225@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">Tag Cloud</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+            <canvas width="250" height="250" id="resCanvas" style="width:100%">
+             <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/" rel="tag">HTML</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">32</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shiro/" rel="tag">Shiro</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Data-JPA/" rel="tag">Spring Data JPA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" rel="tag">信息论</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag">概率论</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag">线性代数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/" rel="tag">集成学习</a><span class="tag-list-count">1</span></li></ul>
+            </canvas>
+          </div>
+        </div>
+      
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koorye</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">303k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">4:35</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"6pc9L1Sa5eA6t2wvNQkmITTV-gzGzoHsz","app_key":"2CMvevJL0UGpH6jg5qTkCe56","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
