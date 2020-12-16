@@ -470,9 +470,9 @@
             
             <tag> Java </tag>
             
-            <tag> Redis </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> Redis </tag>
             
         </tags>
       
@@ -499,9 +499,9 @@
             
             <tag> Java </tag>
             
-            <tag> Redis </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> Redis </tag>
             
         </tags>
       
@@ -557,9 +557,9 @@
             
             <tag> Java </tag>
             
-            <tag> Redis </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> Redis </tag>
             
         </tags>
       
@@ -586,9 +586,9 @@
             
             <tag> Java </tag>
             
-            <tag> Redis </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> Redis </tag>
             
         </tags>
       
@@ -615,9 +615,9 @@
             
             <tag> Java </tag>
             
-            <tag> Redis </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> Redis </tag>
             
         </tags>
       
@@ -754,9 +754,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
             
@@ -785,9 +785,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
             
@@ -816,9 +816,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
             
@@ -847,9 +847,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
             
@@ -878,9 +878,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
             
@@ -1107,15 +1107,15 @@
       
         <tags>
             
+            <tag> Web </tag>
+            
             <tag> 前端 </tag>
             
-            <tag> Web </tag>
+            <tag> Vue </tag>
             
             <tag> JavaScript </tag>
             
             <tag> jQuery </tag>
-            
-            <tag> Vue </tag>
             
         </tags>
       
@@ -1140,13 +1140,13 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
             
             <tag> Spring Boot </tag>
+            
+            <tag> Web </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> MyBatis </tag>
             
@@ -1173,11 +1173,11 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
             
             <tag> Spring Boot </tag>
+            
+            <tag> Web </tag>
             
         </tags>
       
@@ -1202,11 +1202,11 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
             
             <tag> Spring Boot </tag>
+            
+            <tag> Web </tag>
             
         </tags>
       
@@ -1231,11 +1231,11 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
             
             <tag> Spring Boot </tag>
+            
+            <tag> Web </tag>
             
         </tags>
       
@@ -1260,17 +1260,17 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
             
             <tag> Maven </tag>
             
-            <tag> MyBatis </tag>
+            <tag> Web </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> Spring </tag>
+            
+            <tag> MyBatis </tag>
             
         </tags>
       
@@ -1295,9 +1295,9 @@
       
         <tags>
             
-            <tag> 前端 </tag>
-            
             <tag> Web </tag>
+            
+            <tag> 前端 </tag>
             
             <tag> HTML </tag>
             
@@ -1330,11 +1330,11 @@
       
         <tags>
             
+            <tag> Java </tag>
+            
             <tag> Web </tag>
             
             <tag> MySQL </tag>
-            
-            <tag> Java </tag>
             
             <tag> MyBatis </tag>
             
@@ -1361,11 +1361,11 @@
       
         <tags>
             
+            <tag> Java </tag>
+            
             <tag> Web </tag>
             
             <tag> MySQL </tag>
-            
-            <tag> Java </tag>
             
             <tag> MyBatis </tag>
             
@@ -1392,11 +1392,11 @@
       
         <tags>
             
-            <tag> Web </tag>
-            
             <tag> Java </tag>
             
             <tag> Maven </tag>
+            
+            <tag> Web </tag>
             
         </tags>
       
@@ -1475,9 +1475,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> Java </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
