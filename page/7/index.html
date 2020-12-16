@@ -191,104 +191,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/29/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%BA%8C%E3%80%91Maven%20Web%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AEMyBatis%E6%A1%86%E6%9E%B6%E5%B9%B6%E8%AF%BB%E5%8F%96MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Koorye">
-      <meta itemprop="description" content="什么都想学一点">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/29/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%BA%8C%E3%80%91Maven%20Web%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AEMyBatis%E6%A1%86%E6%9E%B6%E5%B9%B6%E8%AF%BB%E5%8F%96MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-title-link" itemprop="url">【Maven配置二】Web项目配置MyBatis框架并读取MySQL数据库</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-04-29 19:03:21" itemprop="dateCreated datePublished" datetime="2020-04-29T19:03:21+08:00">2020-04-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-17 11:08:13" itemprop="dateModified" datetime="2020-06-17T11:08:13+08:00">2020-06-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/04/29/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%BA%8C%E3%80%91Maven%20Web%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AEMyBatis%E6%A1%86%E6%9E%B6%E5%B9%B6%E8%AF%BB%E5%8F%96MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-meta-item leancloud_visitors" data-flag-title="【Maven配置二】Web项目配置MyBatis框架并读取MySQL数据库" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>5.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>上一期中我们用<code>intellij idea</code>完成了<code>Maven</code>项目的配置，内嵌<code>jetty</code>插件构建服务器，并安装了<code>jstl</code>标签库。</p>
-<p>我们知道可以使用<code>jdbc</code>对数据库进行增删改查，但是这样代码量很大，而且是硬编码，不够灵活多变，效率也不高。<code>MyBatis</code>为我们提供了更好的解决方案，让我们为<code>Maven</code>配置<code>MyBatis</code>框架。</p>
-          <!--noindex-->
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/28/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%B8%80%E3%80%91intellij%20idea%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%94%A8maven%E5%88%9B%E5%BB%BAweb%E5%B7%A5%E7%A8%8B+%E9%85%8D%E7%BD%AEjetty%E6%8F%92%E4%BB%B6+%E5%BC%95%E5%85%A5jar%E5%8C%85/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -966,6 +868,103 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2020/04/20/%E4%B8%AA%E4%BA%BA%E6%95%B4%E7%90%86%E7%9A%84python%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83%E2%80%94%E2%80%94%E6%91%98%E8%87%AA%E3%80%8AGoogle%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E3%80%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="什么都想学一点">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会真有人以为Koorye会写代码吧">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/20/%E4%B8%AA%E4%BA%BA%E6%95%B4%E7%90%86%E7%9A%84python%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83%E2%80%94%E2%80%94%E6%91%98%E8%87%AA%E3%80%8AGoogle%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E3%80%8B/" class="post-title-link" itemprop="url">个人整理Python风格规范——摘自《Google开源项目风格指南》</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-20 13:30:40" itemprop="dateCreated datePublished" datetime="2020-04-20T13:30:40+08:00">2020-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-17 11:04:10" itemprop="dateModified" datetime="2020-06-17T11:04:10+08:00">2020-06-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/04/20/%E4%B8%AA%E4%BA%BA%E6%95%B4%E7%90%86%E7%9A%84python%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83%E2%80%94%E2%80%94%E6%91%98%E8%87%AA%E3%80%8AGoogle%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E3%80%8B/" class="post-meta-item leancloud_visitors" data-flag-title="个人整理Python风格规范——摘自《Google开源项目风格指南》" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>743</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Python风格规范</p>
+          <!--noindex-->
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -1037,7 +1036,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
