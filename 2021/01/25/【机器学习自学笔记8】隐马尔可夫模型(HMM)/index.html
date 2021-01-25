@@ -20,16 +20,16 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="隐马尔可夫模型（Hidden Markov Model，HMM）是统计模型，它用来描述一个含有隐含未知参数的马尔可夫过程。其难点是从可观察的参数中确定该过程的隐含参数。然后利用这些参数来作进一步的分析，例如模式识别。  隐马尔可夫模型的结构HMM 模型是一种生成式模型。 HMM 模型中有 2 个相关序列，分别是状态序列和观测序列，HMM 模型具有以下规则：  观测序列是可以直接观测的，状态序列是">
+  <meta name="description" content="隐马尔可夫模型（Hidden Markov Model，HMM）是统计模型，它用来描述一个含有隐含未知参数的马尔可夫过程。其难点是从可观察的参数中确定该过程的隐含参数。然后利用这些参数来作进一步的分析，例如模式识别。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【机器学习自学笔记8】隐马尔可夫模型(HMM)">
 <meta property="og:url" content="http://koorye.github.io/2021/01/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B08%E3%80%91%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B(HMM)/index.html">
 <meta property="og:site_name" content="Koorye 的秘密空间">
-<meta property="og:description" content="隐马尔可夫模型（Hidden Markov Model，HMM）是统计模型，它用来描述一个含有隐含未知参数的马尔可夫过程。其难点是从可观察的参数中确定该过程的隐含参数。然后利用这些参数来作进一步的分析，例如模式识别。  隐马尔可夫模型的结构HMM 模型是一种生成式模型。 HMM 模型中有 2 个相关序列，分别是状态序列和观测序列，HMM 模型具有以下规则：  观测序列是可以直接观测的，状态序列是">
+<meta property="og:description" content="隐马尔可夫模型（Hidden Markov Model，HMM）是统计模型，它用来描述一个含有隐含未知参数的马尔可夫过程。其难点是从可观察的参数中确定该过程的隐含参数。然后利用这些参数来作进一步的分析，例如模式识别。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gitee.com/koorye/picgo/raw/master/image-20210125161351112.png">
 <meta property="article:published_time" content="2021-01-25T07:35:52.000Z">
-<meta property="article:modified_time" content="2021-01-25T12:59:30.880Z">
+<meta property="article:modified_time" content="2021-01-25T13:05:02.325Z">
 <meta property="article:author" content="Koorye">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="概率论">
@@ -222,7 +222,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-01-25 15:35:52 / 修改时间：20:59:30" itemprop="dateCreated datePublished" datetime="2021-01-25T15:35:52+08:00">2021-01-25</time>
+              <time title="创建时间：2021-01-25 15:35:52 / 修改时间：21:05:02" itemprop="dateCreated datePublished" datetime="2021-01-25T15:35:52+08:00">2021-01-25</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -269,6 +269,7 @@
         <blockquote>
 <p>隐马尔可夫模型（Hidden Markov Model，HMM）是统计模型，它用来描述一个含有隐含未知参数的马尔可夫过程。其难点是从可观察的参数中确定该过程的隐含参数。然后利用这些参数来作进一步的分析，例如模式识别。</p>
 </blockquote>
+<a id="more"></a>
 <h1 id="隐马尔可夫模型的结构"><a href="#隐马尔可夫模型的结构" class="headerlink" title="隐马尔可夫模型的结构"></a>隐马尔可夫模型的结构</h1><p>HMM 模型是一种生成式模型。</p>
 <p>HMM 模型中有 2 个相关序列，分别是状态序列和观测序列，HMM 模型具有以下规则：</p>
 <ul>
