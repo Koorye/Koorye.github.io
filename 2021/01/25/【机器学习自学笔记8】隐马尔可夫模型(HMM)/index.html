@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"koorye.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="隐马尔可夫模型（Hidden Markov Model，HMM）是统计模型，它用来描述一个含有隐含未知参数的马尔可夫过程。其难点是从可观察的参数中确定该过程的隐含参数。然后利用这些参数来作进一步的分析，例如模式识别。  隐马尔可夫模型的结构HMM 模型是一种生成式模型。 HMM 模型中有 2 个相关序列，分别是状态序列和观测序列，HMM 模型具有以下规则：  观测序列是可以直接观测的，状态序列是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【机器学习自学笔记8】隐马尔可夫模型(HMM)">
+<meta property="og:url" content="http://koorye.github.io/2021/01/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B08%E3%80%91%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B(HMM)/index.html">
+<meta property="og:site_name" content="Koorye 的秘密空间">
+<meta property="og:description" content="隐马尔可夫模型（Hidden Markov Model，HMM）是统计模型，它用来描述一个含有隐含未知参数的马尔可夫过程。其难点是从可观察的参数中确定该过程的隐含参数。然后利用这些参数来作进一步的分析，例如模式识别。  隐马尔可夫模型的结构HMM 模型是一种生成式模型。 HMM 模型中有 2 个相关序列，分别是状态序列和观测序列，HMM 模型具有以下规则：  观测序列是可以直接观测的，状态序列是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/koorye/picgo/raw/master/image-20210125161351112.png">
+<meta property="article:published_time" content="2021-01-25T07:35:52.000Z">
+<meta property="article:modified_time" content="2021-01-25T12:59:30.880Z">
+<meta property="article:author" content="Koorye">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="概率论">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/koorye/picgo/raw/master/image-20210125161351112.png">
+
+<link rel="canonical" href="http://koorye.github.io/2021/01/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B08%E3%80%91%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B(HMM)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【机器学习自学笔记8】隐马尔可夫模型(HMM) | Koorye 的秘密空间</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Koorye 的秘密空间</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你是怎么找到这里的？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/2021/01/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B08%E3%80%91%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B(HMM)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Koorye">
+      <meta itemprop="description" content="什么都想学一点">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Koorye 的秘密空间">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【机器学习自学笔记8】隐马尔可夫模型(HMM)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-25 15:35:52 / 修改时间：20:59:30" itemprop="dateCreated datePublished" datetime="2021-01-25T15:35:52+08:00">2021-01-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/01/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B08%E3%80%91%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B(HMM)/" class="post-meta-item leancloud_visitors" data-flag-title="【机器学习自学笔记8】隐马尔可夫模型(HMM)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>隐马尔可夫模型（Hidden Markov Model，HMM）是统计模型，它用来描述一个含有隐含未知参数的马尔可夫过程。其难点是从可观察的参数中确定该过程的隐含参数。然后利用这些参数来作进一步的分析，例如模式识别。</p>
+</blockquote>
+<h1 id="隐马尔可夫模型的结构"><a href="#隐马尔可夫模型的结构" class="headerlink" title="隐马尔可夫模型的结构"></a>隐马尔可夫模型的结构</h1><p>HMM 模型是一种生成式模型。</p>
+<p>HMM 模型中有 2 个相关序列，分别是状态序列和观测序列，HMM 模型具有以下规则：</p>
+<ul>
+<li>观测序列是可以直接观测的，状态序列是不可观测的</li>
+<li>状态序列在 t 时刻的值只与 t-1 时刻的值有关</li>
+<li>观测序列在 t 时刻的值只与 t 时刻状态序列的值有关</li>
+</ul>
+<p>设状态序列</p>
+<script type="math/tex; mode=display">
+X = \{X_1,X_2,\dots,X_n\}</script><p>观测序列</p>
+<script type="math/tex; mode=display">
+O=\{O_1,O_2,\dots,O_n\}</script><p>则 HMM 模型的结构如下图所示：<br><img src="https://gitee.com/koorye/picgo/raw/master/image-20210125161351112.png" alt="image-20210125161351112"></p>
+<h1 id="隐马尔科夫模型的假设"><a href="#隐马尔科夫模型的假设" class="headerlink" title="隐马尔科夫模型的假设"></a>隐马尔科夫模型的假设</h1><p>根据上述结构和规则，我们可以得出如下假设：</p>
+<ul>
+<li><p>马尔可夫性假设：t 时刻的状态出现的概率只与 t-1 时刻的状态有关</p>
+<script type="math/tex; mode=display">
+P\{X_t|X_1,X_2,\dots,X_{t-1}\}=P\{X_t|X_{t-1}\}</script></li>
+<li><p>齐次性假设：时间平移不变性</p>
+<script type="math/tex; mode=display">
+P\{X_t|X_{t-1}\}=P\{X_s|X_{s-1}\},if\quad X_t=X_s\quad and\quad X_{t-1}=X_{s-1}</script></li>
+<li><p>观测独立性假设：某个时刻 t 的观测值只依赖于该时刻的状态值</p>
+<script type="math/tex; mode=display">
+P\{O_t|X_1,X_2,\dots,X_{t-1},O_1,O_2,\dots,O_{t-1}\}=P\{O_t|X_t\}</script></li>
+</ul>
+<p>根据上述假设，得 HMM 的联合概率密度：</p>
+<script type="math/tex; mode=display">
+P\{O_1,O_2,\dots,O_T,X_1,X_2,\dots,X_T\}</script><script type="math/tex; mode=display">
+=P\{X_1\}P\{O_1|X_1\}\prod_{t=2}^{T}P\{X_t|X_{t-1}\}P\{O_t|X_t\}</script><h1 id="隐马尔科夫模型的组成"><a href="#隐马尔科夫模型的组成" class="headerlink" title="隐马尔科夫模型的组成"></a>隐马尔科夫模型的组成</h1><p>观察 HMM 的联合概率密度，发现其分为三部分：</p>
+<ul>
+<li><p>初始状态概率</p>
+<script type="math/tex; mode=display">
+P\{X_1\}</script></li>
+<li><p>状态转移概率</p>
+<script type="math/tex; mode=display">
+P\{X_t|X_{t-1}\}</script></li>
+<li><p>观测输出概率 (发射概率)</p>
+<script type="math/tex; mode=display">
+P\{O_t|X_t\}</script></li>
+</ul>
+<p>在状态值和观测值取值为离散值的情况下，这三种概率可以表示为矩阵。</p>
+<p>假定状态值可能的取值为</p>
+<script type="math/tex; mode=display">
+x_1,x_2,\dots,x_M</script><p>观测值可能的取值为</p>
+<script type="math/tex; mode=display">
+o_1,o_2,\dots,o_N</script><p>则可得：</p>
+<ul>
+<li><p>初始概率矩阵 $\pi$</p>
+<script type="math/tex; mode=display">
+\pi_i=P\{x_i\},i=1,2,\dots,M</script></li>
+<li><p>转移概率矩阵 A</p>
+<script type="math/tex; mode=display">
+A_{ij}=P\{x_j|x_i\},i,j=1,2,\dots,M</script></li>
+<li><p>发射概率矩阵 B</p>
+<script type="math/tex; mode=display">
+B_{ij}=P\{o_j|x_i\},i=1,2,\dots,M,j=1,2,\dots,N</script></li>
+</ul>
+<p>最终 HMM 可表示为</p>
+<script type="math/tex; mode=display">
+\lambda=(\pi,A,B)</script><h1 id="维特比算法"><a href="#维特比算法" class="headerlink" title="维特比算法"></a>维特比算法</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>对于</p>
+<script type="math/tex; mode=display">
+\lambda=(\pi,A,B)</script><p>隐状态集合</p>
+<script type="math/tex; mode=display">
+Q=\{q_1,q_2,\dots,q_N\}</script><p>观测值集合</p>
+<script type="math/tex; mode=display">
+V=\{v_1,v_2,\dots,v_M\}</script><p>观测结果序列</p>
+<script type="math/tex; mode=display">
+O=(o_0,o_1,\dots,o_T)</script><p>假设</p>
+<script type="math/tex; mode=display">
+\pi=\begin{bmatrix}
+\pi_i
+\end{bmatrix}</script><p>其中 $\pi_i$ 表示 $q_i$ 的初始概率。</p>
+<script type="math/tex; mode=display">
+A=\begin{bmatrix}
+a_{ij}
+\end{bmatrix}</script><p>其中 $a_{ij}$ 表示 $q_i$ 向 $q_j$ 的转移概率。</p>
+<script type="math/tex; mode=display">
+B=\begin{bmatrix}
+b_{ij}
+\end{bmatrix}</script><p>其中 $b_{ij}$ 表示 $q_i$ 向 $v_j$ 的发射概率。</p>
+<p>求出当前观测结果 O 最有可能的隐状态序列</p>
+<script type="math/tex; mode=display">
+I=(i_0,i_1,\dots,i_t)</script><h2 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>设</p>
+<script type="math/tex; mode=display">
+\delta_t(i)=\max_{i_1,i_2,\dots,i_{t-1}}P\{i_t=i,i_{t-1},\dots,i_1,o_t,\dots,o_1|\lambda\}</script><p>表示时刻 t 状态为 i 的所有单个路径中概率最大值，则可得</p>
+<script type="math/tex; mode=display">
+\delta_{t+1}(i)=\max_{i_1,i_2,i_{t-1}}P\{i_{t+1}=i,i_t,\dots,i_1,o_{t+1},\dots,o_1|\lambda\}</script><script type="math/tex; mode=display">
+=\max_{1\le j\le N}[\delta_t(j)a_{ji}]b_i(o_{t+1})</script><p>设</p>
+<script type="math/tex; mode=display">
+\Psi_t(i)=arg\max_{i\le j\le N}[\delta_{t-1}(j)a_{ji}]</script><p>表示时刻 t 状态为 i 的所有单个路径中概率最大的路径的第 t-1 个结点。</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>医生通过观察病人的状态判断病人是否生病。</p>
+<p>设病人有状态有 {生病，健康}，医生观测结果有 {头晕，不头晕}。</p>
+<p>假设病人第一天生病，健康的概率各为 0.5；</p>
+<p>若前一天生病，则第二天生病的概率为 0.6，健康的概率为 0.4；</p>
+<p>若前一天健康，则第二天健康的概率为 0.8，生病的概率为 0.2；</p>
+<p>若生病，则观测到头晕的概率为 0.7，不头晕的概率为 0.3；</p>
+<p>若健康，则观测到头晕的概率为 0.1，不头晕的概率为 0.9；</p>
+<p>医生观测三天，病人的观测值序列为 {不头晕，头晕，不头晕}；</p>
+<p>推测病人这三天是否生病。</p>
+<p>构造出初始矩阵，转移概率矩阵，发射概率矩阵如下：</p>
+<script type="math/tex; mode=display">
+\pi=\begin{pmatrix}
+0.5\\
+0.5
+\end{pmatrix}</script><script type="math/tex; mode=display">
+A=\begin{pmatrix}
+0.6&0.4\\
+0.2&0.8\\
+\end{pmatrix}</script><script type="math/tex; mode=display">
+B=\begin{pmatrix}
+0.7&0.3\\
+0.1&0.9\\
+\end{pmatrix}</script><h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><script type="math/tex; mode=display">
+\delta_1(i)=\pi_ib_i(o_1)</script><p>即</p>
+<script type="math/tex; mode=display">
+\delta_1(1)=\pi_1b_1(o_1=不头晕)=\pi_1b_{12}=0.15</script><script type="math/tex; mode=display">
+\delta_1(2)=\pi_2b_2(o_1=不头晕)=\pi_2b_{22}=0.45</script><p>上述两个值分别为第一天生病且观测到不头晕，与第一天不生病且观测到不头晕的概率。</p>
+<script type="math/tex; mode=display">
+\Psi_1(1)=\Psi_1(2)=0</script><h4 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h4><h5 id="第一次迭代，求第二时刻"><a href="#第一次迭代，求第二时刻" class="headerlink" title="第一次迭代，求第二时刻"></a>第一次迭代，求第二时刻</h5><script type="math/tex; mode=display">
+\delta_2(j)=\max_{1\le i\le2}[\delta_1(i)a_{ij}]b_j(o_2)</script><p>即</p>
+<script type="math/tex; mode=display">
+\delta_1(1)a_{11}=0.15\cdot0.6=0.09</script><script type="math/tex; mode=display">
+\delta_1(2)a_{21}=0.45\cdot0.2=0.09</script><script type="math/tex; mode=display">
+\delta_2(1)=\max_{1\le i\le2}[\delta_1(i)a_{i1}]b_1(o_2=头晕)</script><script type="math/tex; mode=display">
+=0.09\cdot0.7=0.063</script><script type="math/tex; mode=display">
+\Psi_2(1)=arg\max_{1\le i\le2}[\delta_1(i)a_{i2}]=1</script><script type="math/tex; mode=display">
+\delta_1(1)a_{12}=0.15\cdot0.4=0.06</script><script type="math/tex; mode=display">
+\delta_1(2)a_{22}=0.45\cdot0.8=0.36</script><script type="math/tex; mode=display">
+\delta_2(2)=\max_{1\le i\le2}[\delta_1(i)a_{i2}]b_2(o2=头晕)</script><script type="math/tex; mode=display">
+=0.36\cdot0.1=0.036</script><script type="math/tex; mode=display">
+\Psi_2(2)=arg\max_{1\le i\le2}[\delta_1(i)a_{i2}]=2</script><h5 id="第二次迭代，求第三时刻"><a href="#第二次迭代，求第三时刻" class="headerlink" title="第二次迭代，求第三时刻"></a>第二次迭代，求第三时刻</h5><script type="math/tex; mode=display">
+\delta_2(1)a_{11}=0.063\cdot0.6=0.0378</script><script type="math/tex; mode=display">
+\delta_2(2)a_{21}=0.036\cdot0.2=0.0072</script><script type="math/tex; mode=display">
+\delta_3(1)=\max_{1\le i\le2}[\delta_2(i)a_{i1}]b_1(o_3=不头晕)</script><script type="math/tex; mode=display">
+=0.0378\cdot0.3=0.01134</script><script type="math/tex; mode=display">
+\Psi_3(1)=1</script><script type="math/tex; mode=display">
+\delta_2(1)a_{12}=0.063\cdot0.4=0.0252</script><script type="math/tex; mode=display">
+\delta_2(2)a_{22}=0.036\cdot0.8=0.0288</script><script type="math/tex; mode=display">
+\delta_3(2)=\max_{1\le i\le2}[\delta_2(i)a_{i2}]b_2(o_3=不头晕)</script><script type="math/tex; mode=display">
+=0.0288\cdot0.9=0.02592</script><script type="math/tex; mode=display">
+\Psi_3(2)=2</script><h4 id="回溯"><a href="#回溯" class="headerlink" title="回溯"></a>回溯</h4><script type="math/tex; mode=display">
+\hat{q_3}=arg\max_{0\le i\le2}[\delta_3(i)]=2</script><script type="math/tex; mode=display">
+\hat{q_t}=\Psi_{t+1}(\hat{q_{t+1}})</script><p>即</p>
+<script type="math/tex; mode=display">
+\hat{q_2}=\Psi_3(\hat{q_3})=\Psi_3(2)=2</script><script type="math/tex; mode=display">
+\hat{q_1}=\Psi_2(\hat{q_2})=\Psi_2(2)=2</script><p>解得隐状态序列为</p>
+<script type="math/tex; mode=display">
+\hat{Q}=(2,2,2)</script><p>即 (健康，健康，健康)</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag"># 概率论</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/10/Spring%20Boot%20%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%94RequestContextHolder%20%E4%B8%8E%20ThreadLocal/" rel="prev" title="Spring Boot 源码分析——RequestContextHolder 与 ThreadLocal">
+      <i class="fa fa-chevron-left"></i> Spring Boot 源码分析——RequestContextHolder 与 ThreadLocal
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#隐马尔可夫模型的结构"><span class="nav-number">1.</span> <span class="nav-text">隐马尔可夫模型的结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#隐马尔科夫模型的假设"><span class="nav-number">2.</span> <span class="nav-text">隐马尔科夫模型的假设</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#隐马尔科夫模型的组成"><span class="nav-number">3.</span> <span class="nav-text">隐马尔科夫模型的组成</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#维特比算法"><span class="nav-number">4.</span> <span class="nav-text">维特比算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">4.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法"><span class="nav-number">4.2.</span> <span class="nav-text">解法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">4.2.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">4.2.2.</span> <span class="nav-text">例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代"><span class="nav-number">4.2.2.2.</span> <span class="nav-text">迭代</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一次迭代，求第二时刻"><span class="nav-number">4.2.2.2.1.</span> <span class="nav-text">第一次迭代，求第二时刻</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二次迭代，求第三时刻"><span class="nav-number">4.2.2.2.2.</span> <span class="nav-text">第二次迭代，求第三时刻</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#回溯"><span class="nav-number">4.2.2.3.</span> <span class="nav-text">回溯</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Koorye"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Koorye</p>
+  <div class="site-description" itemprop="description">什么都想学一点</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Koorye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Koorye" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:a1311586225@gmail.com" title="E-Mail → mailto:a1311586225@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+          <h3 class="widget-title">Tag Cloud</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+            <canvas width="250" height="250" id="resCanvas" style="width:100%">
+             <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/" rel="tag">HTML</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">33</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shiro/" rel="tag">Shiro</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Data-JPA/" rel="tag">Spring Data JPA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" rel="tag">信息论</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag">概率论</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag">线性代数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/" rel="tag">集成学习</a><span class="tag-list-count">1</span></li></ul>
+            </canvas>
+          </div>
+        </div>
+      
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koorye</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">317k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">4:48</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"6pc9L1Sa5eA6t2wvNQkmITTV-gzGzoHsz","app_key":"2CMvevJL0UGpH6jg5qTkCe56","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
