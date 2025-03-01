@@ -5,25 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 7.3.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/blog/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"koorye.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="本文介绍了如何在 Spring Boot 环境下使用 Shiro 整合 Spring Data JPA 实现加密与验证。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Shiro 自学笔记五】Spring Boot 整合 Shiro + Spring Data JPA 加密与验证">
-<meta property="og:url" content="http://example.com/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro%20+%20Spring%20Data%20JPA%20%E5%8A%A0%E5%AF%86%E4%B8%8E%E9%AA%8C%E8%AF%81/index.html">
+<meta property="og:url" content="http://koorye.github.io/blog/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro%20+%20Spring%20Data%20JPA%20%E5%8A%A0%E5%AF%86%E4%B8%8E%E9%AA%8C%E8%AF%81/index.html">
 <meta property="og:site_name" content="吴世涵的博客">
 <meta property="og:description" content="本文介绍了如何在 Spring Boot 环境下使用 Shiro 整合 Spring Data JPA 实现加密与验证。">
 <meta property="og:locale" content="zh_CN">
@@ -42,7 +42,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i-blog.csdnimg.cn/blog_migrate/87015c666df99a5d99325a7cea19e44a.png">
 
-<link rel="canonical" href="http://example.com/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro%20+%20Spring%20Data%20JPA%20%E5%8A%A0%E5%AF%86%E4%B8%8E%E9%AA%8C%E8%AF%81/">
+<link rel="canonical" href="http://koorye.github.io/blog/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro%20+%20Spring%20Data%20JPA%20%E5%8A%A0%E5%AF%86%E4%B8%8E%E9%AA%8C%E8%AF%81/">
 
 
 <script id="page-configurations">
@@ -216,7 +216,7 @@ mjx-container[display="true"] + br {
 
   <div class="site-meta">
 
-    <a href="/" class="brand" rel="start">
+    <a href="/blog/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
       <h1 class="site-title">吴世涵的博客</h1>
       <span class="logo-line-after"><i></i></span>
@@ -237,27 +237,27 @@ mjx-container[display="true"] + br {
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+    <a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+    <a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -315,10 +315,10 @@ mjx-container[display="true"] + br {
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro%20+%20Spring%20Data%20JPA%20%E5%8A%A0%E5%AF%86%E4%B8%8E%E9%AA%8C%E8%AF%81/">
+    <link itemprop="mainEntityOfPage" href="http://koorye.github.io/blog/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%94%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro%20+%20Spring%20Data%20JPA%20%E5%8A%A0%E5%AF%86%E4%B8%8E%E9%AA%8C%E8%AF%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
       <meta itemprop="name" content="吴世涵">
       <meta itemprop="description" content="我叫吴世涵，是来自电子科技大学(UESTC)计算机科学与工程学院的硕士研究生">
     </span>
@@ -353,7 +353,7 @@ mjx-container[display="true"] + br {
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%90%8E%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">后端</span></a>
+                  <a href="/blog/categories/%E5%90%8E%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">后端</span></a>
                 </span>
             </span>
 
@@ -473,10 +473,10 @@ Boot，但是用的是假数据而且是明文。这一期我们将实现数据�
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag"># 后端</a>
-              <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
-              <a href="/tags/Shiro/" rel="tag"># Shiro</a>
-              <a href="/tags/SpringBoot/" rel="tag"># SpringBoot</a>
+              <a href="/blog/tags/%E5%90%8E%E7%AB%AF/" rel="tag"># 后端</a>
+              <a href="/blog/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+              <a href="/blog/tags/Shiro/" rel="tag"># Shiro</a>
+              <a href="/blog/tags/SpringBoot/" rel="tag"># SpringBoot</a>
           </div>
 
         
@@ -485,11 +485,11 @@ Boot，但是用的是假数据而且是明文。这一期我们将实现数据�
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro/" rel="prev" title="【Shiro 自学笔记四】Spring Boot 整合 Shiro">
+    <a href="/blog/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Spring%20Boot%20%E6%95%B4%E5%90%88%20Shiro/" rel="prev" title="【Shiro 自学笔记四】Spring Boot 整合 Shiro">
       <i class="fa fa-chevron-left"></i> 【Shiro 自学笔记四】Spring Boot 整合 Shiro
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%85%AD%E3%80%91Shiro%20%E7%9A%84%E9%BB%98%E8%AE%A4%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E5%92%8C%20Redis%20%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98/" rel="next" title="【Shiro 自学笔记六】Shiro 的默认缓存机制和 Redis 实现缓存">
+    <a href="/blog/2020/07/24/%E3%80%90Shiro%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%85%AD%E3%80%91Shiro%20%E7%9A%84%E9%BB%98%E8%AE%A4%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E5%92%8C%20Redis%20%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98/" rel="next" title="【Shiro 自学笔记六】Shiro 的默认缓存机制和 Redis 实现缓存">
       【Shiro 自学笔记六】Shiro 的默认缓存机制和 Redis 实现缓存 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -557,27 +557,27 @@ Boot，但是用的是假数据而且是明文。这一期我们将实现数据�
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="吴世涵"
-      src="/images/avatar.jpg">
+      src="/blog/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">吴世涵</p>
   <div class="site-description" itemprop="description">我叫吴世涵，是来自电子科技大学(UESTC)计算机科学与工程学院的硕士研究生</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
+          <a href="/blog/archives/">
         
           <span class="site-state-item-count">75</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
+            <a href="/blog/categories/">
           
         <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
+            <a href="/blog/tags/">
           
         <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">标签</span></a>
@@ -600,7 +600,7 @@ Boot，但是用的是假数据而且是明文。这一期我们将实现数据�
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="https://koorye.github.io/" title="https:&#x2F;&#x2F;Koorye.github.io" rel="noopener" target="_blank">个人主页</a>
+          <a href="https://koorye.github.io/" title="https:&#x2F;&#x2F;Koorye.github.io">个人主页</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://github.com/Koorye" title="https:&#x2F;&#x2F;github.com&#x2F;Koorye" rel="noopener" target="_blank">Github</a>
@@ -666,30 +666,30 @@ Boot，但是用的是假数据而且是明文。这一期我们将实现数据�
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
 
-<script src="/js/utils.js"></script>
+<script src="/blog/js/utils.js"></script>
 
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/muse.js"></script>
+<script src="/blog/js/motion.js"></script>
 
 
-<script src="/js/next-boot.js"></script>
+<script src="/blog/js/schemes/muse.js"></script>
 
 
-
-
-  
+<script src="/blog/js/next-boot.js"></script>
 
 
 
 
   
-<script src="/js/local-search.js"></script>
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
 
 
 
