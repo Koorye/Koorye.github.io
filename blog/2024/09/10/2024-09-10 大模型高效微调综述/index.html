@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="本文总结了大模型高效微调的方法，包括参数高效微调、模型压缩、检索增强、传播优化、黑盒微调、边缘微调等方面的方法。">
+  <meta name="description" content="本文总结了大模型高效微调的方法，包括参数高效微调、模型压缩、检索增强、传播优化等方法。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="大模型高效微调的调研">
 <meta property="og:url" content="https://koorye.github.io/blog/2024/09/10/2024-09-10%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%AB%98%E6%95%88%E5%BE%AE%E8%B0%83%E7%BB%BC%E8%BF%B0/index.html">
 <meta property="og:site_name" content="吴世涵的博客">
-<meta property="og:description" content="本文总结了大模型高效微调的方法，包括参数高效微调、模型压缩、检索增强、传播优化、黑盒微调、边缘微调等方面的方法。">
+<meta property="og:description" content="本文总结了大模型高效微调的方法，包括参数高效微调、模型压缩、检索增强、传播优化等方法。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2025/03/06/RHagxlWc35BKDtd.png">
 <meta property="og:image" content="https://s2.loli.net/2025/03/06/QzyJDfInE2tXqh9.png">
@@ -57,31 +57,8 @@
 <meta property="og:image" content="https://s2.loli.net/2025/03/06/K61cGLWS3Cbl5Hy.png">
 <meta property="og:image" content="https://s2.loli.net/2025/03/06/Z5C9aGIm3AF1nDp.png">
 <meta property="og:image" content="https://s2.loli.net/2025/03/06/7gN8AvGuqS3ohmQ.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/NfxP6BbvYiZJI1w.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/cSxAuYy8JENOKH6.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/Xn5vBQsPdbgL6l1.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/65ILPowWrjcE7TH.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/F9XMjdhzVY5spPO.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/aB36ey5IgPDLfjH.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/r6NZJXjSLBaPduT.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/DmhqXOavFM9QbYV.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/mjaJe76CWHRofP8.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/jtswGevxyB6p9lc.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/8YNoSHClD73v42c.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/UxraRKO1BnHQMfX.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/yz5rCPoMEfBKNtU.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/Fb4dkqpwShOYHRz.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/Jfi2RsBjkNbpYtd.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/tAlizf8WJ2kapyq.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/KEhQZ236VrXD7Ae.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/z8U36RfOEDCk9Bm.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/iMjlWQXxRHBsUeN.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/2iGqwMokaRrKN37.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/z8U36RfOEDCk9Bm.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/mU94hd8pfNGDqLX.png">
-<meta property="og:image" content="https://s2.loli.net/2025/03/06/SU9cDGuX3wvPfsb.png">
 <meta property="article:published_time" content="2024-09-10T01:15:00.000Z">
-<meta property="article:modified_time" content="2025-03-07T05:52:02.884Z">
+<meta property="article:modified_time" content="2025-03-07T08:42:28.465Z">
 <meta property="article:author" content="吴世涵">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="大模型">
@@ -403,16 +380,16 @@ mjx-container[display="true"] + br {
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.6k</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>2 分钟</span>
             </span>
-            <div class="post-description">本文总结了大模型高效微调的方法，包括参数高效微调、模型压缩、检索增强、传播优化、黑盒微调、边缘微调等方面的方法。</div>
+            <div class="post-description">本文总结了大模型高效微调的方法，包括参数高效微调、模型压缩、检索增强、传播优化等方法。</div>
 
         </div>
       </header>
@@ -549,85 +526,6 @@ mjx-container[display="true"] + br {
 <p>通过SVD分解梯度得到下投影和上投影矩阵，之后可以通过投影减少保存的梯度规模，SVD若干次迭代重新计算</p>
 <p><strong>MeZO</strong> (NeurIPS 23)</p>
 <p>利用0阶优化器SPSA优化大模型，不需要保存梯度</p>
-<h2 id="黑盒微调">黑盒微调</h2>
-<h3 id="进化算法">进化算法</h3>
-<p><strong>GPS</strong> (EMNLP 22)</p>
-<p>通过进化算法生成prompt，通过回译、完形填空、续写等方式变异prompt，之后筛选最佳的prompt</p>
-<p><img src="https://s2.loli.net/2025/03/06/NfxP6BbvYiZJI1w.png"></p>
-<p><strong>BBT</strong> (ICML 22)</p>
-<p>通过进化算法学习一组系数，随机投影到高维之后与prompt相加</p>
-<p><img src="https://s2.loli.net/2025/03/06/cSxAuYy8JENOKH6.png"></p>
-<p><strong>BDPL</strong> (TMLR 23)</p>
-<p>通过进化算法估计一组离散提示词的概率分布，从中采样得到prompt</p>
-<p><img src="https://s2.loli.net/2025/03/06/Xn5vBQsPdbgL6l1.png"></p>
-<p><strong>GrIPS</strong> (EACL 23)</p>
-<p>通过删除、交换、转义等方法变异prompt，打分并保留若干最佳prompt</p>
-<p><img src="https://s2.loli.net/2025/03/06/65ILPowWrjcE7TH.png"></p>
-<p><strong>OPRO</strong> (ICLR 24 DeepMind)</p>
-<p>将LLM作为通用问题求解器，LLM给出答案，环境为答案打分，之后LLM根据答案和打分给出新答案，不断循环这一过程</p>
-<p><img src="https://s2.loli.net/2025/03/06/F9XMjdhzVY5spPO.png"></p>
-<p><strong>Zero-shot EoT</strong> (ArXiv 24 北大)</p>
-<p>设计zero-shot prompt引导LLM自行交叉变异</p>
-<p><img src="https://s2.loli.net/2025/03/06/aB36ey5IgPDLfjH.png"></p>
-<p><strong>EvoPrompt</strong> (ICLR 24 清华, Microsoft)
-设计了遗传和差分2种进化策略，通过设计LLM指令进化prompt</p>
-<p><img src="https://s2.loli.net/2025/03/06/r6NZJXjSLBaPduT.png"></p>
-<p><strong>FunSearch</strong> (Nature 23)</p>
-<p><strong>EvoPrompting</strong> (NeurIPS 23)</p>
-<p><strong>EoH</strong> (ICML 24)</p>
-<p><img src="https://s2.loli.net/2025/03/06/DmhqXOavFM9QbYV.png"></p>
-<p><strong>WizardLM</strong> (ICLR 24 Microsoft)</p>
-<p>通过设计指令让模型向深度和宽度思考，产生比人类设计的更好的指令</p>
-<p><img src="https://s2.loli.net/2025/03/06/mjaJe76CWHRofP8.png"></p>
-<h3 id="模型协同">模型协同</h3>
-<p><strong>CombLM</strong> (EMNLP 23)</p>
-<p>学习一个白盒域特定小模型与黑盒大模型相融合</p>
-<p><img src="https://s2.loli.net/2025/03/06/jtswGevxyB6p9lc.png"></p>
-<h4 id="对比解码">对比解码</h4>
-<p><strong>Contrastive Decoding</strong> (ACL 23 Stanford) (ArXiv 23
-Meta)</p>
-<p>选择专业和业余模型预测差分的最大值</p>
-<p>数据集：WikiText,BookCorpus (100M)</p>
-<p>GPU：A5000 (24G)</p>
-<p><img src="https://s2.loli.net/2025/03/06/8YNoSHClD73v42c.png"></p>
-<p><strong>Contrastive Decoding</strong> (EACL 24)</p>
-<p>用于机器翻译的对比解码，选择随机句子/其他语言作为对比输入，将原输入和对比输入预测的差分作为概率</p>
-<p><img src="https://s2.loli.net/2025/03/06/UxraRKO1BnHQMfX.png"></p>
-<p><strong>VCD</strong> (CVPR 24 Alibaba)</p>
-<p>选择加高斯噪声前后的图像输入VLM的预测差分的最大值，减轻幻觉</p>
-<p><img src="https://s2.loli.net/2025/03/06/yz5rCPoMEfBKNtU.png"></p>
-<p><strong>Emulated fine-tuning</strong> (ICLR 24 Stanford)</p>
-<p><strong>Proxy-tuning</strong> (COLM 24)</p>
-<p>通过微调前后小模型的预测偏差调整大模型的预测</p>
-<p><img src="https://s2.loli.net/2025/03/06/Fb4dkqpwShOYHRz.png"></p>
-<p><strong>Offset-Unlearning</strong> (ArXiv 24)</p>
-<p><strong>Weak-to-Strong Jailbreaking</strong> (ArXiv 24)</p>
-<p>通过梯度上升/对抗学习微调一个遗忘/不安全小模型，将微调前后小模型的差分加到LLM上</p>
-<p><img src="https://s2.loli.net/2025/03/06/Jfi2RsBjkNbpYtd.png"></p>
-<p><strong>Co-LLM (ACL 24)</strong>
-训练一个基础模型在预测不准确的时候调用更大的助手模型</p>
-<p><img src="https://s2.loli.net/2025/03/06/tAlizf8WJ2kapyq.png"></p>
-<h4 id="自主数据生成">自主数据生成</h4>
-<p><strong>Aligner</strong> (ArXiv 24 北大)</p>
-<p>学习一个adapter，接收问题、LLM回答，输出修正后的回答</p>
-<p><img src="https://s2.loli.net/2025/03/06/KEhQZ236VrXD7Ae.png"></p>
-<p><img src="https://s2.loli.net/2025/03/06/z8U36RfOEDCk9Bm.png"></p>
-<p><strong>CoBB</strong> (ArXiv 24 Carnegie Mellon)</p>
-<p>对LLM进行多次采样产生不同的推理，根据答案是否正确划分推理为正负集，匹配为若干正负对，通过ORPO训练校正模型</p>
-<p><img src="https://s2.loli.net/2025/03/06/iMjlWQXxRHBsUeN.png"></p>
-<p><strong>SuperContext</strong> (ICLR 24 西湖)</p>
-<p>将fine-tune SLM的预测整合到LLM输入中，提升OOD泛化能力和减轻幻觉</p>
-<p><img src="https://s2.loli.net/2025/03/06/2iGqwMokaRrKN37.png"></p>
-<p><strong>Prompt2model</strong> (ArXiv 24)</p>
-<p>给定prompt和example，通过LLM选择微调模型、检索和生成数据，接着微调模型以适应特定任务</p>
-<p><img src="https://s2.loli.net/2025/03/06/z8U36RfOEDCk9Bm.png"></p>
-<h2 id="边缘微调">边缘微调</h2>
-<p><strong>Offsite-Tuning</strong> (ArXiv 23 MIT) (EMNLP 23 清华)</p>
-<p>通过压缩模型得到一个模拟器，之后添加adapter进行微调，最后将adapter添加到原模型上</p>
-<p><img src="https://s2.loli.net/2025/03/06/mU94hd8pfNGDqLX.png"></p>
-<p><strong>MIET</strong> (ArXiv 24 Lamda)</p>
-<p>将预训练模型作为服务端，在客户端学习一个小网络，在最小化服务端到客户端通信开销的前提下进行调整</p>
-<p><img src="https://s2.loli.net/2025/03/06/SU9cDGuX3wvPfsb.png"></p>
 
     </div>
 
@@ -648,8 +546,8 @@ Meta)</p>
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/blog/2024/03/01/2024-03-01%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E5%8F%91%E5%B1%95%E7%BB%BC%E8%BF%B0/" rel="prev" title="大模型与迁移学习发展综述">
-      <i class="fa fa-chevron-left"></i> 大模型与迁移学习发展综述
+    <a href="/blog/2024/09/10/2024-09-10%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%BB%91%E7%9B%92%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95%E7%9A%84%E8%B0%83%E7%A0%94/" rel="prev" title="大模型黑盒调优方法的调研">
+      <i class="fa fa-chevron-left"></i> 大模型黑盒调优方法的调研
     </a></div>
       <div class="post-nav-item">
     <a href="/blog/2024/10/09/2024-10-09%20%E6%8E%A2%E7%B4%A2%E9%AB%98%E6%95%88VLM/" rel="next" title="面向高效的视觉语言大模型设计">
@@ -713,7 +611,7 @@ Meta)</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E9%AB%98%E6%95%88%E5%BE%AE%E8%B0%83"><span class="nav-number">2.1.</span> <span class="nav-text">参数高效微调</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E5%BC%8F%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.1.</span> <span class="nav-text">添加式方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%BC%8F%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.2.</span> <span class="nav-text">选择式方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%8F%82%E5%BC%8F%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.3.</span> <span class="nav-text">重参式方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9"><span class="nav-number">2.2.</span> <span class="nav-text">模型压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%AA%E6%9E%9D"><span class="nav-number">2.2.1.</span> <span class="nav-text">剪枝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8F%E5%8C%96%E6%84%9F%E7%9F%A5%E8%AE%AD%E7%BB%83"><span class="nav-number">2.2.2.</span> <span class="nav-text">量化感知训练</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA"><span class="nav-number">2.3.</span> <span class="nav-text">检索增强</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E6%92%AD%E4%BC%98%E5%8C%96"><span class="nav-number">2.4.</span> <span class="nav-text">传播优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#token%E4%BC%98%E5%8C%96"><span class="nav-number">2.4.1.</span> <span class="nav-text">Token优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E5%80%BC%E4%BC%98%E5%8C%96"><span class="nav-number">2.4.2.</span> <span class="nav-text">中间值优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%91%E7%9B%92%E5%BE%AE%E8%B0%83"><span class="nav-number">2.5.</span> <span class="nav-text">黑盒微调</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-number">2.5.1.</span> <span class="nav-text">进化算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%8D%8F%E5%90%8C"><span class="nav-number">2.5.2.</span> <span class="nav-text">模型协同</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E8%A7%A3%E7%A0%81"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">对比解码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E4%B8%BB%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90"><span class="nav-number">2.5.2.2.</span> <span class="nav-text">自主数据生成</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E5%BE%AE%E8%B0%83"><span class="nav-number">2.6.</span> <span class="nav-text">边缘微调</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E9%AB%98%E6%95%88%E5%BE%AE%E8%B0%83"><span class="nav-number">2.1.</span> <span class="nav-text">参数高效微调</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E5%BC%8F%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.1.</span> <span class="nav-text">添加式方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%BC%8F%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.2.</span> <span class="nav-text">选择式方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%8F%82%E5%BC%8F%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.3.</span> <span class="nav-text">重参式方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9"><span class="nav-number">2.2.</span> <span class="nav-text">模型压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%AA%E6%9E%9D"><span class="nav-number">2.2.1.</span> <span class="nav-text">剪枝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8F%E5%8C%96%E6%84%9F%E7%9F%A5%E8%AE%AD%E7%BB%83"><span class="nav-number">2.2.2.</span> <span class="nav-text">量化感知训练</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA"><span class="nav-number">2.3.</span> <span class="nav-text">检索增强</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E6%92%AD%E4%BC%98%E5%8C%96"><span class="nav-number">2.4.</span> <span class="nav-text">传播优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#token%E4%BC%98%E5%8C%96"><span class="nav-number">2.4.1.</span> <span class="nav-text">Token优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E5%80%BC%E4%BC%98%E5%8C%96"><span class="nav-number">2.4.2.</span> <span class="nav-text">中间值优化</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -729,7 +627,7 @@ Meta)</p>
       <div class="site-state-item site-state-posts">
           <a href="/blog/archives/">
         
-          <span class="site-state-item-count">89</span>
+          <span class="site-state-item-count">90</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -742,7 +640,7 @@ Meta)</p>
       <div class="site-state-item site-state-tags">
             <a href="/blog/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">61</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

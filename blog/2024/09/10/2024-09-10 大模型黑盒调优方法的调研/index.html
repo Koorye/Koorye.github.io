@@ -20,22 +20,46 @@
     var CONFIG = {"hostname":"koorye.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。从2013年5月开始，Redis的开发由Pivotal赞助。">
+  <meta name="description" content="本文总结了大模型黑盒调优方法，包括进化算法、模型协同、对比解码、自主数据生成、边缘微调等方法。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【Redis自学笔记一】什么是NoSQL？Docker启动Redis">
-<meta property="og:url" content="https://koorye.github.io/blog/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E4%BB%80%E4%B9%88%E6%98%AFNoSQL%EF%BC%9FDocker%E5%90%AF%E5%8A%A8Redis/index.html">
+<meta property="og:title" content="大模型黑盒调优方法的调研">
+<meta property="og:url" content="https://koorye.github.io/blog/2024/09/10/2024-09-10%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%BB%91%E7%9B%92%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95%E7%9A%84%E8%B0%83%E7%A0%94/index.html">
 <meta property="og:site_name" content="吴世涵的博客">
-<meta property="og:description" content="Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。从2013年5月开始，Redis的开发由Pivotal赞助。">
+<meta property="og:description" content="本文总结了大模型黑盒调优方法，包括进化算法、模型协同、对比解码、自主数据生成、边缘微调等方法。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-07-20T02:36:55.000Z">
-<meta property="article:modified_time" content="2025-03-04T03:39:21.308Z">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/NfxP6BbvYiZJI1w.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/cSxAuYy8JENOKH6.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/Xn5vBQsPdbgL6l1.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/65ILPowWrjcE7TH.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/F9XMjdhzVY5spPO.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/aB36ey5IgPDLfjH.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/r6NZJXjSLBaPduT.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/DmhqXOavFM9QbYV.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/mjaJe76CWHRofP8.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/jtswGevxyB6p9lc.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/8YNoSHClD73v42c.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/UxraRKO1BnHQMfX.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/yz5rCPoMEfBKNtU.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/Fb4dkqpwShOYHRz.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/Jfi2RsBjkNbpYtd.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/tAlizf8WJ2kapyq.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/KEhQZ236VrXD7Ae.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/z8U36RfOEDCk9Bm.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/iMjlWQXxRHBsUeN.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/2iGqwMokaRrKN37.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/z8U36RfOEDCk9Bm.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/mU94hd8pfNGDqLX.png">
+<meta property="og:image" content="https://s2.loli.net/2025/03/06/SU9cDGuX3wvPfsb.png">
+<meta property="article:published_time" content="2024-09-10T01:15:00.000Z">
+<meta property="article:modified_time" content="2025-03-07T08:41:57.258Z">
 <meta property="article:author" content="吴世涵">
-<meta property="article:tag" content="Docker">
-<meta property="article:tag" content="数据库">
-<meta property="article:tag" content="Redis">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="大模型">
+<meta property="article:tag" content="黑盒">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2025/03/06/NfxP6BbvYiZJI1w.png">
 
-<link rel="canonical" href="https://koorye.github.io/blog/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E4%BB%80%E4%B9%88%E6%98%AFNoSQL%EF%BC%9FDocker%E5%90%AF%E5%8A%A8Redis/">
+<link rel="canonical" href="https://koorye.github.io/blog/2024/09/10/2024-09-10%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%BB%91%E7%9B%92%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95%E7%9A%84%E8%B0%83%E7%A0%94/">
 
 
 <script id="page-configurations">
@@ -48,7 +72,7 @@
   };
 </script>
 
-  <title>【Redis自学笔记一】什么是NoSQL？Docker启动Redis | 吴世涵的博客</title>
+  <title>大模型黑盒调优方法的调研 | 吴世涵的博客</title>
   
 
 
@@ -308,7 +332,7 @@ mjx-container[display="true"] + br {
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://koorye.github.io/blog/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%B8%80%E3%80%91%E4%BB%80%E4%B9%88%E6%98%AFNoSQL%EF%BC%9FDocker%E5%90%AF%E5%8A%A8Redis/">
+    <link itemprop="mainEntityOfPage" href="https://koorye.github.io/blog/2024/09/10/2024-09-10%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%BB%91%E7%9B%92%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95%E7%9A%84%E8%B0%83%E7%A0%94/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/blog/images/avatar.jpg">
@@ -321,7 +345,7 @@ mjx-container[display="true"] + br {
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          【Redis自学笔记一】什么是NoSQL？Docker启动Redis
+          大模型黑盒调优方法的调研
         </h1>
 
         <div class="post-meta">
@@ -331,7 +355,7 @@ mjx-container[display="true"] + br {
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-07-20 10:36:55" itemprop="dateCreated datePublished" datetime="2020-07-20T10:36:55+08:00">2020-07-20</time>
+              <time title="创建时间：2024-09-10 09:15:00" itemprop="dateCreated datePublished" datetime="2024-09-10T09:15:00+08:00">2024-09-10</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -339,7 +363,7 @@ mjx-container[display="true"] + br {
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+                  <a href="/blog/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
                 </span>
             </span>
 
@@ -349,7 +373,7 @@ mjx-container[display="true"] + br {
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
+              <span>1.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -358,7 +382,7 @@ mjx-container[display="true"] + br {
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>1 分钟</span>
             </span>
-            <div class="post-description">Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。从2013年5月开始，Redis的开发由Pivotal赞助。</div>
+            <div class="post-description">本文总结了大模型黑盒调优方法，包括进化算法、模型协同、对比解码、自主数据生成、边缘微调等方法。</div>
 
         </div>
       </header>
@@ -369,95 +393,87 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody">
 
       
-        <blockquote>
-<p>Redis（Remote Dictionary Server
-)，即远程字典服务，是一个开源的使用ANSI
-C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。从2013年5月开始，Redis的开发由Pivotal赞助。</p>
-<p>—— 摘自百度百科</p>
-</blockquote>
-<h1 id="什么是nosql">什么是NoSQL</h1>
-<p>NoSQL，泛指非关系型的数据库。</p>
-<p>NoSQL = Not Only
-SQL，即“不仅仅是SQL”。区别于关系型数据库，这种新型数据库的出现是一场数据库的革命运动。</p>
-<p>NoSQL不再用传统的表形式存储数据，数据之间的关系不再那么密切，这使得NoSQL具有非常强的灵活性和可扩展性。</p>
-<p>NoSQL具有以下优点：</p>
-<ul>
-<li><strong>易扩展</strong>
-数据之间的无关系在架构层面带来了可扩展的能力</li>
-<li><strong>高性能</strong>
-得益于无关系性，NoSQL数据库都具有非常高的读写性能</li>
-<li><strong>灵活的数据模式</strong>
-NoSQL无须事先进行表设计、建立字段，随时可以存储自定义的数据格式、自由的进行CRUD操作</li>
-<li><strong>高可用</strong>
-NoSQL在不太影响性能的情况下，就可以实现高可用的架构</li>
-</ul>
-<h2 id="nosql的类型">NoSQL的类型</h2>
-<hr>
-<table>
-<colgroup>
-<col style="width: 3%">
-<col style="width: 10%">
-<col style="width: 11%">
-<col style="width: 19%">
-<col style="width: 17%">
-<col style="width: 37%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>分类</th>
-<th>举例</th>
-<th>应用场景</th>
-<th>数据模型</th>
-<th>优点</th>
-<th>缺点</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>键值对</td>
-<td>Redis, Oracle BDB</td>
-<td>缓存、高访问负载</td>
-<td>Key-Value键值对</td>
-<td>速度快</td>
-<td>数据无结构化</td>
-</tr>
-<tr class="even">
-<td>列存储</td>
-<td>Cassandra, HBase</td>
-<td>分布式文件系统</td>
-<td>列簇</td>
-<td>速度快，可扩展性强</td>
-<td>功能相对局限</td>
-</tr>
-<tr class="odd">
-<td>文档</td>
-<td>CouchDB, MongoDB</td>
-<td>Web应用</td>
-<td>Key-Value键值对，Value是结构化的</td>
-<td>数据结构要求不严格，结构可变</td>
-<td>性能不高，却反统一的查询语法</td>
-</tr>
-<tr class="even">
-<td>图形</td>
-<td>Neo4j, InfoGrid</td>
-<td>社交网络、推荐系统</td>
-<td>图</td>
-<td>可以使用图结构相关算法</td>
-<td>很多时候需要对整个图做计算才能得出需要的信息，不容易做分布式的集群</td>
-</tr>
-</tbody>
-</table>
-<h1 id="ubuntu安装redis">Ubuntu安装Redis</h1>
-<p>Ubuntu的安装非常简单：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install redis  # apt安装redis</span><br><span class="line">sudo service redis-server start  # 启动服务端</span><br><span class="line">redis-cli  # 进入客户端</span><br></pre></td></tr></table></figure>
-<h1 id="docker安装redis">Docker安装Redis</h1>
-<p>Docker安装也很简单，不过需要注意一个细节，镜像本身并不会自带配置文件。</p>
-<p>因此我们先到官网下载配置文件：<a target="_blank" rel="noopener" href="http://download.redis.io/redis-stable/redis.conf">http://download.redis.io/redis-stable/redis.conf</a></p>
-<p>下载完之后，放到本地的目录里。这里笔者在家目录下创建docker/redis目录：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd  # 默认切换到家目录</span><br><span class="line">mkdir docker</span><br><span class="line">cd docker</span><br><span class="line">mkdir redis</span><br></pre></td></tr></table></figure>
-<p>之后放入配置文件。</p>
-<p>创建容器时采用卷挂载的方式，将配置文件同步到容器中(注意此处用户名是笔者个人的用户名)：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> docker run -d \</span><br><span class="line">--name redis \</span><br><span class="line">-p 6379:6379 \</span><br><span class="line">-v /home/koorye/docker/redis/redis.conf:/etc/redis/redis.conf \  <span class="comment"># 挂载配置文件</span></span><br><span class="line">-v /home/koorye/docker/redis/data:/data \  <span class="comment"># 挂载数据</span></span><br><span class="line">redis \</span><br><span class="line">redis-server /etc/redis/redis.conf --appendonly <span class="built_in">yes</span>  <span class="comment"># 启用AOF模式</span></span><br></pre></td></tr></table></figure>
+        <h1 id="引言">引言</h1>
+<p>随着商用和闭源大模型的普及，用户往往无法直接访问模型参数，只能通过API调用模型。因此，黑盒调优方法变得尤为重要。黑盒调优方法指的是在无法直接访问模型参数的情况下，通过影响模型输入或输出，使得模型的性能得到提升。本文将介绍进化算法、模型协同、对比解码、自主数据生成、边缘微调等黑盒调优方法。</p>
+<h1 id="方法">方法</h1>
+<h2 id="进化算法">进化算法</h2>
+<p><strong>GPS</strong> (EMNLP 22)</p>
+<p>通过进化算法生成prompt，通过回译、完形填空、续写等方式变异prompt，之后筛选最佳的prompt</p>
+<p><img src="https://s2.loli.net/2025/03/06/NfxP6BbvYiZJI1w.png"></p>
+<p><strong>BBT</strong> (ICML 22)</p>
+<p>通过进化算法学习一组系数，随机投影到高维之后与prompt相加</p>
+<p><img src="https://s2.loli.net/2025/03/06/cSxAuYy8JENOKH6.png"></p>
+<p><strong>BDPL</strong> (TMLR 23)</p>
+<p>通过进化算法估计一组离散提示词的概率分布，从中采样得到prompt</p>
+<p><img src="https://s2.loli.net/2025/03/06/Xn5vBQsPdbgL6l1.png"></p>
+<p><strong>GrIPS</strong> (EACL 23)</p>
+<p>通过删除、交换、转义等方法变异prompt，打分并保留若干最佳prompt</p>
+<p><img src="https://s2.loli.net/2025/03/06/65ILPowWrjcE7TH.png"></p>
+<p><strong>OPRO</strong> (ICLR 24 DeepMind)</p>
+<p>将LLM作为通用问题求解器，LLM给出答案，环境为答案打分，之后LLM根据答案和打分给出新答案，不断循环这一过程</p>
+<p><img src="https://s2.loli.net/2025/03/06/F9XMjdhzVY5spPO.png"></p>
+<p><strong>Zero-shot EoT</strong> (ArXiv 24 北大)</p>
+<p>设计zero-shot prompt引导LLM自行交叉变异</p>
+<p><img src="https://s2.loli.net/2025/03/06/aB36ey5IgPDLfjH.png"></p>
+<p><strong>EvoPrompt</strong> (ICLR 24 清华, Microsoft)
+设计了遗传和差分2种进化策略，通过设计LLM指令进化prompt</p>
+<p><img src="https://s2.loli.net/2025/03/06/r6NZJXjSLBaPduT.png"></p>
+<p><strong>FunSearch</strong> (Nature 23)</p>
+<p><strong>EvoPrompting</strong> (NeurIPS 23)</p>
+<p><strong>EoH</strong> (ICML 24)</p>
+<p><img src="https://s2.loli.net/2025/03/06/DmhqXOavFM9QbYV.png"></p>
+<p><strong>WizardLM</strong> (ICLR 24 Microsoft)</p>
+<p>通过设计指令让模型向深度和宽度思考，产生比人类设计的更好的指令</p>
+<p><img src="https://s2.loli.net/2025/03/06/mjaJe76CWHRofP8.png"></p>
+<h2 id="模型协同">模型协同</h2>
+<p><strong>CombLM</strong> (EMNLP 23)</p>
+<p>学习一个白盒域特定小模型与黑盒大模型相融合</p>
+<p><img src="https://s2.loli.net/2025/03/06/jtswGevxyB6p9lc.png"></p>
+<h2 id="对比解码">对比解码</h2>
+<p><strong>Contrastive Decoding</strong> (ACL 23 Stanford) (ArXiv 23
+Meta)</p>
+<p>选择专业和业余模型预测差分的最大值</p>
+<p>数据集：WikiText,BookCorpus (100M)</p>
+<p>GPU：A5000 (24G)</p>
+<p><img src="https://s2.loli.net/2025/03/06/8YNoSHClD73v42c.png"></p>
+<p><strong>Contrastive Decoding</strong> (EACL 24)</p>
+<p>用于机器翻译的对比解码，选择随机句子/其他语言作为对比输入，将原输入和对比输入预测的差分作为概率</p>
+<p><img src="https://s2.loli.net/2025/03/06/UxraRKO1BnHQMfX.png"></p>
+<p><strong>VCD</strong> (CVPR 24 Alibaba)</p>
+<p>选择加高斯噪声前后的图像输入VLM的预测差分的最大值，减轻幻觉</p>
+<p><img src="https://s2.loli.net/2025/03/06/yz5rCPoMEfBKNtU.png"></p>
+<p><strong>Emulated fine-tuning</strong> (ICLR 24 Stanford)</p>
+<p><strong>Proxy-tuning</strong> (COLM 24)</p>
+<p>通过微调前后小模型的预测偏差调整大模型的预测</p>
+<p><img src="https://s2.loli.net/2025/03/06/Fb4dkqpwShOYHRz.png"></p>
+<p><strong>Offset-Unlearning</strong> (ArXiv 24)</p>
+<p><strong>Weak-to-Strong Jailbreaking</strong> (ArXiv 24)</p>
+<p>通过梯度上升/对抗学习微调一个遗忘/不安全小模型，将微调前后小模型的差分加到LLM上</p>
+<p><img src="https://s2.loli.net/2025/03/06/Jfi2RsBjkNbpYtd.png"></p>
+<p><strong>Co-LLM (ACL 24)</strong>
+训练一个基础模型在预测不准确的时候调用更大的助手模型</p>
+<p><img src="https://s2.loli.net/2025/03/06/tAlizf8WJ2kapyq.png"></p>
+<h2 id="自主数据生成">自主数据生成</h2>
+<p><strong>Aligner</strong> (ArXiv 24 北大)</p>
+<p>学习一个adapter，接收问题、LLM回答，输出修正后的回答</p>
+<p><img src="https://s2.loli.net/2025/03/06/KEhQZ236VrXD7Ae.png"></p>
+<p><img src="https://s2.loli.net/2025/03/06/z8U36RfOEDCk9Bm.png"></p>
+<p><strong>CoBB</strong> (ArXiv 24 Carnegie Mellon)</p>
+<p>对LLM进行多次采样产生不同的推理，根据答案是否正确划分推理为正负集，匹配为若干正负对，通过ORPO训练校正模型</p>
+<p><img src="https://s2.loli.net/2025/03/06/iMjlWQXxRHBsUeN.png"></p>
+<p><strong>SuperContext</strong> (ICLR 24 西湖)</p>
+<p>将fine-tune SLM的预测整合到LLM输入中，提升OOD泛化能力和减轻幻觉</p>
+<p><img src="https://s2.loli.net/2025/03/06/2iGqwMokaRrKN37.png"></p>
+<p><strong>Prompt2model</strong> (ArXiv 24)</p>
+<p>给定prompt和example，通过LLM选择微调模型、检索和生成数据，接着微调模型以适应特定任务</p>
+<p><img src="https://s2.loli.net/2025/03/06/z8U36RfOEDCk9Bm.png"></p>
+<h2 id="边缘微调">边缘微调</h2>
+<p><strong>Offsite-Tuning</strong> (ArXiv 23 MIT) (EMNLP 23 清华)</p>
+<p>通过压缩模型得到一个模拟器，之后添加adapter进行微调，最后将adapter添加到原模型上</p>
+<p><img src="https://s2.loli.net/2025/03/06/mU94hd8pfNGDqLX.png"></p>
+<p><strong>MIET</strong> (ArXiv 24 Lamda)</p>
+<p>将预训练模型作为服务端，在客户端学习一个小网络，在最小化服务端到客户端通信开销的前提下进行调整</p>
+<p><img src="https://s2.loli.net/2025/03/06/SU9cDGuX3wvPfsb.png"></p>
 
     </div>
 
@@ -467,9 +483,9 @@ NoSQL在不太影响性能的情况下，就可以实现高可用的架构</li>
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/blog/tags/Docker/" rel="tag"># Docker</a>
-              <a href="/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
-              <a href="/blog/tags/Redis/" rel="tag"># Redis</a>
+              <a href="/blog/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/blog/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" rel="tag"># 大模型</a>
+              <a href="/blog/tags/%E9%BB%91%E7%9B%92/" rel="tag"># 黑盒</a>
           </div>
 
         
@@ -478,12 +494,12 @@ NoSQL在不太影响性能的情况下，就可以实现高可用的架构</li>
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/blog/2020/07/19/%E3%80%90RabbitMQ%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E5%9B%9B%E3%80%91Docker%E6%90%AD%E5%BB%BARabbitMQ%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/" rel="prev" title="【RabbitMQ自学笔记四】Docker搭建RabbitMQ集群架构">
-      <i class="fa fa-chevron-left"></i> 【RabbitMQ自学笔记四】Docker搭建RabbitMQ集群架构
+    <a href="/blog/2024/03/01/2024-03-01%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E5%8F%91%E5%B1%95%E7%BB%BC%E8%BF%B0/" rel="prev" title="大模型与迁移学习发展综述">
+      <i class="fa fa-chevron-left"></i> 大模型与迁移学习发展综述
     </a></div>
       <div class="post-nav-item">
-    <a href="/blog/2020/07/20/%E3%80%90Redis%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0%E4%BA%8C%E3%80%91Redis%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%92%8C%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" rel="next" title="【Redis自学笔记二】Redis的基本命令和数据类型">
-      【Redis自学笔记二】Redis的基本命令和数据类型 <i class="fa fa-chevron-right"></i>
+    <a href="/blog/2024/09/10/2024-09-10%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%AB%98%E6%95%88%E5%BE%AE%E8%B0%83%E7%BB%BC%E8%BF%B0/" rel="next" title="大模型高效微调的调研">
+      大模型高效微调的调研 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -543,7 +559,7 @@ NoSQL在不太影响性能的情况下，就可以实现高可用的架构</li>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFnosql"><span class="nav-number">1.</span> <span class="nav-text">什么是NoSQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#nosql%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">NoSQL的类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ubuntu%E5%AE%89%E8%A3%85redis"><span class="nav-number">2.</span> <span class="nav-text">Ubuntu安装Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#docker%E5%AE%89%E8%A3%85redis"><span class="nav-number">3.</span> <span class="nav-text">Docker安装Redis</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">进化算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%8D%8F%E5%90%8C"><span class="nav-number">2.2.</span> <span class="nav-text">模型协同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E8%A7%A3%E7%A0%81"><span class="nav-number">2.3.</span> <span class="nav-text">对比解码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E4%B8%BB%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90"><span class="nav-number">2.4.</span> <span class="nav-text">自主数据生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E5%BE%AE%E8%B0%83"><span class="nav-number">2.5.</span> <span class="nav-text">边缘微调</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
