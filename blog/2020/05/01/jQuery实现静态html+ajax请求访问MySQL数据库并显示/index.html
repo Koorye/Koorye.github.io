@@ -5,25 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 7.3.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/blog/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"koorye.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="本文介绍了如何使用jQuery实现静态html+ajax请求访问MySQL数据库并显示数据的方法。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jQuery实现静态html+ajax请求访问MySQL数据库并显示">
-<meta property="og:url" content="http://example.com/2020/05/01/jQuery%E5%AE%9E%E7%8E%B0%E9%9D%99%E6%80%81html+ajax%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B9%B6%E6%98%BE%E7%A4%BA/index.html">
+<meta property="og:url" content="https://koorye.github.io/blog/2020/05/01/jQuery%E5%AE%9E%E7%8E%B0%E9%9D%99%E6%80%81html+ajax%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B9%B6%E6%98%BE%E7%A4%BA/index.html">
 <meta property="og:site_name" content="吴世涵的博客">
 <meta property="og:description" content="本文介绍了如何使用jQuery实现静态html+ajax请求访问MySQL数据库并显示数据的方法。">
 <meta property="og:locale" content="zh_CN">
@@ -40,7 +40,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i-blog.csdnimg.cn/blog_migrate/2f8a8b144600e91b807b6b71a29d1a3b.png">
 
-<link rel="canonical" href="http://example.com/2020/05/01/jQuery%E5%AE%9E%E7%8E%B0%E9%9D%99%E6%80%81html+ajax%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B9%B6%E6%98%BE%E7%A4%BA/">
+<link rel="canonical" href="https://koorye.github.io/blog/2020/05/01/jQuery%E5%AE%9E%E7%8E%B0%E9%9D%99%E6%80%81html+ajax%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B9%B6%E6%98%BE%E7%A4%BA/">
 
 
 <script id="page-configurations">
@@ -214,7 +214,7 @@ mjx-container[display="true"] + br {
 
   <div class="site-meta">
 
-    <a href="/" class="brand" rel="start">
+    <a href="/blog/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
       <h1 class="site-title">吴世涵的博客</h1>
       <span class="logo-line-after"><i></i></span>
@@ -235,27 +235,27 @@ mjx-container[display="true"] + br {
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+    <a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+    <a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -313,12 +313,12 @@ mjx-container[display="true"] + br {
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/05/01/jQuery%E5%AE%9E%E7%8E%B0%E9%9D%99%E6%80%81html+ajax%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B9%B6%E6%98%BE%E7%A4%BA/">
+    <link itemprop="mainEntityOfPage" href="https://koorye.github.io/blog/2020/05/01/jQuery%E5%AE%9E%E7%8E%B0%E9%9D%99%E6%80%81html+ajax%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B9%B6%E6%98%BE%E7%A4%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
       <meta itemprop="name" content="吴世涵">
-      <meta itemprop="description" content="我叫吴世涵，是来自电子科技大学(UESTC)计算机科学与工程学院的硕士研究生">
+      <meta itemprop="description" content="来自电子科技大学(UESTC)计算机科学与工程学院的硕士研究生">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -351,7 +351,7 @@ mjx-container[display="true"] + br {
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+                  <a href="/blog/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
                 </span>
             </span>
 
@@ -448,11 +448,11 @@ servlet--&gt;|返回数据串, 可以使用json|html</pre>
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
-              <a href="/tags/HTML/" rel="tag"># HTML</a>
-              <a href="/tags/jQuery/" rel="tag"># jQuery</a>
-              <a href="/tags/ajax/" rel="tag"># ajax</a>
-              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+              <a href="/blog/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/blog/tags/HTML/" rel="tag"># HTML</a>
+              <a href="/blog/tags/jQuery/" rel="tag"># jQuery</a>
+              <a href="/blog/tags/ajax/" rel="tag"># ajax</a>
+              <a href="/blog/tags/MySQL/" rel="tag"># MySQL</a>
           </div>
 
         
@@ -461,11 +461,11 @@ servlet--&gt;|返回数据串, 可以使用json|html</pre>
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/30/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%B8%89%E3%80%91Maven%20Web%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AEMyBatis%20Generator%E6%8F%92%E4%BB%B6%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81+%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="prev" title="【Maven配置三】Maven Web项目配置MyBatis Generator插件自动生成代码+访问MySQL数据库">
+    <a href="/blog/2020/04/30/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E4%B8%89%E3%80%91Maven%20Web%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AEMyBatis%20Generator%E6%8F%92%E4%BB%B6%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81+%E8%AE%BF%E9%97%AEMySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="prev" title="【Maven配置三】Maven Web项目配置MyBatis Generator插件自动生成代码+访问MySQL数据库">
       <i class="fa fa-chevron-left"></i> 【Maven配置三】Maven Web项目配置MyBatis Generator插件自动生成代码+访问MySQL数据库
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/05/02/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E5%9B%9B%E3%80%91%E9%85%8D%E7%BD%AESpring+%E6%95%B4%E5%90%88MyBatis%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E6%89%AB%E6%8F%8F%E5%BC%80%E5%8F%91/" rel="next" title="【Maven配置四】配置Spring+整合MyBatis实现动态扫描开发">
+    <a href="/blog/2020/05/02/%E3%80%90Maven%E9%85%8D%E7%BD%AE%E5%9B%9B%E3%80%91%E9%85%8D%E7%BD%AESpring+%E6%95%B4%E5%90%88MyBatis%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E6%89%AB%E6%8F%8F%E5%BC%80%E5%8F%91/" rel="next" title="【Maven配置四】配置Spring+整合MyBatis实现动态扫描开发">
       【Maven配置四】配置Spring+整合MyBatis实现动态扫描开发 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -533,27 +533,27 @@ servlet--&gt;|返回数据串, 可以使用json|html</pre>
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="吴世涵"
-      src="/images/avatar.jpg">
+      src="/blog/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">吴世涵</p>
-  <div class="site-description" itemprop="description">我叫吴世涵，是来自电子科技大学(UESTC)计算机科学与工程学院的硕士研究生</div>
+  <div class="site-description" itemprop="description">来自电子科技大学(UESTC)计算机科学与工程学院的硕士研究生</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
+          <a href="/blog/archives/">
         
           <span class="site-state-item-count">89</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
+            <a href="/blog/categories/">
           
         <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
+            <a href="/blog/tags/">
           
         <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">标签</span></a>
@@ -576,7 +576,7 @@ servlet--&gt;|返回数据串, 可以使用json|html</pre>
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="https://koorye.github.io/" title="https:&#x2F;&#x2F;Koorye.github.io" rel="noopener" target="_blank">个人主页</a>
+          <a href="https://koorye.github.io/" title="https:&#x2F;&#x2F;Koorye.github.io">个人主页</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://github.com/Koorye" title="https:&#x2F;&#x2F;github.com&#x2F;Koorye" rel="noopener" target="_blank">Github</a>
@@ -642,30 +642,30 @@ servlet--&gt;|返回数据串, 可以使用json|html</pre>
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
 
-<script src="/js/utils.js"></script>
+<script src="/blog/js/utils.js"></script>
 
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/muse.js"></script>
+<script src="/blog/js/motion.js"></script>
 
 
-<script src="/js/next-boot.js"></script>
+<script src="/blog/js/schemes/muse.js"></script>
 
 
-
-
-  
+<script src="/blog/js/next-boot.js"></script>
 
 
 
 
   
-<script src="/js/local-search.js"></script>
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
 
 
 
