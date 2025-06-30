@@ -1,8 +1,6 @@
 import bs4
 
 
-html_path = 'html/honor.html'
-
 def parse_honor(html_path, keywords=None):
     """
     Find class="count", which contains many <div> elements with class="list",
@@ -58,5 +56,49 @@ def parse_honor(html_path, keywords=None):
     return output_html.strip()
 
 
+def parse_paper(html_path, keywords=None):
+    """
+    Find class="list", which contains many <div> elements with class="desc",
+    each containing <div class="brief">.
+    Return another format like:
+        <div class="honor-card">
+            <p>XXXXXXXXXXXXXX</p>
+        </div>
+    """
+    with open(html_path, 'r', encoding='utf-8') as file:
+        html = file.read()
 
-print(parse_honor(html_path, ['Jingkuan Song', 'Heng Tao Shen', '']))
+    soup = bs4.BeautifulSoup(html, 'html.parser')
+
+    paper_list = []
+    for item in soup.find_all('div', class_='desc'):
+        brief = item.find('div', class_='brief').get_text(strip=True) if item.find('div', class_='brief') else ''
+
+        if keywords:
+            if not any(keyword in brief for keyword in keywords):
+                continue
+        
+        paper_list.append({
+            'brief': brief
+        })
+        
+        output_html = ''
+        for paper in paper_list:
+            output_html += f"""
+            <div class="honor-card">
+                {paper['brief']}
+            </div>
+            """
+    return output_html.strip()
+
+
+def output_html(html_content, output_path):
+    """
+    Write the HTML content to a file.
+    """
+    with open(output_path, 'w', encoding='utf-8') as file:
+        file.write(html_content)
+
+
+# print(parse_honor('html/honor.html', ['Jingkuan Song', 'Heng Tao Shen']))
+output_html((parse_paper('html/paper.html', ['Jingkuan Song', 'Heng Tao Shen'])), 'html/paper_output.html')
